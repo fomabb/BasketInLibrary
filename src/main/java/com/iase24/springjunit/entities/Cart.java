@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "cart")
 @Data
@@ -16,11 +18,12 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "book_id")
     private Book book;
 
-    @OneToOne
-    @JoinColumn(name = "basket_id", referencedColumnName = "id")
+
+    @ManyToOne
+    @JoinColumn(name = "basket_id")
     private Basket basket;
 }

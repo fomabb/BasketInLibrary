@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @Transactional
@@ -24,7 +23,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAll(String inActive);
 
     @Query(value =
-            "select * from book where basket_id=:id"
+            ""
+//            "select * from book where basket_id=:id"
             , nativeQuery = true)
     List<Book> getBasketById(Long id);
+
+    @Query("")
+    Book getBookByBookId();
 }

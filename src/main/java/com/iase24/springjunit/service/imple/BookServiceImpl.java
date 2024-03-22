@@ -1,7 +1,6 @@
 package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookUpdateDTO;
-import com.iase24.springjunit.entities.Basket;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.repository.BookRepository;
@@ -91,13 +90,16 @@ public class BookServiceImpl implements BookService {
     @Override
     public void updateBookCounter(Long id, int count) {
 
-        BookUpdateDTO bookUpdateDTO = new BookUpdateDTO();
-        getBookById(id);
+        Book book = getBookById(id).orElse(null);
 
-        if (count <= 0) {
-            bookUpdateDTO.setStatus(Status.INACTIVE);
-        } else {
-            bookUpdateDTO.setStatus(Status.ACTIVE);
+        if (book != null) {
+            if (count <= 0) {
+                book.setStatus(Status.INACTIVE);
+            } else {
+                book.setStatus(Status.ACTIVE);
+            }
+
+            bookRepository.saveAndFlush(book);
         }
     }
 }

@@ -25,11 +25,4 @@ public class Basket {
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateTime;
-
-//    @OneToMany(mappedBy = "basket"
-//            , cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-//    List<Book> books = new ArrayList<>();
-
-    @OneToOne(mappedBy = "basket", fetch = FetchType.LAZY)
-    private Cart cart;
 }
