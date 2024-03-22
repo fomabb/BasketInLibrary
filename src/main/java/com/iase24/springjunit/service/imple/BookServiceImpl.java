@@ -35,19 +35,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book addBookInBasket(Long id, Basket newId) {
-
-        Book book = getBookById(id).orElse(null);
-
-        assert book != null;
-        book.setBasket(newId);
-
-        bookRepository.saveAndFlush(book);
-
-        return book;
-    }
-
-    @Override
     public List<Book> getAllByGenre(String genre) {
         return bookRepository.findAll().stream()
                 .filter(book -> genre.equals(book.getGenre().toLowerCase(Locale.ROOT)))

@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface BasketService {
     Optional<Basket> getBasketById(Long id);
-
-    void updateCountBookInBasket(Long id, BookUpdateDTO bookUpdateDTO) throws IllegalAccessException;
 }

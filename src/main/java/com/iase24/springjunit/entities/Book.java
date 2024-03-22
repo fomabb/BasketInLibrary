@@ -38,8 +38,11 @@ public class Book {
     @Column(name = "count")
     private int count;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "basket_id", referencedColumnName = "id")
-    private Basket basket;
+//    @JsonBackReference
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "basket_id", referencedColumnName = "id")
+//    private Basket basket;
+
+    @OneToOne(mappedBy = "book", fetch = FetchType.LAZY)
+    private Cart cart;
 }

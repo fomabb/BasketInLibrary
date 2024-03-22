@@ -69,12 +69,4 @@ public class BookController {
 
         return bookService.getBookByIdStatusActive(id, status);
     }
-
-    @PutMapping("/bookId/{id}")
-    public Book addBookInBasket(@PathVariable("id") Long id,
-                                @RequestParam("newId") Basket newId) {
-
-       return bookService.addBookInBasket(id, newId);
-
-    }
 }

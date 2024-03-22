@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "basket")
@@ -28,7 +26,10 @@ public class Basket {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateTime;
 
-    @OneToMany(mappedBy = "basket"
-            , cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    List<Book> books = new ArrayList<>();
+//    @OneToMany(mappedBy = "basket"
+//            , cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    List<Book> books = new ArrayList<>();
+
+    @OneToOne(mappedBy = "basket", fetch = FetchType.LAZY)
+    private Cart cart;
 }

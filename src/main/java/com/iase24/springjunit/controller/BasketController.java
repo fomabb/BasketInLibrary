@@ -21,17 +21,4 @@ public class BasketController {
 
         return basketService.getBasketById(id);
     }
-
-    @PutMapping("/updateBasket/{id}")
-    public BookUpdateDTO updateCountBookInBasket(
-            @PathVariable("id") Long id,
-            @RequestBody BookUpdateDTO bookUpdateDTO
-    ) throws IllegalAccessException {
-
-        if (id != null) {
-            basketService.updateCountBookInBasket(id, bookUpdateDTO);
-        }
-
-        return bookUpdateDTO;
-    }
 }

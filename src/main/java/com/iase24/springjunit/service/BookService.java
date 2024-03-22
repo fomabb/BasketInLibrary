@@ -26,6 +26,4 @@ public interface BookService {
     List<Book> getBasket(Long id);
 
     Optional<Book> getBookByIdStatusActive(Long id, Status status);
-
-    Book addBookInBasket(Long id, Basket newId);
 }
