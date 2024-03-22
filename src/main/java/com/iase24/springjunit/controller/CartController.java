@@ -13,9 +13,9 @@ public class CartController {
 
     private final CartService cartService;
 
-    @PostMapping
-    public void addCart(@RequestBody Cart cart, @RequestParam Long bookId) {
+    @PutMapping
+    public void addCart(@RequestBody Cart cart) {
 
-        cartService.addCart(cart, bookId);
+        cartService.addCart(cart);
     }
 }

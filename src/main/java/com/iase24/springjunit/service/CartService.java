@@ -5,5 +5,5 @@ import com.iase24.springjunit.entities.Cart;
 
 public interface CartService {
 
-    void addCart(Cart cart, Long bookId);
+    void addCart(Cart cart);
 }

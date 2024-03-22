@@ -1,13 +1,10 @@
 package com.iase24.springjunit.service.imple;
 
-import com.iase24.springjunit.dto.CartDataDTO;
-import com.iase24.springjunit.entities.Basket;
-import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Cart;
-import com.iase24.springjunit.repository.BasketRepository;
+import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.repository.CartRepository;
-import com.iase24.springjunit.service.BasketService;
+import com.iase24.springjunit.service.UserService;
 import com.iase24.springjunit.service.BookService;
 import com.iase24.springjunit.service.CartService;
 import jakarta.transaction.Transactional;
@@ -21,17 +18,18 @@ public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private final BookService bookService;
-    private final BasketService basketService;
+    private final UserService userService;
     private final BookRepository bookRepository;
-    private final BasketRepository basketRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public void addCart(Cart cart, Long bookId) {
+    public void addCart(Cart cart) {
+
 
         cartRepository.save(cart);
 
-        Book book = bookRepository.findById(cart.getBook().getId()).orElse(null);
-
+//        Book book = bookRepository.findById(cart.getBook().getBook_id()).orElse(null);
+//
 //        assert book != null;
 //        bookService.updateBookCounter(book.getId(), book.getCount() - 1);
     }

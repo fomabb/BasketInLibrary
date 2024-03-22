@@ -1,11 +1,14 @@
 package com.iase24.springjunit.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "cart")
@@ -18,12 +21,27 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    private LocalDateTime dateTime;
 
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    private LocalDateTime getDateTime;
 
-    @ManyToOne
-    @JoinColumn(name = "basket_id")
-    private Basket basket;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    private LocalDateTime returnDateTime;
+
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+//            CascadeType.DETACH, CascadeType.REFRESH})
+//    @JoinColumn(name = "user_id")
+//    private User user;
+
+//    @ManyToMany(
+//            fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+//            CascadeType.DETACH, CascadeType.REFRESH})
+//    @JoinTable(name = "BOOK_CART_MAPPING", joinColumns = @JoinColumn(name = "cart_id"),
+//            inverseJoinColumns = @JoinColumn(name = "book_id"))
+//    private List<Book> books = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "cart")
+    private List<Book> books = new ArrayList<>();
 }

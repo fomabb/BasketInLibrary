@@ -1,7 +1,6 @@
 package com.iase24.springjunit.service;
 
 import com.iase24.springjunit.dto.BookUpdateDTO;
-import com.iase24.springjunit.entities.Basket;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Status;
 

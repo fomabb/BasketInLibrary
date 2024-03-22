@@ -1,28 +1,33 @@
 package com.iase24.springjunit.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "basket")
+@Table(name = "user_test")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Basket {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
-    private LocalDateTime dateTime;
+    private String login;
+
+    private String email;
+
+    private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Cart> carts = new ArrayList<>();
 }
