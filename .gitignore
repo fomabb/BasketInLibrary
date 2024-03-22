@@ -1,0 +1,7 @@
+.idea/
+.target/
+/target/
+src/main/resources/static/
+src/main/resources/templates/
+src/main/resources/database.properties/
+src/main/resources/application.properties/
