@@ -16,4 +16,6 @@ public interface CartService {
     Cart addBookInCart(Long cartId, Long bookId);
 
     void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO);
+
+    void removeFromCart(Long cartId, Long bookId);
 }

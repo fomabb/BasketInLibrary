@@ -5,6 +5,7 @@ import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.service.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,5 +53,11 @@ public class CartController {
         cartService.updateBookInCart(bookId, bookUpdateDTO);
 
         return BookUpdateDTO.builder().build();
+    }
+
+    @DeleteMapping("cartId/{cartId}/bookId/{bookId}")
+    public ResponseEntity<?> removeFromCart(@PathVariable Long cartId, @PathVariable Long bookId) {
+        cartService.removeFromCart(cartId, bookId);
+        return ResponseEntity.ok().build();
     }
 }

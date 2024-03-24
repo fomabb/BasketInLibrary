@@ -73,4 +73,13 @@ public class BookController {
 
         return bookService.getBookByIdStatusActive(id, status);
     }
+
+    @DeleteMapping("cartId/{cartId}/bookId/{bookId}")
+    public void deleteBookFromCart(
+            @PathVariable("cartId") Long cartId,
+            @PathVariable("bookId") Long bookId
+    ) {
+
+        bookService.deleteBookFromCart(cartId, bookId);
+    }
 }

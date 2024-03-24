@@ -5,7 +5,9 @@ import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.repository.BookRepository;
+import com.iase24.springjunit.repository.CartRepository;
 import com.iase24.springjunit.service.BookService;
+import com.iase24.springjunit.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final CartRepository cartRepository;
 
     @Override
     public List<Book> getBasket(Long id) {
@@ -52,6 +55,12 @@ public class BookServiceImpl implements BookService {
     public List<Book> getBookByAuthor(String author) {
 
         return bookRepository.findAllByAuthor(author);
+    }
+
+    @Override
+    public void deleteBookFromCart(Long cartId, Long bookId) {
+        cartRepository.findById(cartId);
+        bookRepository.deleteById(bookId);
     }
 
     @Override
