@@ -1,5 +1,6 @@
 package com.iase24.springjunit.controller;
 
+import com.iase24.springjunit.dto.BookAddCartDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Status;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api/")
+@RequestMapping(value = "/api")
 @RequiredArgsConstructor
 public class BookController {
 
@@ -20,20 +21,24 @@ public class BookController {
     @GetMapping
     public List<Book> getAllBooks(
             @RequestParam(required = false) String genre,
-            @RequestParam(required = false) String inActive
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String author
     ) {
 
         if (genre != null) {
             return bookService.getAllByGenre(genre);
         }
-        if (inActive != null) {
-            return bookService.getAllInactive(inActive);
+        if (title != null) {
+            return bookService.getBookByTitle(title);
+        }
+        if (author != null) {
+            return bookService.getBookByAuthor(author);
         }
         return bookService.getAll();
     }
 
     @PostMapping
-    public Book createNewBook(@RequestBody Book book) {
+    public List<Book> createNewBook(@RequestBody List<Book> book) {
         bookService.createNewBook(book);
         return book;
     }

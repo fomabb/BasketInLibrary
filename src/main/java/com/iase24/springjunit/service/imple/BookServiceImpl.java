@@ -1,5 +1,6 @@
 package com.iase24.springjunit.service.imple;
 
+import com.iase24.springjunit.dto.BookAddCartDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Status;
@@ -9,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -34,10 +34,24 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> getBookByTitle(String title) {
+
+        return bookRepository.findBookByTitle(title);
+    }
+
+    @Override
     public List<Book> getAllByGenre(String genre) {
-        return bookRepository.findAll().stream()
-                .filter(book -> genre.equals(book.getGenre().toLowerCase(Locale.ROOT)))
-                .toList();
+//        return bookRepository.findAll().stream()
+//                .filter(book -> genre.equals(book.getGenre().toLowerCase(Locale.ROOT)))
+//                .toList();
+
+        return bookRepository.findAllByGenre(genre);
+    }
+
+    @Override
+    public List<Book> getBookByAuthor(String author) {
+
+        return bookRepository.findAllByAuthor(author);
     }
 
     @Override
@@ -47,16 +61,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getAllInactive(String inActive) {
-
-        return bookRepository.findAll(inActive);
-    }
-
-    @Override
-    public boolean createNewBook(Book book) {
+    public boolean createNewBook(List<Book> book) {
         if (book != null) {
-            book.setStatus(Status.ACTIVE);
-            bookRepository.save(book);
+            bookRepository.saveAllAndFlush(book);
             return true;
         } else {
             return false;

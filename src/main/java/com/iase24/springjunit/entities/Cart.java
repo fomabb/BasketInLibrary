@@ -1,6 +1,8 @@
 package com.iase24.springjunit.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,23 +27,19 @@ public class Cart {
     private LocalDateTime dateTime;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
-    private LocalDateTime getDateTime;
+    private LocalDateTime putDateTime;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime returnDateTime;
 
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-//            CascadeType.DETACH, CascadeType.REFRESH})
-//    @JoinColumn(name = "user_id")
-//    private User user;
-
-//    @ManyToMany(
-//            fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-//            CascadeType.DETACH, CascadeType.REFRESH})
-//    @JoinTable(name = "BOOK_CART_MAPPING", joinColumns = @JoinColumn(name = "cart_id"),
-//            inverseJoinColumns = @JoinColumn(name = "book_id"))
-//    private List<Book> books = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "cart")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "book_cart",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Book> books = new ArrayList<>();
+
+
+    @OneToOne(mappedBy = "cart")
+    private User user;
 }

@@ -1,5 +1,6 @@
 package com.iase24.springjunit.service;
 
+import com.iase24.springjunit.dto.BookAddCartDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Status;
@@ -12,7 +13,7 @@ public interface BookService {
 
     List<Book> getAll();
 
-    boolean createNewBook(Book book);
+    boolean createNewBook(List<Book> book);
 
     Optional<Book> getBookById(Long id);
 
@@ -20,9 +21,11 @@ public interface BookService {
 
     void updateBookCounter(Long id, int count);
 
-    List<Book> getAllInactive(String inActive);
-
     List<Book> getBasket(Long id);
 
     Optional<Book> getBookByIdStatusActive(Long id, Status status);
+
+    List<Book> getBookByTitle(String title);
+
+    List<Book> getBookByAuthor(String author);
 }

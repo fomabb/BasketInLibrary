@@ -47,7 +47,7 @@ class BookServiceImplTest {
 
     @Test
     void createNewBook() {
-        Book book = getCreateBook();
+        List<Book> book = getBooks();
         boolean result = bookService.createNewBook(book);
 
         assertTrue(result);

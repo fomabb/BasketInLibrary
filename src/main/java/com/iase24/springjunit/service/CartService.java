@@ -1,9 +1,19 @@
 package com.iase24.springjunit.service;
 
-import com.iase24.springjunit.dto.CartDataDTO;
+import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Cart;
+
+import java.util.List;
 
 public interface CartService {
 
-    void addCart(Cart cart);
+    Cart addCart(Cart cart);
+
+    List<Cart> getCarts();
+
+    Cart getCartById(Long cartId);
+
+    Cart addBookInCart(Long cartId, Long bookId);
+
+    void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO);
 }

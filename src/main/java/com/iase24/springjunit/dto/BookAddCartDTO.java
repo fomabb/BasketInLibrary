@@ -1,16 +1,14 @@
 package com.iase24.springjunit.dto;
 
-import com.iase24.springjunit.entities.Status;
+import com.iase24.springjunit.entities.Book;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class BookUpdateDTO {
-    private int count;
-    private Status status;
+public class BookAddCartDTO {
+
+    private Book book_id;
 }
