@@ -1,6 +1,5 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.BookAddCartDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Status;
@@ -59,12 +58,6 @@ public class BookController {
         }
 
         return bookUpdateDTO;
-    }
-
-    @GetMapping("/basket/{id}")
-    public List<Book> getBasket(@PathVariable("id") Long id) {
-
-        return bookService.getBasket(id);
     }
 
     @GetMapping("/active/{id}")

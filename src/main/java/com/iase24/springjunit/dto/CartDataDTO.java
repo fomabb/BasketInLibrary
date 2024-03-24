@@ -1,7 +1,7 @@
 package com.iase24.springjunit.dto;
 
-import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -3,20 +3,17 @@ package com.iase24.springjunit.service.imple;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Cart;
-import com.iase24.springjunit.entities.User;
-import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.repository.CartRepository;
-import com.iase24.springjunit.service.UserService;
+import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.service.BookService;
 import com.iase24.springjunit.service.CartService;
+import com.iase24.springjunit.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

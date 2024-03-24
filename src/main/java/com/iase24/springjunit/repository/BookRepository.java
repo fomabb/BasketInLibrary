@@ -13,14 +13,6 @@ import java.util.List;
 @Transactional
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-//"UPDATE books SET book_count=?, book_status=? WHERE book_id=?";
-
-    @Query(value =
-            ""
-//            "select * from book where basket_id=:id"
-            , nativeQuery = true)
-    List<Book> getBasketById(Long id);
-
     @Query("select b from Book b where b.title ilike %:title%")
     List<Book> findBookByTitle(@Param("title") String title);
 

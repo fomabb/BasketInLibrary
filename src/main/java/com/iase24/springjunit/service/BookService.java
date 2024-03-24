@@ -1,6 +1,5 @@
 package com.iase24.springjunit.service;
 
-import com.iase24.springjunit.dto.BookAddCartDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Status;
@@ -20,8 +19,6 @@ public interface BookService {
     void updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) throws IllegalAccessException;
 
     void updateBookCounter(Long id, int count);
-
-    List<Book> getBasket(Long id);
 
     Optional<Book> getBookByIdStatusActive(Long id, Status status);
 
