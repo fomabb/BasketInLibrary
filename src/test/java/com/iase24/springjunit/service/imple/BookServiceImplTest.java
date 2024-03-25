@@ -3,8 +3,6 @@ package com.iase24.springjunit.service.imple;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.repository.BookRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.logging.Logger;
@@ -18,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
