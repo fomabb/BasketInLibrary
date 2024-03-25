@@ -47,7 +47,7 @@ ___Request body for method create new user___
  METHOD | PATH                 | DESCRIPTION            
 --------|----------------------|------------------------
  POST   | /api                 | create new books    
- PUT   | /api                 | updating the number of books in stock     
+ PUT   | /api/{bookId}        | updating the count of books in stock     
  GET   | /api/{id}            | get book by id     
  GET   | /api                 | get all books
  GET   | /api?title={title}   | get all books by title
@@ -93,8 +93,8 @@ ___Request body for method PUT___
 --------|-------------------------------------------|---------------------
  PUT    | /api/cart/cartId/{cartId}/bookId/{bookId} | adding a book to the user's cart from the book warehouse 
  DELETE    | /api/cart/cartId/{cartId}/bookId/{bookId} | returning  a book from a user's shopping cart to a book warehouse 
- GET    | api/cart/{id}                              | get cart by id  
- GET    | api/cart                                  | get all carts users 
+ GET    | /api/cart/{id}                            | get cart by id  
+ GET    | /api/cart                                 | get all carts users 
  GET    | /api/cart/user/{login}                    | get cart user's by login 
 
 ___Response for cart___
