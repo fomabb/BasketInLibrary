@@ -14,10 +14,11 @@ public interface BookService {
 
     boolean createNewBook(List<Book> book);
 
-    Optional<Book> getBookById(Long id);
+    Book getBookById(Long id);
 
     void updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) throws IllegalAccessException;
 
+    //TODO
     void updateBookCounter(Long id, int count);
 
     Optional<Book> getBookByIdStatusActive(Long id, Status status);

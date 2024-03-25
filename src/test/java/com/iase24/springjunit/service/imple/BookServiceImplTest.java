@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,9 +63,9 @@ class BookServiceImplTest {
 
         assertTrue(bookFromRepository.isPresent());
 
-        Optional<Book> actualResult = bookService.getBookById(createBook.getId());
-        assertTrue(actualResult.isPresent());
-        assertEquals(createBook.getId(), actualResult.get().getId());
+        Book actualResult = bookService.getBookById(createBook.getId());
+        assertTrue((BooleanSupplier) actualResult);
+        assertEquals(createBook.getId(), actualResult.getId());
     }
 
     private List<Book> getBooks() {

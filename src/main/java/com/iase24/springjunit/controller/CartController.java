@@ -55,8 +55,14 @@ public class CartController {
     }
 
     @DeleteMapping("cartId/{cartId}/bookId/{bookId}")
-    public ResponseEntity<?> removeFromCart(@PathVariable Long cartId, @PathVariable Long bookId) {
+    public ResponseEntity<Cart> removeFromCart(@PathVariable Long cartId, @PathVariable Long bookId) {
         cartService.removeFromCart(cartId, bookId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/user/{login}")
+    public Cart getCartByUser(@PathVariable("login") String login) {
+
+        return cartService.getCartByLogin(login);
     }
 }

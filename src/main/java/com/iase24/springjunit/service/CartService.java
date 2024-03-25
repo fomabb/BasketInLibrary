@@ -17,5 +17,7 @@ public interface CartService {
 
     void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO);
 
-    void removeFromCart(Long cartId, Long bookId);
+    Cart removeFromCart(Long cartId, Long bookId);
+
+    Cart getCartByLogin(String login);
 }

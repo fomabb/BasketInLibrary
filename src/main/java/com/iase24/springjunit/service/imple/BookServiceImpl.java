@@ -36,9 +36,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getAllByGenre(String genre) {
-//        return bookRepository.findAll().stream()
-//                .filter(book -> genre.equals(book.getGenre().toLowerCase(Locale.ROOT)))
-//                .toList();
 
         return bookRepository.findAllByGenre(genre);
     }
@@ -72,15 +69,20 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> getBookById(Long id) {
-        return bookRepository.findById(id);
+    public Book getBookById(Long id) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+
+        if (optionalBook.isPresent()) {
+            return optionalBook.get();
+        } else {
+            throw new IllegalArgumentException("Book with id " + id + " not found");
+        }
     }
 
     @Override
     public void updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) throws IllegalAccessException {
-        Book book = getBookById(id).orElse(null);
+        Book book = getBookById(id);
 
-        assert book != null;
         book.setCount(bookUpdateDTO.getCount());
 
         if (book.getCount() > 0) {
@@ -95,10 +97,11 @@ public class BookServiceImpl implements BookService {
         new BookUpdateDTO(updateBook.getCount(), updateBook.getStatus());
     }
 
+    //TODO
     @Override
     public void updateBookCounter(Long id, int count) {
 
-        Book book = getBookById(id).orElse(null);
+        Book book = getBookById(id);
 
         if (book != null) {
             if (count <= 0) {
@@ -106,7 +109,6 @@ public class BookServiceImpl implements BookService {
             } else {
                 book.setStatus(Status.ACTIVE);
             }
-
             bookRepository.saveAndFlush(book);
         }
     }

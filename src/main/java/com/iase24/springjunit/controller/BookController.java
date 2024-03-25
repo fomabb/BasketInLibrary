@@ -43,7 +43,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Book> getBookById(@PathVariable("id") Long id) {
+    public Book getBookById(@PathVariable("id") Long id) {
         return bookService.getBookById(id);
     }
 
@@ -74,5 +74,11 @@ public class BookController {
     ) {
 
         bookService.deleteBookFromCart(cartId, bookId);
+    }
+
+    @PutMapping("update/counter")
+    public void updateBookCounter(@RequestParam Long id, @RequestParam int count) {
+
+        bookService.updateBookCounter(id, count);
     }
 }

@@ -1,12 +1,12 @@
 package com.iase24.springjunit.controller;
 
+import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/user")
@@ -26,14 +26,14 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserDataDTO> getAllUsers() {
 
         return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getBasketById(@PathVariable("id") Long id) {
+    public UserDataDTO getUserById(@PathVariable("id") Long id) {
 
-        return userService.getBasketById(id);
+        return userService.getUserById(id);
     }
 }
