@@ -36,8 +36,8 @@
 ___Request body for method create new user___
 ```json
 {
-"login":"Nik",
-"email": "nike@gmail.com",
+"login":"Ric",
+"email": "Ricbb1221@gmail.com",
 "password": "java12-rs"
 }
 ```
