@@ -103,7 +103,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart removeFromCart(Long cartId, Long bookId) {
+    public void removeFromCart(Long cartId, Long bookId) {
         Cart cart = getCartById(cartId);
         Book bookToRemove = bookService.getBookById(bookId);
 
@@ -115,7 +115,6 @@ public class CartServiceImpl implements CartService {
                 // Возврат книги на склад, только если корзина не пуста
                 returnBookToStock(bookToRemove.getId());
             }
-            return cart;
         } else {
             throw new EntityNotFoundException("Book is Not in Cart");
         }
