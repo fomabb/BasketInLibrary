@@ -107,12 +107,21 @@ public class CartServiceImpl implements CartService {
         Cart cart = getCartById(cartId);
         Book bookToRemove = bookService.getBookById(bookId);
 
+        // Проверяем, была ли книга в корзине до удаления
+        boolean wasInCart = cart.getBooks().contains(bookToRemove);
+
         // Удаление книги из корзины
         if (cart.getBooks().remove(bookToRemove)) {
             cartRepository.save(cart);
             // Проверка, остались ли еще книги в корзине
-            if (!cart.getBooks().isEmpty()) {
-                // Возврат книги на склад, только если корзина не пуста
+            if (cart.getBooks().isEmpty()) {
+                // Если корзина стала пустой, но книга была в ней до удаления,
+                // возвращаем книгу на склад
+                if (wasInCart) {
+                    returnBookToStock(bookToRemove.getId());
+                }
+            } else {
+                // Если в корзине еще остались книги, возвращаем книгу на склад
                 returnBookToStock(bookToRemove.getId());
             }
         } else {
