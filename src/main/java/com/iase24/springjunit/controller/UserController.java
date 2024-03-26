@@ -1,12 +1,18 @@
 package com.iase24.springjunit.controller;
 
+import com.iase24.springjunit.dto.BooCartDataDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.entities.BookCart;
+import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.entities.User;
+import com.iase24.springjunit.repository.BookCartRepository;
+import com.iase24.springjunit.service.BookCartService;
 import com.iase24.springjunit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/user")
@@ -36,4 +42,6 @@ public class UserController {
 
         return userService.getUserById(id);
     }
+
+
 }

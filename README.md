@@ -96,6 +96,7 @@ ___Request body for method PUT___
  GET    | /api/cart/{id}                            | get cart by id  
  GET    | /api/cart                                 | get all carts users 
  GET    | /api/cart/user/{login}                    | get cart user's by login 
+ GET    | /api/cart/allCarts/{cartId}               | show aa orders by Id cart 
 
 ___Response for cart___
 
@@ -103,8 +104,6 @@ ___Response for cart___
 {
     "id": 1,
     "dateTime": "25-03-2024 14:51",
-    "putDateTime": "26-03-2024 01:52",
-    "returnDateTime": "25-03-2024 22:26",
     "books": [
         {
             "id": 5,
@@ -132,6 +131,38 @@ ___Response for cart___
         "password": "202cb962ac59075b964b07152d234b70"
     }
 }
+````
+___Response show all orders___
+
+````json
+[
+  {
+    "orderNumber": 1323,
+    "creationTime": "26-03-2024 15:59",
+    "book": {
+      "id": 5,
+      "title": "WarCraft",
+      "author": "Kristi Golden",
+      "genre": "Fantasy",
+      "status": "ACTIVE",
+      "publisher": "Miki",
+      "count": 1
+    }
+  },
+  {
+    "orderNumber": 1324,
+    "creationTime": "26-03-2024 15:59",
+    "book": {
+      "id": 6,
+      "title": "Private investigation",
+      "author": "Daniel Ribakoff",
+      "genre": "Detective",
+      "status": "ACTIVE",
+      "publisher": "Nik",
+      "count": 1
+    }
+  }
+]
 ````
 
 ### My application requests in Postman

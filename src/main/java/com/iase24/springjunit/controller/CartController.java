@@ -1,7 +1,9 @@
 package com.iase24.springjunit.controller;
 
+import com.iase24.springjunit.dto.BooCartDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Cart;
+import com.iase24.springjunit.service.BookCartService;
 import com.iase24.springjunit.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.List;
 public class CartController {
 
     private final CartService cartService;
+    private final BookCartService bookCartService;
 
     @PutMapping("/cartId/{cartId}/bookId/{bookId}")
     public Cart addBookInCart(
@@ -64,5 +67,11 @@ public class CartController {
     public Cart getCartByUser(@PathVariable("login") String login) {
 
         return cartService.getCartByLogin(login);
+    }
+
+    @GetMapping("/allCarts/{cartId}")
+    public List<BooCartDataDTO> getAllCarts(@PathVariable("cartId") Long cartId) {
+
+        return bookCartService.findAllByCartId(cartId);
     }
 }

@@ -24,12 +24,6 @@ public class Cart {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateTime;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
-    private LocalDateTime putDateTime;
-
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
-    private LocalDateTime returnDateTime;
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "book_cart",

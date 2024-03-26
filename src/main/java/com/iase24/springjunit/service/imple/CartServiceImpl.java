@@ -3,8 +3,10 @@ package com.iase24.springjunit.service.imple;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.BookCart;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.entities.Status;
+import com.iase24.springjunit.repository.BookCartRepository;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.repository.CartRepository;
 import com.iase24.springjunit.service.BookService;
@@ -27,6 +29,7 @@ public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final BookService bookService;
     private final BookRepository bookRepository;
+    private final BookCartRepository bookCartRepository;
 
     @Override
     public Cart addCart(Cart cart) {
@@ -63,26 +66,31 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart addBookInCart(Long cartId, Long bookId) {
-        //1
         Cart cart = getCartById(cartId);
         Book book = bookService.getBookById(bookId);
 
         if (book.getCount() > 0) {
             // Уменьшаем количество книги на складе
             book.setCount(book.getCount() - 1);
-            bookRepository.save(book);
+            bookRepository.save(book); // Сохраняем изменения в книге
 
             if (book.getCount() <= 0) {
                 book.setStatus(Status.INACTIVE);
             }
 
-            cart.setPutDateTime(LocalDateTime.now());
-            cart.getBooks().add(book);
-            return cartRepository.save(cart);
+            BookCart bookCart = new BookCart();
+            bookCart.setBook(book);
+            bookCart.setCart(cart);
+            bookCart.setCreationTime(LocalDateTime.now());
+
+            bookCartRepository.saveAndFlush(bookCart);
+
+            return cart;
         } else {
             throw new EntityNotFoundException("Book not exist");
         }
     }
+
 
     @Override
     public void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO) {
