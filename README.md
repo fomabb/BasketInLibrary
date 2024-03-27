@@ -33,13 +33,31 @@
  GET    | /api/user/{id} | get user by id                                     
  GET    | /api/user      | get all user                                      
 
-___Request body for method create new user___
+___Request body for method create new user with your basket___
 ```json
 {
 "login":"Ric",
 "email": "Ricbb1221@gmail.com",
 "password": "java12-rs"
 }
+```
+
+___Response user with basket___
+
+```json
+[
+  {
+    "id": 1,
+    "dateTime": "25-03-2024 14:51",
+    "books": [],
+    "user": {
+      "id": 1,
+      "login": "Ric",
+      "email": "Ric@gmail.com",
+      "password": "202cb962ac59075b964b07152d234b70"
+    }
+  }
+]
 ```
 
 **2. API Description of general methods for Book**
