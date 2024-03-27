@@ -98,6 +98,7 @@ public class BookServiceImpl implements BookService {
     }
 
     //TODO
+
     @Override
     public void updateBookCounter(Long id, int count) {
 
@@ -111,5 +112,11 @@ public class BookServiceImpl implements BookService {
             }
             bookRepository.saveAndFlush(book);
         }
+    }
+
+    @Override
+    public List<Book> search(String text) {
+
+        return bookRepository.search(text);
     }
 }

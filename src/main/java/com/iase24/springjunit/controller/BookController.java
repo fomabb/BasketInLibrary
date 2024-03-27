@@ -81,4 +81,10 @@ public class BookController {
 
         bookService.updateBookCounter(id, count);
     }
+
+    @GetMapping("/search")
+    public List<Book> findSearchBook(@RequestParam String text) {
+
+        return bookService.search(text);
+    }
 }

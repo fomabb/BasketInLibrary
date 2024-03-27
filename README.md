@@ -44,17 +44,18 @@ ___Request body for method create new user___
 
 **2. API Description of general methods for Book**
 
- METHOD | PATH                 | DESCRIPTION            
---------|----------------------|------------------------
- POST   | /api                 | create new books    
- PUT   | /api/{bookId}        | updating the count of books in stock     
- GET   | /api/{id}            | get book by id     
- GET   | /api                 | get all books
- GET   | /api?title={title}   | get all books by title
- GET   | /api?genre={genre}   | get all books by genre
- GET   | /api?author={author} | get all books by author
+ METHOD | PATH                                  | DESCRIPTION            
+--------|---------------------------------------|------------------------
+ POST   | /api                                  | create new books    
+ PUT   | /api/{bookId}                         | updating the count of books in stock     
+ GET   | /api/{id}                             | get book by id     
+ GET   | /api                                  | get all books
+ GET   | /api?title={title}                    | get all books by title
+ GET   | /api?genre={genre}                    | get all books by genre
+ GET   | /api?author={author}                  | get all books by author
+ GET   | /api/search?text={title/genre/author} | full-text search for books from the warehouse
 
-___Request body for method POST___
+___Request body for method POST create new user___
 
 ```json
 [
@@ -78,13 +79,29 @@ ___Request body for method POST___
 
 ```
 
-___Request body for method PUT___
+___Request body for method PUT updating the count of books in stock___
 
 ```json
 {
   "count": 12
 }
 
+```
+
+___Response body for method GET search /api/search?text=war kristi golden___
+
+```json
+[
+  {
+    "id": 5,
+    "title": "WarCraft",
+    "author": "Kristi Golden",
+    "genre": "Fantasy",
+    "status": "INACTIVE",
+    "publisher": "Miki",
+    "count": 0
+  }
+]
 ```
 
 **3. API Description of general methods for Cart**

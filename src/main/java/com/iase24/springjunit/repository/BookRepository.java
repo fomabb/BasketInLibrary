@@ -21,4 +21,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select b from Book b where b.author ilike %:author%")
     List<Book> findAllByAuthor(@Param("author") String author);
+
+    @Query(value =
+            "select * from book b where make_tsvector(b.title, b.genre, b.author) @@ plainto_tsquery(?1)" +
+                    "or similarity(b.title, ?1) > 0.6 " +
+                    "or similarity(b.genre, ?1) > 0.6 " +
+                    "or similarity(b.author, ?1) > 0.6 " +
+                    "order by ts_rank(make_tsvector(b.title, b.genre, b.author), plainto_tsquery(?1)) " +
+                    "desc",
+            nativeQuery = true)
+    List<Book> search(String text);
 }

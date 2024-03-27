@@ -2,8 +2,6 @@ package com.iase24.springjunit.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iase24.springjunit.entities.Book;
-import com.iase24.springjunit.entities.Cart;
-import com.iase24.springjunit.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

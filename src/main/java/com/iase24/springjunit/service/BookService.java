@@ -28,4 +28,6 @@ public interface BookService {
     List<Book> getBookByAuthor(String author);
 
     void deleteBookFromCart(Long cartId, Long bookId);
+
+    List<Book> search(String text);
 }
