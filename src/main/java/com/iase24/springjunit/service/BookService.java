@@ -2,6 +2,7 @@ package com.iase24.springjunit.service;
 
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Status;
 
 import java.util.List;
@@ -30,4 +31,14 @@ public interface BookService {
     void deleteBookFromCart(Long cartId, Long bookId);
 
     List<Book> search(String text);
+
+    void addBookInCategory(Long bookId, Node categoryId);
+
+    void createNewCategory(Node node);
+
+    void addChildrenIdInParentId(Long childrenId, Node parentNode);
+
+    Node findNodeById(Long nodeId);
+
+    List<Book> findBooksChildCategoryId(Long categoryId, boolean parent);
 }

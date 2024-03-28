@@ -2,9 +2,11 @@ package com.iase24.springjunit.controller;
 
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api")
 @RequiredArgsConstructor
+@Transactional
 public class BookController {
 
     private final BookService bookService;
@@ -86,5 +89,51 @@ public class BookController {
     public List<Book> findSearchBook(@RequestParam String text) {
 
         return bookService.search(text);
+    }
+
+//===========================================================Tree=======================================================
+
+    @PostMapping("/createCategory")
+    public Node createNewCategory(@RequestBody Node node) {
+
+        bookService.createNewCategory(node);
+
+        return node;
+    }
+
+    @PutMapping("/addChildrenId/{childrenId}")
+    public Node addChildrenIdInParentId(
+            @PathVariable("childrenId") Long childrenId,
+            @RequestParam Node parentNode
+    ) {
+
+        bookService.addChildrenIdInParentId(childrenId, parentNode);
+
+        return parentNode;
+    }
+
+    @PutMapping("addBookId/{bookId}/categoryId/{categoryId}")
+    public Node addBookInCategory(
+            @PathVariable("bookId") Long bookId,
+            @PathVariable("categoryId") Node categoryId
+    ) {
+
+        bookService.addBookInCategory(bookId, categoryId);
+
+        return categoryId;
+    }
+
+    @GetMapping("/node/{nodeId}")
+    public Node findNodeById(@PathVariable("nodeId") Long nodeId) {
+
+        return bookService.findNodeById(nodeId);
+    }
+
+    @GetMapping("/book/category/{categoryId}")
+    public List<Book> getBooksByCategoryId(
+            @PathVariable("categoryId") Long categoryId,
+            @RequestParam Boolean parent
+    ) {
+        return bookService.findBooksChildCategoryId(categoryId, parent);
     }
 }

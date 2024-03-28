@@ -2,22 +2,27 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.repository.CartRepository;
+import com.iase24.springjunit.repository.NodeRepository;
 import com.iase24.springjunit.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final CartRepository cartRepository;
+    private final NodeRepository nodeRepository;
 
     @Override
     public Optional<Book> getBookByIdStatusActive(Long id, Status status) {
@@ -118,5 +123,54 @@ public class BookServiceImpl implements BookService {
     public List<Book> search(String text) {
 
         return bookRepository.search(text);
+    }
+
+
+//===========================================================Tree=======================================================
+
+    @Override
+    public void createNewCategory(Node node) {
+
+        nodeRepository.saveAndFlush(node);
+    }
+
+    @Override
+    public void addChildrenIdInParentId(Long childrenId, Node parentNode) {
+
+        Node node = findNodeById(childrenId);
+
+        node.setParent(parentNode);
+    }
+
+    @Override
+    public void addBookInCategory(Long bookId, Node categoryId) {
+
+        Book book = getBookById(bookId);
+
+        book.setNode(categoryId);
+
+        bookRepository.saveAndFlush(book);
+    }
+
+    @Override
+    public Node findNodeById(Long nodeId) {
+
+        Optional<Node> optionalNode = nodeRepository.findById(nodeId);
+
+        if (optionalNode.isPresent()) {
+            return optionalNode.get();
+        } else {
+            throw new IllegalArgumentException("Node with id " + nodeId + "not found");
+        }
+    }
+
+    @Override
+    public List<Book> findBooksChildCategoryId(Long categoryId, boolean parent) {
+
+        if (parent) {
+            return bookRepository.findBooksParentCategoryId(categoryId);
+        } else {
+            return bookRepository.findBooksChildCategoryId(categoryId);
+        }
     }
 }

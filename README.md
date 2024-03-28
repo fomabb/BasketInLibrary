@@ -21,7 +21,7 @@
 
 ## ER diagram for the data model
 
-![Tables Library.jpg](src%2Fmain%2Fresources%2Fimage%2FTables%20Library.jpg)
+![DataBaseTable.png](src%2Fmain%2Fresources%2Fimage%2FDataBaseTable.png)
 
 ## RESTful API
 
@@ -199,6 +199,120 @@ ___Response show all orders___
   }
 ]
 ````
+
+**4. API Description of general methods for Tree**
+
+ METHOD | PATH                                                | DESCRIPTION                     
+--------|-----------------------------------------------------|---------------------------------
+ POST   | /api/createCategory                                 | create new category in tree     
+ PUT    | /api/addChildrenId/3?parentNode={parentId}          | add children category in parent 
+ PUT    | /api/addBookId/{bookId}/categoryId/{categoryId}     | add book in category for tree 
+ GET    | /api/book/category/{categoryId}?parent={true/false} | display all books for the category by id {true}parent, {false}child 
+
+___Request body for create categories method___
+
+```json5
+[
+  {
+    "category": "Genres",
+  },
+  {
+    "category": "Action",
+  },
+  {
+    "category": "Fantasy",
+  },
+  {
+    "category": "Detective",
+  }
+]
+```
+
+___Response all categories with books with the implementation of infinite tree deepening___
+
+```json5
+{
+    "id": 4,
+    "category": "Genres",
+    "children": [
+        {
+            "id": 1,
+            "category": "Action",
+            "children": [],
+            "books": [
+                {
+                    "id": 1,
+                    "title": "War and Peace",
+                    "author": "Tolstoy",
+                    "genre": "Action",
+                    "status": "Active",
+                    "publisher": "Mike",
+                    "count": 1
+                },
+                {
+                    "id": 2,
+                    "title": "Goal",
+                    "author": "Eliyagu",
+                    "genre": "Action",
+                    "status": "ACTIVE",
+                    "publisher": "Rik",
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "category": "Fantasy",
+            "children": [],
+            "books": [
+                {
+                    "id": 4,
+                    "title": "Rune",
+                    "author": "James",
+                    "genre": "Fantasy",
+                    "status": "ACTIVE",
+                    "publisher": "Miki",
+                    "count": 1
+                },
+                {
+                    "id": 5,
+                    "title": "WarCraft",
+                    "author": "Kristi Golden",
+                    "genre": "Fantasy",
+                    "status": "ACTIVE",
+                    "publisher": "Miki",
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "category": "Detective",
+            "children": [],
+            "books": [
+                {
+                  "id": 6,
+                  "title": "Private investigation",
+                  "author": "Daniel Ribakoff",
+                  "genre": "Detective",
+                  "status": "ACTIVE",
+                  "publisher": "Nik",
+                  "count": 1
+                },
+                {
+                  "id": 3,
+                  "title": "The girl with the dragon tattoo",
+                  "author": "Stig Larsson",
+                  "genre": "Detective",
+                  "status": "ACTIVE",
+                  "publisher": "Nik",
+                  "count": 1
+                }
+            ]
+        }
+    ]
+}
+```
 
 ### My application requests in Postman
 

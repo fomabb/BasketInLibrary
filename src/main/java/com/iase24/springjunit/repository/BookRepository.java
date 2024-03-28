@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -31,4 +32,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                     "desc",
             nativeQuery = true)
     List<Book> search(String text);
+
+    @Query(value =
+            "select b.* from book b join tree t on t.id = b.node_id where t.id=:categoryId"
+            , nativeQuery = true)
+    List<Book> findBooksChildCategoryId(@Param("categoryId") Long categoryId);
+
+    @Query(value =
+            "select b.* from book b join tree t on t.id = b.node_id where parent_id=:categoryId"
+    , nativeQuery = true)
+    List<Book> findBooksParentCategoryId(@Param("categoryId") Long categoryId);
 }

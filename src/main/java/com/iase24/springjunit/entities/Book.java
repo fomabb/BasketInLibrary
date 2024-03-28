@@ -1,6 +1,7 @@
 package com.iase24.springjunit.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,4 +45,9 @@ public class Book {
     @JsonBackReference
     @ManyToMany(mappedBy = "books")
     List<Cart> carts = new ArrayList<>();
+
+    @JsonBackReference("parent_id")
+    @ManyToOne
+    @JoinColumn(name = "node_id", referencedColumnName = "id")
+    private Node node;
 }
