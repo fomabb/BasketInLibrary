@@ -202,41 +202,41 @@ ___Response show all orders___
 
 **4. API Description of general methods for Tree**
 
- METHOD | PATH                                                | DESCRIPTION                     
---------|-----------------------------------------------------|---------------------------------
- POST   | /api/createCategory                                 | create new category in tree     
- PUT    | /api/addChildrenId/3?parentNode={parentId}          | add children category in parent 
- PUT    | /api/addBookId/{bookId}/categoryId/{categoryId}     | add book in category for tree 
+ METHOD | PATH                                               | DESCRIPTION                     
+--------|----------------------------------------------------|---------------------------------
+ POST   | /api/createCategory                                | create new category in tree     
+ PUT    | /api/addChildrenId/{childId}?parentNode={parentId} | add children category in parent 
+ PUT    | /api/addBookId/{bookId}/categoryId/{categoryId}    | add book in category for tree 
  GET    | /api/book/category/{categoryId}?parent={true/false} | display all books for the category by id {true}parent, {false}child 
 
 ___Request body for create categories method___
 
-```json5
+```json
 [
   {
-    "category": "Genres",
+    "category": "Genres"
   },
   {
-    "category": "Action",
+    "category": "Action"
   },
   {
-    "category": "Fantasy",
+    "category": "Fantasy"
   },
   {
-    "category": "Detective",
+    "category": "Detective"
   }
 ]
 ```
 
 ___Response all categories with books with the implementation of infinite tree deepening___
 
-```json5
+```json
 {
-    "id": 4,
+    "id": 1,
     "category": "Genres",
     "children": [
         {
-            "id": 1,
+            "id": 2,
             "category": "Action",
             "children": [],
             "books": [
@@ -261,7 +261,7 @@ ___Response all categories with books with the implementation of infinite tree d
             ]
         },
         {
-            "id": 2,
+            "id": 3,
             "category": "Fantasy",
             "children": [],
             "books": [
@@ -286,7 +286,7 @@ ___Response all categories with books with the implementation of infinite tree d
             ]
         },
         {
-            "id": 3,
+            "id": 4,
             "category": "Detective",
             "children": [],
             "books": [
