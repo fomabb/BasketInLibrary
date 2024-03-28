@@ -31,7 +31,6 @@ public class Cart {
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Book> books = new ArrayList<>();
 
-
     @OneToOne(mappedBy = "cart")
     private User user;
 }

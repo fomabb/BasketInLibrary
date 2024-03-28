@@ -16,8 +16,8 @@ public class DatabaseInitializer {
 
     @PostConstruct
     public void init() {
-            ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-            populator.addScript(new ClassPathResource("init_database.sql"));
-            populator.execute(dataSource);
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScript(new ClassPathResource("init_database.sql"));
+        populator.execute(dataSource);
     }
 }
