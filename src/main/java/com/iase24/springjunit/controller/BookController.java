@@ -54,7 +54,7 @@ public class BookController {
     public BookUpdateDTO updateBookCount(
             @PathVariable("id") Long id,
             @RequestBody BookUpdateDTO bookUpdateDTO
-    ) throws IllegalAccessException {
+    ) {
 
         if (id != null) {
             bookService.updateBookCount(id, bookUpdateDTO);

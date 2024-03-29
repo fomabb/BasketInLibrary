@@ -1,6 +1,6 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.BooCartDataDTO;
+import com.iase24.springjunit.dto.BookCartDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.service.BookCartService;
@@ -70,7 +70,7 @@ public class CartController {
     }
 
     @GetMapping("/allCarts/{cartId}")
-    public List<BooCartDataDTO> getAllCarts(@PathVariable("cartId") Long cartId) {
+    public List<BookCartDataDTO> getAllCarts(@PathVariable("cartId") Long cartId) {
 
         return bookCartService.findAllByCartId(cartId);
     }

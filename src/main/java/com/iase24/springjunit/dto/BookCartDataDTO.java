@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BooCartDataDTO {
+public class BookCartDataDTO {
 
     private Long orderNumber;
 

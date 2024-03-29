@@ -64,12 +64,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public boolean createNewBook(List<Book> book) {
+    public void createNewBook(List<Book> book) {
         if (book != null) {
             bookRepository.saveAllAndFlush(book);
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -85,7 +82,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) throws IllegalAccessException {
+    public void updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) {
         Book book = getBookById(id);
 
         book.setCount(bookUpdateDTO.getCount());
@@ -95,7 +92,7 @@ public class BookServiceImpl implements BookService {
         } else if (book.getCount() == 0) {
             book.setStatus(Status.INACTIVE);
         } else {
-            throw new IllegalAccessException("IllegalAccessException");
+            throw new IllegalArgumentException("IllegalAccessException");
         }
 
         Book updateBook = bookRepository.save(book);
