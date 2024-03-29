@@ -3,12 +3,15 @@ package com.iase24.springjunit.service.imple;
 import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.User;
+import com.iase24.springjunit.exception.ValidationException;
 import com.iase24.springjunit.mapper.user.CreateUserMapper;
 import com.iase24.springjunit.mapper.user.UserMapper;
 import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.service.UserService;
 import com.iase24.springjunit.validator.CreateUserValidator;
+import com.iase24.springjunit.validator.ValidationResult;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -30,16 +33,21 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmailAndPassword(email, password).map(userMapper::map);
     }
 
+    @SneakyThrows
     @Override
-    public void createNewUser(CreateUserDTO createUserDTO) {
+    public UserDataDTO createNewUser(CreateUserDTO createUserDTO) {
 
+        ValidationResult validationResult = createUserValidator.validate(createUserDTO);
+        if (validationResult.hasErrors()) {
+            throw new ValidationException(validationResult.getErrors());
+        }
 
         User userEntity = createUserMapper.map(createUserDTO);
         userEntity.setPassword(DigestUtils.md5DigestAsHex(userEntity.getPassword().getBytes()));
 
         userRepository.save(userEntity);
 
-        userMapper.map(userEntity);
+        return userMapper.map(userEntity);
     }
 
     @Override

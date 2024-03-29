@@ -1,8 +1,11 @@
 package com.iase24.springjunit.validator;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class ValidationResult {
 
     private final List<Error> errors = new ArrayList<>();

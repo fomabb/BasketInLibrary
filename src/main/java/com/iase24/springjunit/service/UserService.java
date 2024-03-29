@@ -12,7 +12,7 @@ public interface UserService {
 
     Optional<UserDataDTO> getUserById(Long id);
 
-    void createNewUser(CreateUserDTO createUserDTO);
+    UserDataDTO createNewUser(CreateUserDTO createUserDTO);
 
     List<UserDataDTO> getAllUsers();
 
