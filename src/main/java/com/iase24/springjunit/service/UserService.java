@@ -1,7 +1,7 @@
 package com.iase24.springjunit.service;
 
+import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.entities.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +12,7 @@ public interface UserService {
 
     Optional<UserDataDTO> getUserById(Long id);
 
-    void createNewUser(User user);
+    void createNewUser(CreateUserDTO createUserDTO);
 
     List<UserDataDTO> getAllUsers();
 

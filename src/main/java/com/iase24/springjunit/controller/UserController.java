@@ -1,5 +1,6 @@
 package com.iase24.springjunit.controller;
 
+import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.service.UserService;
@@ -17,13 +18,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public User createNewUser(
-            @RequestBody User user
+    public CreateUserDTO createNewUser(
+            @RequestBody CreateUserDTO createUserDTO
     ) {
 
-        userService.createNewUser(user);
+        userService.createNewUser(createUserDTO);
 
-        return user;
+        return createUserDTO;
     }
 
     @GetMapping

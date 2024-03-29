@@ -1,5 +1,6 @@
 package com.iase24.springjunit.service.imple;
 
+import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.mapper.user.CreateUserMapper;
@@ -30,19 +31,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void createNewUser(CreateUserDTO createUserDTO) {
+
+
+        User userEntity = createUserMapper.map(createUserDTO);
+        userEntity.setPassword(DigestUtils.md5DigestAsHex(userEntity.getPassword().getBytes()));
+
+        userRepository.save(userEntity);
+
+        userMapper.map(userEntity);
+    }
+
+    @Override
     public Optional<UserDataDTO> getUserById(Long id) {
 
         return Optional.ofNullable(userRepository.findById(id)
                 .map(userMapper::map)
                 .orElseThrow(() -> new IllegalArgumentException("User with id: " + id + " not found")));
-    }
-
-    @Override
-    public void createNewUser(User user) {
-
-        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-
-        userRepository.save(user);
     }
 
     @Override
