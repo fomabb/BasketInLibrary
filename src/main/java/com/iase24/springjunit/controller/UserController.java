@@ -4,6 +4,7 @@ import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/user")
 @RequiredArgsConstructor
+@Valid
 public class UserController {
 
     private final UserService userService;

@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException(validationResult.getErrors());
         }
 
-        User userEntity = createUserMapper.map(createUserDTO);
+        var userEntity = createUserMapper.map(createUserDTO);
         userEntity.setPassword(DigestUtils.md5DigestAsHex(userEntity.getPassword().getBytes()));
 
         userRepository.save(userEntity);

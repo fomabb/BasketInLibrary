@@ -94,7 +94,7 @@ public class BookController {
 //===========================================================Tree=======================================================
 
     @PostMapping("/createCategory")
-    public Node createNewCategory(@RequestBody Node node) {
+    public List<Node> createNewCategory(@RequestBody List<Node> node) {
 
         bookService.createNewCategory(node);
 

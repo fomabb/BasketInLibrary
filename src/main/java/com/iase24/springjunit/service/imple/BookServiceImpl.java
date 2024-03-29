@@ -12,8 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -126,9 +129,9 @@ public class BookServiceImpl implements BookService {
 //===========================================================Tree=======================================================
 
     @Override
-    public void createNewCategory(Node node) {
+    public void createNewCategory(List<Node> node) {
 
-        nodeRepository.saveAndFlush(node);
+        nodeRepository.saveAllAndFlush(node);
     }
 
     @Override
@@ -165,9 +168,13 @@ public class BookServiceImpl implements BookService {
     public List<Book> findBooksChildCategoryId(Long categoryId, boolean parent) {
 
         if (parent) {
-            return bookRepository.findBooksParentCategoryId(categoryId);
+            return bookRepository.findBooksParentCategoryId(categoryId).stream()
+                    .sorted(Comparator.comparing(Book::getGenre))
+                    .collect(Collectors.toList());
         } else {
-            return bookRepository.findBooksChildCategoryId(categoryId);
+            return bookRepository.findBooksChildCategoryId(categoryId).stream()
+                    .sorted(Comparator.comparing(Book::getAuthor))
+                    .collect(Collectors.toList());
         }
     }
 }

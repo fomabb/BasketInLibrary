@@ -1,13 +1,14 @@
 package com.iase24.springjunit.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CreateUserDTO {
 
-    String login;
-    String email;
-    String password;
+    private String login;
+    private String email;
+    private String password;
 }

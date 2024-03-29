@@ -2,6 +2,8 @@ package com.iase24.springjunit.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +26,9 @@ public class User {
 
     private String login;
 
+    @Email(message = "Email field does not match the request",
+            regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,5}",
+            flags = Pattern.Flag.UNICODE_CASE)
     private String email;
 
     private String password;

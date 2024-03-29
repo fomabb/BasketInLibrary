@@ -17,15 +17,15 @@ public class CreateUserValidator implements Validator<CreateUserDTO> {
         var validationResult = new ValidationResult();
 
         if (object.getLogin().isEmpty()) {
-            validationResult.add(Error.of("invalid login", "Login is invalid"));
+            validationResult.add(Error.of("invalid.login", "Login is invalid"));
         }
 
         if (object.getEmail().isEmpty()) {
-            validationResult.add(Error.of("invalid email", "Email is invalid"));
+            validationResult.add(Error.of("invalid.email", "Email is invalid"));
         }
 
         if (object.getPassword().isEmpty()) {
-            validationResult.add(Error.of("invalid password", "Password is invalid"));
+            validationResult.add(Error.of("invalid.password", "Password is invalid"));
         }
 
         return validationResult;
