@@ -1,11 +1,14 @@
 package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookUpdateDTO;
+import com.iase24.springjunit.dto.CartDataDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.BookCart;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.entities.Status;
+import com.iase24.springjunit.mapper.cart.CartMapper;
+import com.iase24.springjunit.mapper.user.UserMapper;
 import com.iase24.springjunit.repository.BookCartRepository;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.repository.CartRepository;
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +34,8 @@ public class CartServiceImpl implements CartService {
     private final BookService bookService;
     private final BookRepository bookRepository;
     private final BookCartRepository bookCartRepository;
+    private final UserMapper userMapper;
+    private final CartMapper cartMapper;
 
     @Override
     public Cart addCart(Cart cart) {

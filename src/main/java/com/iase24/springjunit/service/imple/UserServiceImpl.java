@@ -51,4 +51,11 @@ public class UserServiceImpl implements UserService {
                 .map(user -> new UserDataDTO(user.getId(), user.getLogin(), user.getEmail()))
                 .collect(Collectors.toList());
     }
+
+    //    TODO
+    @Override
+    public Optional<UserDataDTO> getCartByUserId(Long userId) {
+
+        return userRepository.findUserByIdAndCart(userId).map(userMapper::map);
+    }
 }

@@ -1,10 +1,10 @@
 package com.iase24.springjunit.repository;
 
-import com.iase24.springjunit.dto.UserDTO;
-import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -14,4 +14,10 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmailAndPassword(String email, String password);
+
+//    TODO
+    @Query(value =
+            "select * from cart c join user_test ut on ut.id = c.id where c.id=:id"
+            , nativeQuery = true)
+    Optional<User> findUserByIdAndCart(@Param("id") Long id);
 }

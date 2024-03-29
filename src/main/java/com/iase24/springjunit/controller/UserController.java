@@ -38,5 +38,12 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    //TODO
+    @GetMapping("/cart/userId/{userId}")
+    public Optional<UserDataDTO> getCartByUserId(
+            @PathVariable("userId") Long userId
+    ) {
 
+        return userService.getCartByUserId(userId);
+    }
 }
