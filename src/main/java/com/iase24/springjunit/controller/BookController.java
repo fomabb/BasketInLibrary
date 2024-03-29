@@ -1,5 +1,6 @@
 package com.iase24.springjunit.controller;
 
+import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Node;
@@ -86,7 +87,7 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public List<Book> findSearchBook(@RequestParam String text) {
+    public List<BookDataDTO> findSearchBook(@RequestParam String text) {
 
         return bookService.search(text);
     }

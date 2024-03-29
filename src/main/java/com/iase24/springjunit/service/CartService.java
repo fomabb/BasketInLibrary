@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface CartService {
 
+    /**
+     *Необходимо создать DTO для всех методв
+     */
+
     Cart addCart(Cart cart);
 
     List<Cart> getCarts();

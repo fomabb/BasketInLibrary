@@ -1,5 +1,6 @@
 package com.iase24.springjunit.service;
 
+import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Node;
@@ -30,7 +31,7 @@ public interface BookService {
 
     void deleteBookFromCart(Long cartId, Long bookId);
 
-    List<Book> search(String text);
+    List<BookDataDTO> search(String text);
 
     void addBookInCategory(Long bookId, Node categoryId);
 

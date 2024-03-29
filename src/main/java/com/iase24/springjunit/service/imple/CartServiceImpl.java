@@ -1,8 +1,6 @@
 package com.iase24.springjunit.service.imple;
 
-import com.iase24.springjunit.dto.BookCartDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
-import com.iase24.springjunit.dto.CartDataDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.BookCart;
@@ -21,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

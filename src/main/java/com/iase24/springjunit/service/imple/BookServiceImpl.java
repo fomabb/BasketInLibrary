@@ -1,9 +1,11 @@
 package com.iase24.springjunit.service.imple;
 
+import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Status;
+import com.iase24.springjunit.mapper.book.BookMapper;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.repository.CartRepository;
 import com.iase24.springjunit.repository.NodeRepository;
@@ -26,6 +28,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final CartRepository cartRepository;
     private final NodeRepository nodeRepository;
+    private final BookMapper bookMapper;
 
     @Override
     public Optional<Book> getBookByIdStatusActive(Long id, Status status) {
@@ -121,9 +124,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> search(String text) {
+    public List<BookDataDTO> search(String text) {
 
-        return bookRepository.search(text);
+        return bookRepository.search(text)
+                .stream()
+                .map(bookMapper::map)
+                .collect(Collectors.toList());
     }
 
 
