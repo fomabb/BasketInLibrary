@@ -1,5 +1,6 @@
 package com.iase24.springjunit.service.imple;
 
+import com.iase24.springjunit.dto.BookCartDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.dto.CartDataDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
@@ -71,6 +72,27 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO) {
+
+        Book book = bookService.getBookById(bookId);
+
+        if (book.getId() != null) {
+
+            if (book.getCount() <= 0) {
+                book.setCount(bookUpdateDTO.getCount());
+            }
+
+            Book updateCount = bookRepository.save(book);
+            new BookUpdateDTO(updateCount.getCount(), updateCount.getStatus());
+        } else {
+            throw new IllegalArgumentException("Book with id " + bookId + " not found");
+        }
+    }
+
+    /**
+     * Метод добавляющий книгу в корзину заказов пользователя
+     */
+    @Override
     public Cart addBookInCart(Long cartId, Long bookId) {
         Cart cart = getCartById(cartId);
         Book book = bookService.getBookById(bookId);
@@ -94,25 +116,6 @@ public class CartServiceImpl implements CartService {
             return cart;
         } else {
             throw new EntityNotFoundException("Book not exist");
-        }
-    }
-
-
-    @Override
-    public void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO) {
-
-        Book book = bookService.getBookById(bookId);
-
-        if (book.getId() != null) {
-
-            if (book.getCount() <= 0) {
-                book.setCount(bookUpdateDTO.getCount());
-            }
-
-            Book updateCount = bookRepository.save(book);
-            new BookUpdateDTO(updateCount.getCount(), updateCount.getStatus());
-        } else {
-            throw new IllegalArgumentException("Book with id " + bookId + " not found");
         }
     }
 
@@ -143,6 +146,9 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    /**
+     * Метод добавляющий книгу на склад после удаления из заказов
+     */
     private void returnBookToStock(Long bookId) {
         Book book = bookService.getBookById(bookId);
         book.setCount(book.getCount() + 1);
