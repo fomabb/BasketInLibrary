@@ -11,6 +11,7 @@ import com.iase24.springjunit.repository.CartRepository;
 import com.iase24.springjunit.repository.NodeRepository;
 import com.iase24.springjunit.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,9 +66,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getAll() {
+    public List<Book> getAll(PageRequest pageRequest) {
 
-        return bookRepository.findAll();
+        return bookRepository.findAll(pageRequest).toList();
     }
 
     @Override

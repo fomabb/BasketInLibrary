@@ -21,7 +21,7 @@
 
 ## ER diagram for the data model
 
-![DataBaseTable.png](src%2Fmain%2Fresources%2Fimage%2FDataBaseTable.png)
+![DataBaseImg.png](src%2Fmain%2Fresources%2Fimage%2FDataBaseImg.png)
 
 ## RESTful API
 

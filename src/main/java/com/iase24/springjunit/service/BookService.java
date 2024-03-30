@@ -5,6 +5,7 @@ import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Status;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,7 @@ import java.util.Optional;
 public interface BookService {
     List<Book> getAllByGenre(String genre);
 
-    List<Book> getAll();
+    List<Book> getAll(PageRequest pageRequest);
 
     void createNewBook(List<Book> book);
 

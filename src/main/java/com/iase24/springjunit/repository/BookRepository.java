@@ -4,6 +4,7 @@ import com.iase24.springjunit.entities.Book;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, Long>, PagingAndSortingRepository<Book, Long> {
 
     @Query("select b from Book b where b.title ilike %:title%")
     List<Book> findBookByTitle(@Param("title") String title);
@@ -40,6 +41,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(value =
             "select b.* from book b join tree t on t.id = b.node_id where parent_id=:categoryId"
-    , nativeQuery = true)
+            , nativeQuery = true)
     List<Book> findBooksParentCategoryId(@Param("categoryId") Long categoryId);
 }

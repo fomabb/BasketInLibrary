@@ -1,5 +1,7 @@
 package com.iase24.springjunit.controller;
 
+import com.iase24.springjunit.component.BookResponse;
+import com.iase24.springjunit.component.PaginationInfo;
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
@@ -7,6 +9,7 @@ import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,22 +25,21 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<Book> getAllBooks(
-            @RequestParam(required = false) String genre,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String author
+    public BookResponse getAllBooks(
+            @RequestParam int page,
+            @RequestParam int size
     ) {
 
-        if (genre != null) {
-            return bookService.getAllByGenre(genre);
-        }
-        if (title != null) {
-            return bookService.getBookByTitle(title);
-        }
-        if (author != null) {
-            return bookService.getBookByAuthor(author);
-        }
-        return bookService.getAll();
+        List<Book> books = bookService.getAll(PageRequest.of(page, size));
+
+        PaginationInfo info = new PaginationInfo();
+        info.setAmount(books.size());
+
+        BookResponse response = new BookResponse();
+        response.setData(books);
+        response.setPaginationInfo(info);
+
+        return response;
     }
 
     @PostMapping
