@@ -3,6 +3,7 @@ package com.iase24.springjunit.service;
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Status;
 import org.springframework.data.domain.PageRequest;
@@ -42,5 +43,7 @@ public interface BookService {
 
     Node findNodeById(Long nodeId);
 
-    List<Book> findBooksChildCategoryId(Long categoryId, boolean parent);
+    List<Book> findBooksChildCategoryId(Long categoryId, boolean parent, PageRequest pageRequest);
+
+    List<DescriptionCategory> findDescriptionCategory(Long categoryId);
 }

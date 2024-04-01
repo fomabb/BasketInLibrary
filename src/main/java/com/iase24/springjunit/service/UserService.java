@@ -1,6 +1,7 @@
 package com.iase24.springjunit.service;
 
 import com.iase24.springjunit.dto.CreateUserDTO;
+import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface UserService {
     List<UserDataDTO> getAllUsers();
 
     Optional<UserDataDTO> getCartByUserId(Long userId);
+
+    void questionCategory(Long categoryId, FaqQuestionDTO question);
 }

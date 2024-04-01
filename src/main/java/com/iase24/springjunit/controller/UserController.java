@@ -1,8 +1,8 @@
 package com.iase24.springjunit.controller;
 
 import com.iase24.springjunit.dto.CreateUserDTO;
+import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +48,18 @@ public class UserController {
     ) {
 
         return userService.getCartByUserId(userId);
+    }
+
+//===========================================FAQ========================================================================
+
+    @PostMapping("/faq/question/{categoryId}")
+    public FaqQuestionDTO questionCategory(
+            @PathVariable("categoryId") Long categoryId,
+            @RequestBody FaqQuestionDTO question
+    ) {
+
+        userService.questionCategory(categoryId, question);
+
+        return question;
     }
 }

@@ -5,6 +5,7 @@ import com.iase24.springjunit.component.PaginationInfo;
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.service.BookService;
@@ -94,7 +95,7 @@ public class BookController {
         return bookService.search(text);
     }
 
-//===========================================================Tree=======================================================
+//=======================================================Tree===========================================================
 
     @PostMapping("/createCategory")
     public List<Node> createNewCategory(@RequestBody List<Node> node) {
@@ -132,11 +133,27 @@ public class BookController {
         return bookService.findNodeById(nodeId);
     }
 
-    @GetMapping("/book/category/{categoryId}")
-    public List<Book> getBooksByCategoryId(
-            @PathVariable("categoryId") Long categoryId,
-            @RequestParam Boolean parent
+    @GetMapping("/book/category")
+    public BookResponse getBooksByCategoryId(
+//            @PathVariable("categoryId") Long categoryId,
+            @RequestParam Long categoryId,
+//            @RequestParam String category,
+            @RequestParam Boolean parent,
+            @RequestParam int page,
+            @RequestParam int size
     ) {
-        return bookService.findBooksChildCategoryId(categoryId, parent);
+
+        List<DescriptionCategory> description = bookService.findDescriptionCategory(categoryId);
+        List<Book> books = bookService.findBooksChildCategoryId(categoryId, parent, PageRequest.of(page, size));
+
+        PaginationInfo info = new PaginationInfo();
+        info.setAmount(books.size());
+
+        BookResponse response = new BookResponse();
+        response.setData(books);
+        response.setPaginationInfo(info);
+        response.setDescriptionData(description);
+
+        return response;
     }
 }

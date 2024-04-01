@@ -1,7 +1,9 @@
 package com.iase24.springjunit.repository;
 
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.DescriptionCategory;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -37,10 +39,13 @@ public interface BookRepository extends JpaRepository<Book, Long>, PagingAndSort
     @Query(value =
             "select b.* from book b join tree t on t.id = b.node_id where t.id=:categoryId"
             , nativeQuery = true)
-    List<Book> findBooksChildCategoryId(@Param("categoryId") Long categoryId);
+    List<Book> findBooksChildCategoryId(@Param("categoryId") Long categoryId, PageRequest pageRequest);
 
     @Query(value =
             "select b.* from book b join tree t on t.id = b.node_id where parent_id=:categoryId"
             , nativeQuery = true)
-    List<Book> findBooksParentCategoryId(@Param("categoryId") Long categoryId);
+    List<Book> findBooksParentCategoryId(@Param("categoryId") Long categoryId, PageRequest pageRequest);
+
+    @Query("select dc from DescriptionCategory dc where dc.id=:categoryId")
+    List<DescriptionCategory> findDescriptionCategory(Long categoryId);
 }

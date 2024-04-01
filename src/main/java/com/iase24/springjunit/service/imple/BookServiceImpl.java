@@ -3,6 +3,7 @@ package com.iase24.springjunit.service.imple;
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.mapper.book.BookMapper;
@@ -173,16 +174,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findBooksChildCategoryId(Long categoryId, boolean parent) {
+    public List<Book> findBooksChildCategoryId(Long categoryId, boolean parent, PageRequest pageRequest) {
 
         if (parent) {
-            return bookRepository.findBooksParentCategoryId(categoryId).stream()
+            return bookRepository.findBooksParentCategoryId(categoryId, pageRequest).stream()
                     .sorted(Comparator.comparing(Book::getGenre))
                     .collect(Collectors.toList());
         } else {
-            return bookRepository.findBooksChildCategoryId(categoryId).stream()
+            return bookRepository.findBooksChildCategoryId(categoryId, pageRequest).stream()
                     .sorted(Comparator.comparing(Book::getAuthor))
                     .collect(Collectors.toList());
         }
+    }
+
+    @Override
+    public List<DescriptionCategory> findDescriptionCategory(Long category) {
+
+        return bookRepository.findDescriptionCategory(category);
     }
 }

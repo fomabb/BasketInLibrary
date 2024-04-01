@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "description_category")
+@Table(name = "description")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +20,8 @@ public class DescriptionCategory {
     private Long id;
 
     private String title;
+
+    private String category;
 
     private String description;
 
