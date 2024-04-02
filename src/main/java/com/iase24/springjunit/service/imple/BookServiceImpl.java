@@ -16,7 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -41,23 +40,6 @@ public class BookServiceImpl implements BookService {
         return Optional.empty();
     }
 
-    @Override
-    public List<Book> getBookByTitle(String title) {
-
-        return bookRepository.findBookByTitle(title);
-    }
-
-    @Override
-    public List<Book> getAllByGenre(String genre) {
-
-        return bookRepository.findAllByGenre(genre);
-    }
-
-    @Override
-    public List<Book> getBookByAuthor(String author) {
-
-        return bookRepository.findAllByAuthor(author);
-    }
 
     //TODO
     @Override

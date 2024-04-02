@@ -1,9 +1,6 @@
 package com.iase24.springjunit.repository;
 
-import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.Cart;
-import com.iase24.springjunit.entities.User;
-import com.iase24.springjunit.mapper.Mapper;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

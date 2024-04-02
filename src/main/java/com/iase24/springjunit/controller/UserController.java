@@ -3,13 +3,10 @@ package com.iase24.springjunit.controller;
 import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

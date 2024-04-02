@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
-    List<Book> getAllByGenre(String genre);
 
     List<Book> getAll(PageRequest pageRequest);
 
@@ -27,9 +26,6 @@ public interface BookService {
 
     Optional<Book> getBookByIdStatusActive(Long id, Status status);
 
-    List<Book> getBookByTitle(String title);
-
-    List<Book> getBookByAuthor(String author);
 
     void deleteBookFromCart(Long cartId, Long bookId);
 
