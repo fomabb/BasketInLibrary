@@ -7,6 +7,10 @@ import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,5 +66,27 @@ public class UserController {
         userService.questionCategory(categoryId, question);
 
         return question;
+    }
+
+    @PutMapping("/faq/update/faqId/{faqId}")
+    public FaqQuestionDTO updateQuestion(
+            @PathVariable("faqId") Long faqId,
+            @RequestBody FaqQuestionDTO question
+    ) {
+        userService.updateQuestion(faqId, question);
+
+        return question;
+    }
+
+    @DeleteMapping("/faq/categoryId/{categoryId}/faqId/{faqId}")
+    public ResponseEntity<String> removeFaqFromCategory(
+            @PathVariable("categoryId") Long categoryId,
+            @PathVariable("faqId") Long faqId
+    ) {
+
+        userService.removeFaqFromCategory(categoryId, faqId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
     }
 }

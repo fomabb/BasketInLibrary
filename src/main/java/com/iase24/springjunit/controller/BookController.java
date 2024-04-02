@@ -133,9 +133,9 @@ public class BookController {
         return bookService.findNodeById(nodeId);
     }
 
-    @GetMapping("/book/category")
+    @GetMapping("/book/category/{categoryId}")
     public BookResponse getBooksByCategoryId(
-            @RequestParam Long categoryId,
+            @PathVariable("categoryId") Long categoryId,
             @RequestParam Boolean parent,
             @RequestParam int page,
             @RequestParam int size

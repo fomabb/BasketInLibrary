@@ -4,6 +4,9 @@ import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,9 +28,15 @@ public class AdminController {
         return answer;
     }
 
-    @DeleteMapping("/{faqId}")
-    public void deleteFaq(@PathVariable("faqId") Long faqId) {
+    @DeleteMapping("/categoryId/{categoryId}/faqId/{faqId}")
+    public ResponseEntity<String> deleteFaq(
+            @PathVariable("categoryId") Long categoryId,
+            @PathVariable("faqId") Long faqId
+    ) {
 
-        adminService.deleteFaq(faqId);
+        adminService.deleteFaq(categoryId, faqId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
     }
 }

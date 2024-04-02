@@ -5,5 +5,5 @@ import com.iase24.springjunit.dto.FaqAnswerDTO;
 public interface AdminService {
     void answerForFaq(Long faqId, FaqAnswerDTO answer);
 
-    void deleteFaq(Long faqId);
+    void deleteFaq(Long categoryId, Long faqId);
 }

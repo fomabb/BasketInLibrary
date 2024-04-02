@@ -26,7 +26,8 @@ public class DescriptionCategory {
     private String description;
 
     @OneToMany(mappedBy = "descriptionCategory"
-            , cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
-            , fetch = FetchType.EAGER)
+            , cascade = CascadeType.ALL
+            , orphanRemoval = true
+            , fetch = FetchType.LAZY)
     private List<Faq> faq = new ArrayList<>();
 }

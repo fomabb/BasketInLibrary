@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final CreateUserValidator createUserValidator;
     private final DescriptionCategoryRepository descriptionCategoryRepository;
+    private final FaqRepository faqRepository;
 
     @Override
     public Optional<UserDataDTO> login(String email, String password) {
@@ -89,5 +90,32 @@ public class UserServiceImpl implements UserService {
 
         descriptionCategory.getFaq().add(faq);
         descriptionCategoryRepository.save(descriptionCategory);
+    }
+
+    @Override
+    public void removeFaqFromCategory(Long categoryId, Long faqId) {
+
+        DescriptionCategory category = descriptionCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Category with id not found"));
+
+        Faq faq = faqRepository.findById(faqId)
+                .orElseThrow(() -> new IllegalArgumentException("Faq with id not found"));
+
+        if (category.getFaq().remove(faq)) {
+            descriptionCategoryRepository.save(category);
+        } else {
+            throw new IllegalArgumentException("Faq in description category not found");
+        }
+    }
+
+    @Override
+    public void updateQuestion(Long faqId, FaqQuestionDTO question) {
+
+        Faq faq = faqRepository.findById(faqId)
+                .orElseThrow(() -> new IllegalArgumentException("Faq id not found"));
+
+        faq.setQuestion(question.getQuestion());
+
+        faqRepository.save(faq);
     }
 }

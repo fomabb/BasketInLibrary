@@ -20,4 +20,8 @@ public interface UserService {
     Optional<UserDataDTO> getCartByUserId(Long userId);
 
     void questionCategory(Long categoryId, FaqQuestionDTO question);
+
+    void removeFaqFromCategory(Long categoryId, Long faqId);
+
+    void updateQuestion(Long faqId, FaqQuestionDTO question);
 }
