@@ -135,9 +135,7 @@ public class BookController {
 
     @GetMapping("/book/category")
     public BookResponse getBooksByCategoryId(
-//            @PathVariable("categoryId") Long categoryId,
             @RequestParam Long categoryId,
-//            @RequestParam String category,
             @RequestParam Boolean parent,
             @RequestParam int page,
             @RequestParam int size
