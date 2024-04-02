@@ -19,7 +19,6 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,7 +32,6 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final CreateUserValidator createUserValidator;
     private final DescriptionCategoryRepository descriptionCategoryRepository;
-    private final FaqRepository faqRepository;
 
     @Override
     public Optional<UserDataDTO> login(String email, String password) {
@@ -79,10 +77,17 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserByIdAndCart(userId).map(userMapper::map);
     }
 
-    //TODO
     @Override
     public void questionCategory(Long categoryId, FaqQuestionDTO question) {
 
-        DescriptionCategory descriptionCategory = descriptionCategoryRepository.findById(categoryId).orElse(null);
+        DescriptionCategory descriptionCategory = descriptionCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Description category not found"));
+
+        Faq faq = new Faq();
+        faq.setQuestion(question.getQuestion());
+        faq.setDescriptionCategory(descriptionCategory);
+
+        descriptionCategory.getFaq().add(faq);
+        descriptionCategoryRepository.save(descriptionCategory);
     }
 }
