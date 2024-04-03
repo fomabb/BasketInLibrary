@@ -22,9 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public CreateUserDTO createNewUser(
-            @RequestBody CreateUserDTO createUserDTO
-    ) {
+    public CreateUserDTO createNewUser(@RequestBody CreateUserDTO createUserDTO) {
 
         userService.createNewUser(createUserDTO);
 
@@ -59,7 +57,6 @@ public class UserController {
             @PathVariable("categoryId") Long categoryId,
             @RequestBody FaqQuestionDTO question
     ) {
-
         userService.questionCategory(categoryId, question);
 
         return question;
@@ -80,7 +77,6 @@ public class UserController {
             @PathVariable("categoryId") Long categoryId,
             @PathVariable("faqId") Long faqId
     ) {
-
         userService.removeFaqFromCategory(categoryId, faqId);
 
         return ResponseEntity.status(HttpStatus.OK)

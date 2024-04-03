@@ -24,7 +24,6 @@ public class CartController {
             @PathVariable("cartId") Long cartId,
             @PathVariable("bookId") Long bookId
     ) {
-
         return cartService.addBookInCart(cartId, bookId);
     }
 
@@ -51,15 +50,18 @@ public class CartController {
             @PathVariable("bookId") Long bookId,
             @RequestBody BookUpdateDTO bookUpdateDTO
     ) {
-
         cartService.updateBookInCart(bookId, bookUpdateDTO);
 
         return BookUpdateDTO.builder().build();
     }
 
     @DeleteMapping("cartId/{cartId}/bookId/{bookId}")
-    public ResponseEntity<Cart> removeFromCart(@PathVariable Long cartId, @PathVariable Long bookId) {
+    public ResponseEntity<Cart> removeFromCart(
+            @PathVariable Long cartId,
+            @PathVariable Long bookId
+    ) {
         cartService.removeFromCart(cartId, bookId);
+
         return ResponseEntity.ok().build();
     }
 

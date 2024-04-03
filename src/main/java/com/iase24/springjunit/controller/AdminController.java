@@ -20,8 +20,7 @@ public class AdminController {
     public FaqAnswerDTO answerForFaq(
             @PathVariable("faqId") Long faqId,
             @RequestBody FaqAnswerDTO answer
-            ) {
-
+    ) {
         adminService.answerForFaq(faqId, answer);
 
         return answer;
@@ -32,10 +31,10 @@ public class AdminController {
             @PathVariable("categoryId") Long categoryId,
             @PathVariable("faqId") Long faqId
     ) {
-
         adminService.deleteFaq(categoryId, faqId);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
     }
 }

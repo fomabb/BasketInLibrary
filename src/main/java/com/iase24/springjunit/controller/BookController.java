@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/book")
 @RequiredArgsConstructor
 @Transactional
 public class BookController {
@@ -30,7 +30,6 @@ public class BookController {
             @RequestParam int page,
             @RequestParam int size
     ) {
-
         List<Book> books = bookService.getAll(PageRequest.of(page, size));
 
         PaginationInfo info = new PaginationInfo();
@@ -46,11 +45,13 @@ public class BookController {
     @PostMapping
     public List<Book> createNewBook(@RequestBody List<Book> book) {
         bookService.createNewBook(book);
+
         return book;
     }
 
     @GetMapping("/{id}")
     public Book getBookById(@PathVariable("id") Long id) {
+
         return bookService.getBookById(id);
     }
 
@@ -59,7 +60,6 @@ public class BookController {
             @PathVariable("id") Long id,
             @RequestBody BookUpdateDTO bookUpdateDTO
     ) {
-
         if (id != null) {
             bookService.updateBookCount(id, bookUpdateDTO);
         }
@@ -68,24 +68,26 @@ public class BookController {
     }
 
     @GetMapping("/active/{id}")
-    public Optional<Book> getBookByIdStatusActive(@PathVariable("id") Long id,
-                                                  @RequestParam("status") Status status) {
+    public Optional<Book> getBookByIdStatusActive(
+            @PathVariable("id") Long id,
+            @RequestParam("status") Status status
+    ) {
 
         return bookService.getBookByIdStatusActive(id, status);
     }
 
-    @DeleteMapping("cartId/{cartId}/bookId/{bookId}")
+    @DeleteMapping("/cartId/{cartId}/bookId/{bookId}")
     public void deleteBookFromCart(
             @PathVariable("cartId") Long cartId,
             @PathVariable("bookId") Long bookId
     ) {
-
         bookService.deleteBookFromCart(cartId, bookId);
     }
 
-    @PutMapping("update/counter")
-    public void updateBookCounter(@RequestParam Long id, @RequestParam int count) {
-
+    @PutMapping("/update/counter")
+    public void updateBookCounter(
+            @RequestParam Long id, @RequestParam int count
+    ) {
         bookService.updateBookCounter(id, count);
     }
 
@@ -110,7 +112,6 @@ public class BookController {
             @PathVariable("childrenId") Long childrenId,
             @RequestParam Node parentNode
     ) {
-
         bookService.addChildrenIdInParentId(childrenId, parentNode);
 
         return parentNode;
@@ -121,7 +122,6 @@ public class BookController {
             @PathVariable("bookId") Long bookId,
             @PathVariable("categoryId") Node categoryId
     ) {
-
         bookService.addBookInCategory(bookId, categoryId);
 
         return categoryId;
@@ -133,16 +133,15 @@ public class BookController {
         return bookService.findNodeById(nodeId);
     }
 
-    @GetMapping("/book/category/{categoryId}")
+    @GetMapping("/category/{categoryId}")
     public BookResponse getBooksByCategoryId(
             @PathVariable("categoryId") Long categoryId,
             @RequestParam Boolean parent,
             @RequestParam int page,
             @RequestParam int size
     ) {
-
-        List<DescriptionCategory> description = bookService.findDescriptionCategory(categoryId);
         List<Book> books = bookService.findBooksChildCategoryId(categoryId, parent, PageRequest.of(page, size));
+        List<DescriptionCategory> description = bookService.findDescriptionCategory(categoryId);
 
         PaginationInfo info = new PaginationInfo();
         info.setAmount(books.size());

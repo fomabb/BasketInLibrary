@@ -119,13 +119,13 @@ ___Response user with basket___
 
 **2. API Description of general methods for Book**
 
- METHOD | PATH                                  | DESCRIPTION                                   
---------|---------------------------------------|-----------------------------------------------
- POST   | /api                                  | create new books                              
- PUT    | /api/{bookId}                         | updating the count of books in stock          
- GET    | /api/{id}                             | get book by id                                
- GET    | /api?page={page}&size={size}          | get all books                                 
- GET    | /api/search?text={title/genre/author} | full-text search for books from the warehouse 
+ METHOD | PATH                                       | DESCRIPTION                                   
+--------|--------------------------------------------|-----------------------------------------------
+ POST   | /api/book                                  | create new books                              
+ PUT    | /api/book/{bookId}                         | updating the count of books in stock          
+ GET    | /api/book/{id}                             | get book by id                                
+ GET    | /api/book?page={page}&size={size}          | get all books                                 
+ GET    | /api/book/search?text={title/genre/author} | full-text search for books from the warehouse 
 
 ___Request body for method POST create new user___
 
