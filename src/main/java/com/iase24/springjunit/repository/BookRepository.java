@@ -16,15 +16,6 @@ import java.util.List;
 @Transactional
 public interface BookRepository extends JpaRepository<Book, Long>, PagingAndSortingRepository<Book, Long> {
 
-    @Query("select b from Book b where b.title ilike %:title%")
-    List<Book> findBookByTitle(@Param("title") String title);
-
-    @Query("select b from Book b where b.genre ilike %:genre%")
-    List<Book> findAllByGenre(@Param("genre") String genre);
-
-    @Query("select b from Book b where b.author ilike %:author%")
-    List<Book> findAllByAuthor(@Param("author") String author);
-
     @Query(value =
             "select * from book b where make_tsvector(b.title, b.genre, b.author) @@ plainto_tsquery(?1)" +
                     "or similarity(b.title, ?1) > 0.3 " +
