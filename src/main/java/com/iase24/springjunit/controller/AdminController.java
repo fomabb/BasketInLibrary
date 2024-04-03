@@ -1,6 +1,7 @@
 package com.iase24.springjunit.controller;
 
 import com.iase24.springjunit.dto.FaqAnswerDTO;
+import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,13 @@ public class AdminController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
+    }
+
+    @PostMapping("/description")
+    public DescriptionCategory createDescriptionCategory(@RequestBody DescriptionCategory descriptionCategory) {
+
+        adminService.createDescriptionCategory(descriptionCategory);
+
+        return descriptionCategory;
     }
 }

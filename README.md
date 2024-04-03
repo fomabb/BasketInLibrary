@@ -21,7 +21,7 @@
 
 ## ER diagram for the data model
 
-![DataBaseImg.png](src%2Fmain%2Fresources%2Fimage%2FDataBaseImg.png)
+![table_db_library.png](src%2Fmain%2Fresources%2Fimage%2Ftable_db_library.png)
 
 ## RESTful API
 
@@ -127,7 +127,7 @@ ___Response user with basket___
  GET    | /api/book?page={page}&size={size}          | get all books                                 
  GET    | /api/book/search?text={title/genre/author} | full-text search for books from the warehouse 
 
-___Request body for method POST create new user___
+___Request body for method POST create new books___
 
 ```json
 [
@@ -393,6 +393,18 @@ ___Response all categories with books with the implementation of infinite tree d
 --------|---------------------------------------------|-----------------------------------
  PUT    | /api/admin/{faqId}                          | answer the question on the faq id and update text 
  DELETE | /api/admin/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category 
+ POST | /api/api/admin/description | create description by id category 
+
+___Request body for description___
+
+```json
+{
+  "id": 3,
+  "title": "Fantasy category",
+  "category": "Fantasy",
+  "description": "This fantasy genre"
+}
+```
 
 ___Request body for answer___
 

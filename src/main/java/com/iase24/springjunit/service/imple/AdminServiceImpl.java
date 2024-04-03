@@ -41,4 +41,10 @@ public class AdminServiceImpl implements AdminService {
             throw new IllegalArgumentException("Faq in description category not found");
         }
     }
+
+    @Override
+    public void createDescriptionCategory(DescriptionCategory descriptionCategory) {
+
+        descriptionCategoryRepository.save(descriptionCategory);
+    }
 }
