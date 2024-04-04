@@ -1,10 +1,13 @@
 package com.iase24.springjunit.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "faq")
@@ -20,8 +23,14 @@ public class Faq {
     @Column(name = "question")
     private String question;
 
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    private LocalDateTime dateQuestionCreate;
+
     @Column(name = "answer")
     private String answer;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    private LocalDateTime dateAnswerCreate;
 
     @JsonBackReference
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})

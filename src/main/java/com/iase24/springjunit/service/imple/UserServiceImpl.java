@@ -19,6 +19,7 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -86,6 +87,7 @@ public class UserServiceImpl implements UserService {
 
         Faq faq = new Faq();
         faq.setQuestion(question.getQuestion());
+        faq.setDateQuestionCreate(LocalDateTime.now());
         faq.setDescriptionCategory(descriptionCategory);
 
         descriptionCategory.getFaq().add(faq);

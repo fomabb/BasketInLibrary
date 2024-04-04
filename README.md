@@ -87,8 +87,10 @@ ___Response category book___
       "faq": [
         {
           "id": 1,
+          "dateQuestionCreate": "04-04-2024 10:02",
           "question": "Which book from this genre is the best rated?",
-          "answer": "null"
+          "answer": "null",
+          "dateAnswerCreate": "null"
         }
       ]
     }
@@ -448,7 +450,9 @@ ___Response answer___
         {
           "id": 1,
           "question": "Which book from this genre is the best rated?",
-          "answer": "Considered one of the best publications, this is a series of WarCraft books by author Kristi Golden."
+          "dateQuestionCreate": "04-04-2024 10:02",
+          "answer": "Considered one of the best publications, this is a series of WarCraft books by author Kristi Golden.",
+          "dateAnswerCreate": "04-04-2024 10:03"
         }
       ]
     }

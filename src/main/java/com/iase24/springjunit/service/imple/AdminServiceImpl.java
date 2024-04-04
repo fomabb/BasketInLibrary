@@ -9,6 +9,8 @@ import com.iase24.springjunit.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
@@ -23,6 +25,7 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new IllegalArgumentException("Faq id: " + faqId + " not found"));
 
         faq.setAnswer(answer.getAnswer());
+        faq.setDateAnswerCreate(LocalDateTime.now());
 
         faqRepository.save(faq);
     }
