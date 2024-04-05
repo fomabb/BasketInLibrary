@@ -46,7 +46,7 @@ public class CartServiceImpl implements CartService {
                 .peek(cart -> {
                     UserDataDTO userDataDTO = new UserDataDTO();
                     userDataDTO.setId(cart.getUser().getId());
-                    userDataDTO.setLogin(cart.getUser().getLogin());
+                    userDataDTO.setUsername(cart.getUser().getUsername());
                     userDataDTO.setEmail(cart.getUser().getEmail());
                 })
                 .collect(Collectors.toList());
@@ -154,14 +154,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getCartByLogin(String login) {
+    public Cart getCartByLogin(String username) {
 
-        Optional<Cart> cartOptional = cartRepository.findByUserLogin(login);
+        Optional<Cart> cartOptional = cartRepository.findByUserUsername(username);
 
         if (cartOptional.isPresent()) {
             return cartOptional.get();
         } else {
-            throw new EntityNotFoundException("User with login: " + login + " not found");
+            throw new EntityNotFoundException("User with name: " + username + " not found");
         }
     }
 }

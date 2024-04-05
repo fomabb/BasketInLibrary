@@ -21,7 +21,7 @@ public class CreateUserMapper implements Mapper<CreateUserDTO, User> {
     @Override
     public User map(CreateUserDTO object) {
         return User.builder()
-                .login(object.getLogin())
+                .username(object.getUsername())
                 .email(object.getEmail())
                 .password(object.getPassword())
                 .build();

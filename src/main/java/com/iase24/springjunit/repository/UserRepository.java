@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "select * from cart c join user_test ut on ut.id = c.id where c.id=:id"
             , nativeQuery = true)
     Optional<User> findUserByIdAndCart(@Param("id") Long id);
+
+    Optional<User> findUserByUsername(String username);
 }

@@ -16,7 +16,7 @@ public class CreateUserValidator implements Validator<CreateUserDTO> {
     public ValidationResult validate(CreateUserDTO object) {
         var validationResult = new ValidationResult();
 
-        if (object.getLogin().isEmpty()) {
+        if (object.getUsername().isEmpty()) {
             validationResult.add(Error.of("invalid.login", "Login is invalid"));
         }
 

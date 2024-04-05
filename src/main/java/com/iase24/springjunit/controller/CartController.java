@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/cart")
 @RequiredArgsConstructor
 public class CartController {
@@ -66,9 +67,9 @@ public class CartController {
     }
 
     @GetMapping("/user/{login}")
-    public Cart getCartByUser(@PathVariable("login") String login) {
+    public Cart getCartByUser(@PathVariable("login") String username) {
 
-        return cartService.getCartByLogin(login);
+        return cartService.getCartByLogin(username);
     }
 
     @GetMapping("/allCarts/{cartId}")

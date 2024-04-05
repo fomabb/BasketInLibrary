@@ -13,6 +13,6 @@ import java.util.Optional;
 @Transactional
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    @Query("SELECT c FROM Cart c JOIN FETCH c.user u WHERE u.login = :login")
-    Optional<Cart> findByUserLogin(@Param("login") String login);
+    @Query("SELECT c FROM Cart c JOIN FETCH c.user u WHERE u.username = :username")
+    Optional<Cart> findByUserUsername(@Param("username") String username);
 }

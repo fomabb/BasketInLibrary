@@ -6,3 +6,10 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX IF NOT EXISTS book_trgm_idx ON book USING gin (title gin_trgm_ops);
 
 
+-- insert into role(name)
+-- values ('ROLE_USER');
+--
+-- insert into role(name)
+-- values ('ROLE_ADMIN');
+
+

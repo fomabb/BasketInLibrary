@@ -5,17 +5,24 @@ import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Faq;
+import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.exception.ValidationException;
 import com.iase24.springjunit.mapper.user.CreateUserMapper;
 import com.iase24.springjunit.mapper.user.UserMapper;
 import com.iase24.springjunit.repository.DescriptionCategoryRepository;
 import com.iase24.springjunit.repository.FaqRepository;
+import com.iase24.springjunit.repository.RoleRepository;
 import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.service.UserService;
 import com.iase24.springjunit.validator.CreateUserValidator;
 import com.iase24.springjunit.validator.ValidationResult;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -26,7 +33,9 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService
+        , UserDetailsService
+{
 
     private final UserRepository userRepository;
     private final CreateUserMapper createUserMapper;
@@ -34,6 +43,27 @@ public class UserServiceImpl implements UserService {
     private final CreateUserValidator createUserValidator;
     private final DescriptionCategoryRepository descriptionCategoryRepository;
     private final FaqRepository faqRepository;
+    private final RoleRepository roleRepository;
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        User user = findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+                String.format("User '%s' not exist", username)));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName()))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public Optional<User> findUserByUsername(String username) {
+
+        return userRepository.findUserByUsername(username);
+    }
 
     @Override
     public Optional<UserDataDTO> login(String email, String password) {
@@ -51,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
         var userEntity = createUserMapper.map(createUserDTO);
         userEntity.setPassword(DigestUtils.md5DigestAsHex(userEntity.getPassword().getBytes()));
-
+        userEntity.setRoles(List.of(roleRepository.findByName("ROLE_USER").get()));
         userRepository.save(userEntity);
 
         return userMapper.map(userEntity);
@@ -68,7 +98,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDataDTO> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(user -> new UserDataDTO(user.getId(), user.getLogin(), user.getEmail()))
+                .map(user -> new UserDataDTO(user.getId(), user.getUsername(), user.getEmail()))
                 .collect(Collectors.toList());
     }
 

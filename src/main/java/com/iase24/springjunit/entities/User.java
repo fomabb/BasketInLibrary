@@ -10,9 +10,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Entity
-@Table(name = "user_test")
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,7 +25,8 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    private String login;
+    @Column(name = "username")
+    private String username;
 
     @Email(message = "Email field does not match the request",
             regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,5}",
@@ -32,6 +34,14 @@ public class User {
     private String email;
 
     private String password;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Collection<Role> roles;
 
     @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

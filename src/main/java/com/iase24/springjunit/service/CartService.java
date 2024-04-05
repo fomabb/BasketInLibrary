@@ -23,5 +23,5 @@ public interface CartService {
 
     void removeFromCart(Long cartId, Long bookId);
 
-    Cart getCartByLogin(String login);
+    Cart getCartByLogin(String username);
 }

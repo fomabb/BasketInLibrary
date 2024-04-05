@@ -3,6 +3,7 @@ package com.iase24.springjunit.controller;
 import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/user")
 @RequiredArgsConstructor
 @Valid
@@ -42,7 +44,7 @@ public class UserController {
     }
 
     //TODO
-    @GetMapping("/cart/userId/{userId}")
+    @GetMapping("/secured/cart/userId/{userId}")
     public Optional<UserDataDTO> getCartByUserId(
             @PathVariable("userId") Long userId
     ) {
@@ -52,7 +54,7 @@ public class UserController {
 
 //===========================================FAQ========================================================================
 
-    @PostMapping("/faq/question/{categoryId}")
+    @PostMapping("/secured/faq/question/{categoryId}")
     public FaqQuestionDTO questionCategory(
             @PathVariable("categoryId") Long categoryId,
             @RequestBody FaqQuestionDTO question
@@ -62,7 +64,7 @@ public class UserController {
         return question;
     }
 
-    @PutMapping("/faq/update/faqId/{faqId}")
+    @PutMapping("/secured/faq/update/faqId/{faqId}")
     public FaqQuestionDTO updateQuestion(
             @PathVariable("faqId") Long faqId,
             @RequestBody FaqQuestionDTO question
@@ -72,7 +74,7 @@ public class UserController {
         return question;
     }
 
-    @DeleteMapping("/faq/categoryId/{categoryId}/faqId/{faqId}")
+    @DeleteMapping("/secured/faq/categoryId/{categoryId}/faqId/{faqId}")
     public ResponseEntity<String> removeFaqFromCategory(
             @PathVariable("categoryId") Long categoryId,
             @PathVariable("faqId") Long faqId

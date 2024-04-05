@@ -22,7 +22,7 @@ public class UserMapper implements Mapper<User, UserDataDTO> {
     public UserDataDTO map(User object) {
         return UserDataDTO.builder()
                 .id(object.getId())
-                .login(object.getLogin())
+                .username(object.getUsername())
                 .email(object.getEmail())
                 .build();
     }

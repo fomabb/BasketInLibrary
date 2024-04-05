@@ -14,7 +14,7 @@ class CreateUserMapperTest {
     @Test
     void map() {
         CreateUserDTO dto = CreateUserDTO.builder()
-                .login("Ric")
+                .username("Ric")
                 .email("rici@gmail.com")
                 .password("123")
                 .build();
@@ -22,7 +22,7 @@ class CreateUserMapperTest {
 
         User actualResult = mapper.map(dto);
         User expectedResult = User.builder()
-                .login("Ric")
+                .username("Ric")
                 .email("rici@gmail.com")
                 .password("123")
                 .build();

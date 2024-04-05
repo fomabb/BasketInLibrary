@@ -23,7 +23,7 @@ class CreateUserValidatorTest {
     @Test
     void invalidEmail() {
         CreateUserDTO createUserDTO = CreateUserDTO.builder()
-                .login("Foma")
+                .username("Foma")
                 .email("fake")
                 .password("123")
                 .build();
@@ -37,7 +37,7 @@ class CreateUserValidatorTest {
 
     private CreateUserDTO getCreateUserDto() {
         return CreateUserDTO.builder()
-                .login("Foma")
+                .username("Foma")
                 .email("fomabb@gmail.com")
                 .password("123")
                 .build();

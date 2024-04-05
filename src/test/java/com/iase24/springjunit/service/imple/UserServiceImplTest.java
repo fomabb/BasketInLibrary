@@ -10,7 +10,6 @@ import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.validator.CreateUserValidator;
 import com.iase24.springjunit.validator.Error;
 import com.iase24.springjunit.validator.ValidationResult;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -90,7 +89,7 @@ class UserServiceImplTest {
     private User getUser() {
         return User.builder()
                 .id(12L)
-                .login("Ric")
+                .username("Ric")
                 .email("rici@gmail.com")
                 .password("123")
                 .build();
@@ -99,14 +98,14 @@ class UserServiceImplTest {
     private UserDataDTO getUserDataDto() {
         return UserDataDTO.builder()
                 .id(12L)
-                .login("Ric")
+                .username("Ric")
                 .email("rici@gmail.com")
                 .build();
     }
 
     private CreateUserDTO getCreateUserDto() {
         return CreateUserDTO.builder()
-                .login("Foma")
+                .username("Foma")
                 .email("foma@gmail.com")
                 .password("123")
                 .build();
