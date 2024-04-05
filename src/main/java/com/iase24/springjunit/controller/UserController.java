@@ -3,6 +3,8 @@ package com.iase24.springjunit.controller;
 import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.entities.Cart;
+import com.iase24.springjunit.service.imple.CartServiceImpl;
 import com.iase24.springjunit.service.imple.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserServiceImpl userService;
+    private final CartServiceImpl cartService;
 
     @PostMapping
     public CreateUserDTO createNewUser(@RequestBody CreateUserDTO createUserDTO) {
@@ -30,11 +32,6 @@ public class UserController {
         return createUserDTO;
     }
 
-    @GetMapping
-    public List<UserDataDTO> getAllUsers() {
-
-        return userService.getAllUsers();
-    }
 
     @GetMapping("/{id}")
     public Optional<UserDataDTO> getUserById(@PathVariable("id") Long id) {
@@ -43,7 +40,7 @@ public class UserController {
     }
 
     //TODO
-    @GetMapping("/secured/cart/userId/{userId}")
+    @GetMapping("/cart/userId/{userId}")
     public Optional<UserDataDTO> getCartByUserId(
             @PathVariable("userId") Long userId
     ) {
@@ -51,9 +48,35 @@ public class UserController {
         return userService.getCartByUserId(userId);
     }
 
+//===========================================Cart=======================================================================
+
+    @PutMapping("/cartId/{cartId}/bookId/{bookId}")
+    public Cart addBookInCart(
+            @PathVariable("cartId") Long cartId,
+            @PathVariable("bookId") Long bookId
+    ) {
+        return cartService.addBookInCart(cartId, bookId);
+    }
+
+    @GetMapping("/{cartId}")
+    public Cart getCartById(@PathVariable("cartId") Long cartId) {
+
+        return cartService.getCartById(cartId);
+    }
+
+    @DeleteMapping("cartId/{cartId}/bookId/{bookId}")
+    public ResponseEntity<Cart> removeFromCart(
+            @PathVariable Long cartId,
+            @PathVariable Long bookId
+    ) {
+        cartService.removeFromCart(cartId, bookId);
+
+        return ResponseEntity.ok().build();
+    }
+
 //===========================================FAQ========================================================================
 
-    @PostMapping("/secured/faq/question/{categoryId}")
+    @PostMapping("/faq/question/{categoryId}")
     public FaqQuestionDTO questionCategory(
             @PathVariable("categoryId") Long categoryId,
             @RequestBody FaqQuestionDTO question
@@ -63,7 +86,7 @@ public class UserController {
         return question;
     }
 
-    @PutMapping("/secured/faq/update/faqId/{faqId}")
+    @PutMapping("/faq/update/faqId/{faqId}")
     public FaqQuestionDTO updateQuestion(
             @PathVariable("faqId") Long faqId,
             @RequestBody FaqQuestionDTO question
@@ -73,7 +96,7 @@ public class UserController {
         return question;
     }
 
-    @DeleteMapping("/secured/faq/categoryId/{categoryId}/faqId/{faqId}")
+    @DeleteMapping("/faq/categoryId/{categoryId}/faqId/{faqId}")
     public ResponseEntity<String> removeFaqFromCategory(
             @PathVariable("categoryId") Long categoryId,
             @PathVariable("faqId") Long faqId

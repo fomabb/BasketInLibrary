@@ -20,30 +20,16 @@ public class CartController {
     private final CartService cartService;
     private final BookCartService bookCartService;
 
-    @PutMapping("/cartId/{cartId}/bookId/{bookId}")
-    public Cart addBookInCart(
-            @PathVariable("cartId") Long cartId,
-            @PathVariable("bookId") Long bookId
-    ) {
-        return cartService.addBookInCart(cartId, bookId);
-    }
-
     @PostMapping
     public Cart addCart(@RequestBody Cart cart) {
 
         return cartService.addCart(cart);
     }
 
-    @GetMapping
-    public List<Cart> getCarts() {
+    @GetMapping("/allCarts/{cartId}")
+    public List<BookCartDataDTO> getAllCarts(@PathVariable("cartId") Long cartId) {
 
-        return cartService.getCarts();
-    }
-
-    @GetMapping("/{cartId}")
-    public Cart getCartById(@PathVariable("cartId") Long cartId) {
-
-        return cartService.getCartById(cartId);
+        return bookCartService.findAllByCartId(cartId);
     }
 
     @PutMapping("/bookId/{bookId}")
@@ -54,27 +40,5 @@ public class CartController {
         cartService.updateBookInCart(bookId, bookUpdateDTO);
 
         return BookUpdateDTO.builder().build();
-    }
-
-    @DeleteMapping("cartId/{cartId}/bookId/{bookId}")
-    public ResponseEntity<Cart> removeFromCart(
-            @PathVariable Long cartId,
-            @PathVariable Long bookId
-    ) {
-        cartService.removeFromCart(cartId, bookId);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/user/{login}")
-    public Cart getCartByUser(@PathVariable("login") String username) {
-
-        return cartService.getCartByLogin(username);
-    }
-
-    @GetMapping("/allCarts/{cartId}")
-    public List<BookCartDataDTO> getAllCarts(@PathVariable("cartId") Long cartId) {
-
-        return bookCartService.findAllByCartId(cartId);
     }
 }

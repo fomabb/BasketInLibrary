@@ -43,31 +43,12 @@ public class BookController {
         return response;
     }
 
-
-    @PostMapping("/admin")
-    public List<Book> createNewBook(@RequestBody List<Book> book) {
-        bookService.createNewBook(book);
-
-        return book;
-    }
-
     @GetMapping("/{id}")
     public Book getBookById(@PathVariable("id") Long id) {
 
         return bookService.getBookById(id);
     }
 
-    @PutMapping("/admin/{id}")
-    public BookUpdateDTO updateBookCount(
-            @PathVariable("id") Long id,
-            @RequestBody BookUpdateDTO bookUpdateDTO
-    ) {
-        if (id != null) {
-            bookService.updateBookCount(id, bookUpdateDTO);
-        }
-
-        return bookUpdateDTO;
-    }
 
     @GetMapping("/active/{id}")
     public Optional<Book> getBookByIdStatusActive(
@@ -97,36 +78,6 @@ public class BookController {
     public List<BookDataDTO> findSearchBook(@RequestParam String text) {
 
         return bookService.search(text);
-    }
-
-//=======================================================Tree===========================================================
-
-    @PostMapping("/admin/createCategory")
-    public List<Node> createNewCategory(@RequestBody List<Node> node) {
-
-        bookService.createNewCategory(node);
-
-        return node;
-    }
-
-    @PutMapping("/admin/addChildrenId/{childrenId}")
-    public Node addChildrenIdInParentId(
-            @PathVariable("childrenId") Long childrenId,
-            @RequestParam Node parentNode
-    ) {
-        bookService.addChildrenIdInParentId(childrenId, parentNode);
-
-        return parentNode;
-    }
-
-    @PutMapping("/admin/addBookId/{bookId}/categoryId/{categoryId}")
-    public Node addBookInCategory(
-            @PathVariable("bookId") Long bookId,
-            @PathVariable("categoryId") Node categoryId
-    ) {
-        bookService.addBookInCategory(bookId, categoryId);
-
-        return categoryId;
     }
 
     @GetMapping("/node/{nodeId}")

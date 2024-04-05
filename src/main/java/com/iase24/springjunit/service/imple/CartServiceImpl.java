@@ -156,7 +156,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart getCartByLogin(String username) {
 
-        Optional<Cart> cartOptional = cartRepository.findByUserUsername(username);
+        Optional<Cart> cartOptional = cartRepository.findCartByUser_Username(username);
 
         if (cartOptional.isPresent()) {
             return cartOptional.get();

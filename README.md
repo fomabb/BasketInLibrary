@@ -29,21 +29,67 @@
 
  METHOD | PATH                                                | DESCRIPTION                                     
 --------|-----------------------------------------------------|-------------------------------------------------
- POST   | /api/user                                           | create a new user with a personal shopping cart 
+ POST   | /auth/registration                                  | registration user with ROLE_USER and with create a personal shopping cart 
+ POST   | /auth/                                  | registration user with ROLE_USER and with create a personal shopping cart 
  POST   | /api/user/faq/question/{categoryId}                 | ask a question by category by id                
  PUT   | /api/user/faq/update/faqId/{faqId}                  | update text question                
  GET    | /api/user/{id}                                      | get user by id                                  
- GET    | /api/user                                           | get all user                                    
+ GET    | /api/admin/allUsers                                  | get all user for admin                                   
  DELETE | /api/user/faq/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category  
 
-___Request body for method create new user with your basket___
+___Request body for method registration new user with your basket___
 
 ```json
 {
   "login": "Ric",
-  "email": "Ricbb1221@gmail.com",
-  "password": "java12-rs"
+  "email": "ricbb@gmail.com",
+  "password": "java12-rs",
+  "confirmPassword" : "java12-rs"
 }
+```
+
+___Request body authentication user___
+
+```json
+{
+  "username" : "Ric",
+  "password" : "java12-rs"
+}
+```
+
+___Response jwtToken___
+
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoiUmljIiwiaWF0IjoxNz
+              EyMzQwMDk3LCJleHAiOjE3MTIzNDA2OTd9.apv25A_5vuHU3xooX-32w6-t2UnLorkx0zXz-LouRmw"
+}
+```
+
+___Filtering authentication by {/api/user/(**)} and {/api/admin/(**)}___
+
+___Response user with basket___
+
+```json
+[
+  {
+    "id": 1,
+    "dateTime": "25-03-2024 14:51",
+    "books": [],
+    "user": {
+      "id": 1,
+      "login": "Ric",
+      "email": "Ric@gmail.com",
+      "password": "$2a$10$iSOYg/4dUsKaYn.a5V/THO11XkQnpcKsG0jyGE/i4U3xDQarcakDW",
+      "roles": [
+        {
+          "id": 1,
+          "name": "ROLE_USER"
+        }
+      ]
+    }
+  }
+]
 ```
 
 ___Request body for method ask a question___
@@ -99,24 +145,6 @@ ___Response category book___
     "amount": 2
   }
 }
-```
-
-___Response user with basket___
-
-```json
-[
-  {
-    "id": 1,
-    "dateTime": "25-03-2024 14:51",
-    "books": [],
-    "user": {
-      "id": 1,
-      "login": "Ric",
-      "email": "Ric@gmail.com",
-      "password": "202cb962ac59075b964b07152d234b70"
-    }
-  }
-]
 ```
 
 **2. API Description of general methods for Book**
@@ -182,11 +210,11 @@ ___Response body for method GET search /api/search?text=war kristi golden___
 
  METHOD | PATH                                      | DESCRIPTION                                                       
 --------|-------------------------------------------|-------------------------------------------------------------------
- PUT    | /api/cart/cartId/{cartId}/bookId/{bookId} | adding a book to the user's cart from the book warehouse          
- DELETE | /api/cart/cartId/{cartId}/bookId/{bookId} | returning  a book from a user's shopping cart to a book warehouse 
+ PUT    | /api/user/cartId/{cartId}/bookId/{bookId} | adding a book to the user's cart from the book warehouse          
+ DELETE | /api/user/cartId/{cartId}/bookId/{bookId} | returning  a book from a user's shopping cart to a book warehouse 
  GET    | /api/cart/{id}                            | get cart by id                                                    
  GET    | /api/cart                                 | get all carts users                                               
- GET    | /api/cart/user/{login}                    | get cart user's by login                                          
+ GET    | /api/admin/cartByUser?username={username} | get cart user's by login                                          
  GET    | /api/cart/allCarts/{cartId}               | show aa orders by Id cart                                         
 
 ___Response for cart___
@@ -218,8 +246,8 @@ ___Response for cart___
   "user": {
     "id": 1,
     "login": "Ric",
-    "email": "Ricbb1221@gmail.com",
-    "password": "202cb962ac59075b964b07152d234b70"
+    "email": "ricbb@gmail.com",
+    "password": "$2a$10$iSOYg/4dUsKaYn.a5V/THO11XkQnpcKsG0jyGE/i4U3xDQarcakDW"
   }
 }
 ````
@@ -261,9 +289,9 @@ ___Response show all orders___
 
  METHOD | PATH                                                                        | DESCRIPTION                                                         
 --------|-----------------------------------------------------------------------------|---------------------------------------------------------------------
- POST   | /api/createCategory                                                         | create new category in tree                                         
- PUT    | /api/addChildrenId/{childId}?parentNode={parentId}                          | add children category in parent                                     
- PUT    | /api/addBookId/{bookId}/categoryId/{categoryId}                             | add book in category for tree                                       
+ POST   | /api/admin/createCategory                                                         | create new category in tree                                         
+ PUT    | /api/admin/addChildrenId/{childId}?parentNode={parentId}                          | add children category in parent                                     
+ PUT    | /api/admin/addBookId/{bookId}/categoryId/{categoryId}                             | add book in category for tree                                       
  GET    | /api/book/category/{categoryId}?parent={true/false}&page={page}&size={size} | display all books for the category by id {true}parent, {false}child 
 
 ___Request body for create categories method___
@@ -391,11 +419,11 @@ ___Response all categories with books with the implementation of infinite tree d
 
 **5. API Description of general methods for Admin**
 
- METHOD | PATH                                        | DESCRIPTION                       
---------|---------------------------------------------|-----------------------------------
- PUT    | /api/admin/{faqId}                          | answer the question on the faq id and update text 
+ METHOD | PATH                                       | DESCRIPTION                       
+--------|--------------------------------------------|-----------------------------------
+ PUT    | /api/admin/{faqId}                         | answer the question on the faq id and update text 
  DELETE | /api/admin/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category 
- POST | /api/api/admin/description | create description by id category 
+ POST | /api/admin/description | create description by id category 
 
 ___Request body for description___
 
