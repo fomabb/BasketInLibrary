@@ -30,7 +30,7 @@
  METHOD | PATH                                                | DESCRIPTION                                     
 --------|-----------------------------------------------------|-------------------------------------------------
  POST   | /auth/registration                                  | registration user with ROLE_USER and with create a personal shopping cart 
- POST   | /auth/                                  | registration user with ROLE_USER and with create a personal shopping cart 
+ POST   | /auth                                  | registration user with ROLE_USER and with create a personal shopping cart 
  POST   | /api/user/faq/question/{categoryId}                 | ask a question by category by id                
  PUT   | /api/user/faq/update/faqId/{faqId}                  | update text question                
  GET    | /api/user/{id}                                      | get user by id                                  
@@ -79,7 +79,7 @@ ___Response user with basket___
     "user": {
       "id": 1,
       "login": "Ric",
-      "email": "Ric@gmail.com",
+      "email": "ricbb@gmail.com",
       "password": "$2a$10$iSOYg/4dUsKaYn.a5V/THO11XkQnpcKsG0jyGE/i4U3xDQarcakDW",
       "roles": [
         {
