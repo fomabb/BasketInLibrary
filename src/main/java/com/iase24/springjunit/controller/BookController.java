@@ -43,7 +43,8 @@ public class BookController {
         return response;
     }
 
-    @PostMapping
+
+    @PostMapping("/admin")
     public List<Book> createNewBook(@RequestBody List<Book> book) {
         bookService.createNewBook(book);
 
@@ -56,7 +57,7 @@ public class BookController {
         return bookService.getBookById(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     public BookUpdateDTO updateBookCount(
             @PathVariable("id") Long id,
             @RequestBody BookUpdateDTO bookUpdateDTO
@@ -77,7 +78,7 @@ public class BookController {
         return bookService.getBookByIdStatusActive(id, status);
     }
 
-    @DeleteMapping("/cartId/{cartId}/bookId/{bookId}")
+    @DeleteMapping("/user/cartId/{cartId}/bookId/{bookId}")
     public void deleteBookFromCart(
             @PathVariable("cartId") Long cartId,
             @PathVariable("bookId") Long bookId
@@ -100,7 +101,7 @@ public class BookController {
 
 //=======================================================Tree===========================================================
 
-    @PostMapping("/createCategory")
+    @PostMapping("/admin/createCategory")
     public List<Node> createNewCategory(@RequestBody List<Node> node) {
 
         bookService.createNewCategory(node);
@@ -108,7 +109,7 @@ public class BookController {
         return node;
     }
 
-    @PutMapping("/addChildrenId/{childrenId}")
+    @PutMapping("/admin/addChildrenId/{childrenId}")
     public Node addChildrenIdInParentId(
             @PathVariable("childrenId") Long childrenId,
             @RequestParam Node parentNode
@@ -118,7 +119,7 @@ public class BookController {
         return parentNode;
     }
 
-    @PutMapping("addBookId/{bookId}/categoryId/{categoryId}")
+    @PutMapping("/admin/addBookId/{bookId}/categoryId/{categoryId}")
     public Node addBookInCategory(
             @PathVariable("bookId") Long bookId,
             @PathVariable("categoryId") Node categoryId

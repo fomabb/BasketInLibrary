@@ -3,8 +3,7 @@ package com.iase24.springjunit.controller;
 import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.entities.User;
-import com.iase24.springjunit.service.UserService;
+import com.iase24.springjunit.service.imple.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,7 @@ import java.util.Optional;
 @Valid
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @PostMapping
     public CreateUserDTO createNewUser(@RequestBody CreateUserDTO createUserDTO) {
