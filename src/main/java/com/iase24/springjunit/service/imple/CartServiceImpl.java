@@ -13,11 +13,11 @@ import com.iase24.springjunit.repository.CartRepository;
 import com.iase24.springjunit.service.BookService;
 import com.iase24.springjunit.service.CartService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
@@ -35,6 +35,7 @@ public class CartServiceImpl implements CartService {
     private final BookCartRepository bookCartRepository;
 
     @Override
+    @Transactional
     public Cart addCart(Cart cart) {
 
         return cartRepository.save(cart);
@@ -68,6 +69,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO) {
 
         Book book = bookService.getBookById(bookId);
@@ -89,6 +91,7 @@ public class CartServiceImpl implements CartService {
      * Метод добавляющий книгу в корзину заказов пользователя
      */
     @Override
+    @Transactional
     public ResponseEntity<?> addBookInCart(Long cartId, Long bookId) {
         Cart cart = getCartById(cartId);
         Book book = bookService.getBookById(bookId);
@@ -121,6 +124,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> removeFromCart(Long cartId, Long bookId) {
         Cart cart = getCartById(cartId);
         Book bookToRemove = bookService.getBookById(bookId);

@@ -18,6 +18,7 @@ import com.iase24.springjunit.validator.ValidationResult;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -42,6 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @SneakyThrows
+    @Transactional
     @Override
     public UserDataDTO createNewUser(CreateUserDTO createUserDTO) {
 
@@ -81,6 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void questionCategory(Long categoryId, FaqQuestionDTO question) {
 
         DescriptionCategory descriptionCategory = descriptionCategoryRepository.findById(categoryId)
@@ -96,6 +100,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void removeFaqFromCategory(Long categoryId, Long faqId) {
 
         DescriptionCategory category = descriptionCategoryRepository.findById(categoryId)
@@ -112,6 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateQuestion(Long faqId, FaqQuestionDTO question) {
 
         Faq faq = faqRepository.findById(faqId)

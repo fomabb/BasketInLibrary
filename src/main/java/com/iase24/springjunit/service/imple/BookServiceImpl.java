@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
@@ -45,6 +45,7 @@ public class BookServiceImpl implements BookService {
 
     //TODO
     @Override
+    @Transactional
     public void deleteBookFromCart(Long cartId, Long bookId) {
         cartRepository.findById(cartId);
         bookRepository.deleteById(bookId);
@@ -57,6 +58,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public void createNewBook(List<Book> book) {
         if (book != null) {
             bookRepository.saveAllAndFlush(book);
@@ -75,6 +77,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public void updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) {
         Book book = getBookById(id);
 
@@ -93,8 +96,8 @@ public class BookServiceImpl implements BookService {
     }
 
     //TODO
-
     @Override
+    @Transactional
     public void updateBookCounter(Long id, int count) {
 
         Book book = getBookById(id);

@@ -8,17 +8,20 @@ import com.iase24.springjunit.repository.FaqRepository;
 import com.iase24.springjunit.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AdminServiceImpl implements AdminService {
 
     private final FaqRepository faqRepository;
     private final DescriptionCategoryRepository descriptionCategoryRepository;
 
     @Override
+    @Transactional
     public void answerForFaq(Long faqId, FaqAnswerDTO answer) {
 
         Faq faq = faqRepository.findById(faqId)
@@ -31,6 +34,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Transactional
     public void deleteFaq(Long categoryId, Long faqId) {
 
         DescriptionCategory category = descriptionCategoryRepository.findById(categoryId)
@@ -46,6 +50,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Transactional
     public void createDescriptionCategory(DescriptionCategory descriptionCategory) {
 
         descriptionCategoryRepository.save(descriptionCategory);
