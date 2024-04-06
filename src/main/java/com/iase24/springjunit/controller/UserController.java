@@ -51,27 +51,27 @@ public class UserController {
 //===========================================Cart=======================================================================
 
     @PutMapping("/cartId/{cartId}/bookId/{bookId}")
-    public Cart addBookInCart(
+    public ResponseEntity<?> addBookInCart(
             @PathVariable("cartId") Long cartId,
             @PathVariable("bookId") Long bookId
     ) {
         return cartService.addBookInCart(cartId, bookId);
     }
 
-    @GetMapping("/{cartId}")
+    @GetMapping("/cartId/{cartId}")
     public Cart getCartById(@PathVariable("cartId") Long cartId) {
 
         return cartService.getCartById(cartId);
     }
 
     @DeleteMapping("cartId/{cartId}/bookId/{bookId}")
-    public ResponseEntity<Cart> removeFromCart(
+    public ResponseEntity<?> removeFromCart(
             @PathVariable Long cartId,
             @PathVariable Long bookId
     ) {
-        cartService.removeFromCart(cartId, bookId);
+        return cartService.removeFromCart(cartId, bookId);
 
-        return ResponseEntity.ok().build();
+//        return ResponseEntity.ok().build();
     }
 
 //===========================================FAQ========================================================================

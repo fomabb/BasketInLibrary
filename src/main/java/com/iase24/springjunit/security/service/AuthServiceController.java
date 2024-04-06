@@ -15,7 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
@@ -26,11 +25,8 @@ public class AuthServiceController {
     private final JwtTokensUtil jwtTokensUtil;
     private final AuthenticationManager authenticationManager;
 
-
-    @PostMapping("/auth")
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
         try {
-
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authRequest.getUsername()
                     , authRequest.getPassword()
@@ -46,7 +42,6 @@ public class AuthServiceController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    @PostMapping("/registration")
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDTO registrationUserDTO) {
 
         if (!registrationUserDTO.getPassword().equals(registrationUserDTO.getConfirmPassword())) {
@@ -61,7 +56,6 @@ public class AuthServiceController {
                     , "A user with the same name or email exists")
                     , HttpStatus.BAD_REQUEST);
         }
-
         User user = authService.registrationNewUser(registrationUserDTO);
         return ResponseEntity.ok(new UserDataDTO(user.getId(), user.getUsername(), user.getEmail()));
     }

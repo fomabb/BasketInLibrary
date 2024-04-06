@@ -6,6 +6,7 @@ import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.BookCart;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.entities.Status;
+import com.iase24.springjunit.exception.AppError;
 import com.iase24.springjunit.repository.BookCartRepository;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.repository.CartRepository;
@@ -14,6 +15,8 @@ import com.iase24.springjunit.service.CartService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -86,7 +89,7 @@ public class CartServiceImpl implements CartService {
      * Метод добавляющий книгу в корзину заказов пользователя
      */
     @Override
-    public Cart addBookInCart(Long cartId, Long bookId) {
+    public ResponseEntity<?> addBookInCart(Long cartId, Long bookId) {
         Cart cart = getCartById(cartId);
         Book book = bookService.getBookById(bookId);
 
@@ -105,15 +108,20 @@ public class CartServiceImpl implements CartService {
             bookCart.setCreationTime(LocalDateTime.now());
 
             bookCartRepository.saveAndFlush(bookCart);
-
-            return cart;
         } else {
-            throw new EntityNotFoundException("Book not exist");
+            return new ResponseEntity<>(new AppError(
+                    HttpStatus.NOT_FOUND.value(), "Book in stock not found")
+                    , HttpStatus.NOT_FOUND
+            );
         }
+        return new ResponseEntity<>(
+                "Book with id " + bookId + " added to the cart with id " + cartId
+                , HttpStatus.OK
+        );
     }
 
     @Override
-    public void removeFromCart(Long cartId, Long bookId) {
+    public ResponseEntity<?> removeFromCart(Long cartId, Long bookId) {
         Cart cart = getCartById(cartId);
         Book bookToRemove = bookService.getBookById(bookId);
 
@@ -135,8 +143,15 @@ public class CartServiceImpl implements CartService {
                 returnBookToStock(bookToRemove.getId());
             }
         } else {
-            throw new EntityNotFoundException("Book is Not in Cart");
+            return new ResponseEntity<>(new AppError(
+                    HttpStatus.NOT_FOUND.value(), "Book is Not in Cart")
+                    , HttpStatus.NOT_FOUND
+            );
         }
+        return new ResponseEntity<>(
+                "Book with id " + bookId + " remove in cart with id " + cartId
+                , HttpStatus.OK
+        );
     }
 
     /**

@@ -2,6 +2,7 @@ package com.iase24.springjunit.service;
 
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Cart;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -17,11 +18,11 @@ public interface CartService {
 
     Cart getCartById(Long cartId);
 
-    Cart addBookInCart(Long cartId, Long bookId);
+    ResponseEntity<?> addBookInCart(Long cartId, Long bookId);
 
     void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO);
 
-    void removeFromCart(Long cartId, Long bookId);
+    ResponseEntity<?> removeFromCart(Long cartId, Long bookId);
 
     Cart getCartByLogin(String username);
 }

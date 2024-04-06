@@ -4,7 +4,6 @@ import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.security.dto.RegistrationUserDTO;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

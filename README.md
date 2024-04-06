@@ -27,14 +27,14 @@
 
 **1. API Description of general methods for User**
 
- METHOD | PATH                                                | DESCRIPTION                                     
---------|-----------------------------------------------------|-------------------------------------------------
- POST   | /auth/registration                                  | registration user with ROLE_USER and with create a personal shopping cart 
- POST   | /auth/                                  | registration user with ROLE_USER and with create a personal shopping cart 
- POST   | /api/user/faq/question/{categoryId}                 | ask a question by category by id                
- PUT   | /api/user/faq/update/faqId/{faqId}                  | update text question                
- GET    | /api/user/{id}                                      | get user by id                                  
- GET    | /api/admin/allUsers                                  | get all user for admin                                   
+ METHOD | PATH                                               | DESCRIPTION                                     
+--------|----------------------------------------------------|-------------------------------------------------
+ POST   | /auth/registration                                 | registration user with ROLE_USER and with create a personal shopping cart 
+ POST   | /auth                                  | authentication user  
+ POST   | /api/user/faq/question/{categoryId}                | ask a question by category by id                
+ PUT   | /api/user/faq/update/faqId/{faqId}                 | update text question                
+ GET    | /api/user/{id}                                     | get user by id                                  
+ GET    | /api/admin/allUsers                                 | get all user for admin                                   
  DELETE | /api/user/faq/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category  
 
 ___Request body for method registration new user with your basket___
@@ -79,7 +79,7 @@ ___Response user with basket___
     "user": {
       "id": 1,
       "login": "Ric",
-      "email": "Ric@gmail.com",
+      "email": "ric@gmail.com",
       "password": "$2a$10$iSOYg/4dUsKaYn.a5V/THO11XkQnpcKsG0jyGE/i4U3xDQarcakDW",
       "roles": [
         {
@@ -152,7 +152,7 @@ ___Response category book___
  METHOD | PATH                                       | DESCRIPTION                                   
 --------|--------------------------------------------|-----------------------------------------------
  POST   | /api/book                                  | create new books                              
- PUT    | /api/book/{bookId}                         | updating the count of books in stock          
+ PUT    | /api/admin/bookCount/{bookId}              | updating the count of books in stock          
  GET    | /api/book/{id}                             | get book by id                                
  GET    | /api/book?page={page}&size={size}          | get all books                                 
  GET    | /api/book/search?text={title/genre/author} | full-text search for books from the warehouse 
@@ -212,7 +212,7 @@ ___Response body for method GET search /api/search?text=war kristi golden___
 --------|-------------------------------------------|-------------------------------------------------------------------
  PUT    | /api/user/cartId/{cartId}/bookId/{bookId} | adding a book to the user's cart from the book warehouse          
  DELETE | /api/user/cartId/{cartId}/bookId/{bookId} | returning  a book from a user's shopping cart to a book warehouse 
- GET    | /api/cart/{id}                            | get cart by id                                                    
+ GET    | /api/cartId/{id}                          | get cart by id                                                    
  GET    | /api/cart                                 | get all carts users                                               
  GET    | /api/admin/cartByUser?username={username} | get cart user's by login                                          
  GET    | /api/cart/allCarts/{cartId}               | show aa orders by Id cart                                         
