@@ -79,7 +79,7 @@ ___Response user with basket___
     "user": {
       "id": 1,
       "login": "Ric",
-      "email": "ric@gmail.com",
+      "email": "Ric@gmail.com",
       "password": "$2a$10$iSOYg/4dUsKaYn.a5V/THO11XkQnpcKsG0jyGE/i4U3xDQarcakDW",
       "roles": [
         {
@@ -152,7 +152,7 @@ ___Response category book___
  METHOD | PATH                                       | DESCRIPTION                                   
 --------|--------------------------------------------|-----------------------------------------------
  POST   | /api/book                                  | create new books                              
- PUT    | /api/admin/bookCount/{bookId}              | updating the count of books in stock          
+ PUT    | /api/book/{bookId}                         | updating the count of books in stock          
  GET    | /api/book/{id}                             | get book by id                                
  GET    | /api/book?page={page}&size={size}          | get all books                                 
  GET    | /api/book/search?text={title/genre/author} | full-text search for books from the warehouse 
@@ -212,7 +212,7 @@ ___Response body for method GET search /api/search?text=war kristi golden___
 --------|-------------------------------------------|-------------------------------------------------------------------
  PUT    | /api/user/cartId/{cartId}/bookId/{bookId} | adding a book to the user's cart from the book warehouse          
  DELETE | /api/user/cartId/{cartId}/bookId/{bookId} | returning  a book from a user's shopping cart to a book warehouse 
- GET    | /api/cartId/{id}                          | get cart by id                                                    
+ GET    | /api/cart/{id}                            | get cart by id                                                    
  GET    | /api/cart                                 | get all carts users                                               
  GET    | /api/admin/cartByUser?username={username} | get cart user's by login                                          
  GET    | /api/cart/allCarts/{cartId}               | show aa orders by Id cart                                         
