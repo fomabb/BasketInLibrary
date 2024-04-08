@@ -3,7 +3,6 @@ package com.iase24.springjunit.security.service;
 import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.security.dto.RegistrationUserDTO;
-import com.iase24.springjunit.security.dto.UpdateRoleDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

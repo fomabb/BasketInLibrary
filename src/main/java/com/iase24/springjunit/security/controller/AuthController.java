@@ -2,7 +2,6 @@ package com.iase24.springjunit.security.controller;
 
 import com.iase24.springjunit.security.dto.JwtRequest;
 import com.iase24.springjunit.security.dto.RegistrationUserDTO;
-import com.iase24.springjunit.security.dto.UpdateRoleDTO;
 import com.iase24.springjunit.security.facade.AuthFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
