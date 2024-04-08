@@ -23,25 +23,20 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public void answerForFaq(Long faqId, FaqAnswerDTO answer) {
-
         Faq faq = faqRepository.findById(faqId)
                 .orElseThrow(() -> new IllegalArgumentException("Faq id: " + faqId + " not found"));
-
         faq.setAnswer(answer.getAnswer());
         faq.setDateAnswerCreate(LocalDateTime.now());
-
         faqRepository.save(faq);
     }
 
     @Override
     @Transactional
     public void deleteFaq(Long categoryId, Long faqId) {
-
         DescriptionCategory category = descriptionCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category id not found"));
         Faq faq = faqRepository.findById(faqId)
                 .orElseThrow(() -> new IllegalArgumentException("Faq id not found"));
-
         if (category.getFaq().remove(faq)) {
             descriptionCategoryRepository.save(category);
         } else {
@@ -52,7 +47,6 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public void createDescriptionCategory(DescriptionCategory descriptionCategory) {
-
         descriptionCategoryRepository.save(descriptionCategory);
     }
 }

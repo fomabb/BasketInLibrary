@@ -12,8 +12,6 @@ import com.iase24.springjunit.repository.CartRepository;
 import com.iase24.springjunit.repository.NodeRepository;
 import com.iase24.springjunit.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +51,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getAll(PageRequest pageRequest) {
-
         return bookRepository.findAll(pageRequest).toList();
     }
 
@@ -67,22 +64,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getBookById(Long id) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
-
-        if (optionalBook.isPresent()) {
-            return optionalBook.get();
-        } else {
-            throw new IllegalArgumentException("Book with id " + id + " not found");
-        }
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Book with id " + id + " not found"));
     }
 
     @Override
     @Transactional
     public void updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) {
         Book book = getBookById(id);
-
         book.setCount(bookUpdateDTO.getCount());
-
         if (book.getCount() > 0) {
             book.setStatus(Status.ACTIVE);
         } else if (book.getCount() == 0) {
@@ -90,7 +80,6 @@ public class BookServiceImpl implements BookService {
         } else {
             throw new IllegalArgumentException("IllegalAccessException");
         }
-
         Book updateBook = bookRepository.save(book);
         new BookUpdateDTO(updateBook.getCount(), updateBook.getStatus());
     }
@@ -99,9 +88,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void updateBookCounter(Long id, int count) {
-
         Book book = getBookById(id);
-
         if (book != null) {
             if (count <= 0) {
                 book.setStatus(Status.INACTIVE);
@@ -114,7 +101,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDataDTO> search(String text) {
-
         return bookRepository.search(text)
                 .stream()
                 .map(bookMapper::map)
@@ -127,45 +113,32 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void createNewCategory(List<Node> node) {
-
         nodeRepository.saveAllAndFlush(node);
     }
 
     @Override
     @Transactional
     public void addChildrenIdInParentId(Long childrenId, Node parentNode) {
-
         Node node = findNodeById(childrenId);
-
         node.setParent(parentNode);
     }
 
     @Override
     @Transactional
     public void addBookInCategory(Long bookId, Node categoryId) {
-
         Book book = getBookById(bookId);
-
         book.setNode(categoryId);
-
         bookRepository.saveAndFlush(book);
     }
 
     @Override
     public Node findNodeById(Long nodeId) {
-
-        Optional<Node> optionalNode = nodeRepository.findById(nodeId);
-
-        if (optionalNode.isPresent()) {
-            return optionalNode.get();
-        } else {
-            throw new IllegalArgumentException("Node with id " + nodeId + "not found");
-        }
+        return nodeRepository.findById(nodeId)
+                .orElseThrow(() -> new IllegalArgumentException("Node with id " + nodeId + "not found"));
     }
 
     @Override
     public List<Book> findBooksChildCategoryId(Long categoryId, boolean parent, PageRequest pageRequest) {
-
         if (parent) {
             return bookRepository.findBooksParentCategoryId(categoryId, pageRequest).stream()
                     .sorted(Comparator.comparing(Book::getGenre))
@@ -179,7 +152,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<DescriptionCategory> findDescriptionCategory(Long category) {
-
         return bookRepository.findDescriptionCategory(category);
     }
 }

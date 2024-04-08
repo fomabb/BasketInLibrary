@@ -47,23 +47,19 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDataDTO createNewUser(CreateUserDTO createUserDTO) {
-
         ValidationResult validationResult = createUserValidator.validate(createUserDTO);
         if (validationResult.hasErrors()) {
             throw new ValidationException(validationResult.getErrors());
         }
-
         var userEntity = createUserMapper.map(createUserDTO);
         userEntity.setPassword(userEntity.getPassword());
         userEntity.setRoles(List.of(roleRepository.findByName("ROLE_USER").get()));
         userRepository.save(userEntity);
-
         return userMapper.map(userEntity);
     }
 
     @Override
     public Optional<UserDataDTO> getUserById(Long id) {
-
         return Optional.ofNullable(userRepository.findById(id)
                 .map(userMapper::map)
                 .orElseThrow(() -> new IllegalArgumentException("User with id: " + id + " not found")));
@@ -79,22 +75,18 @@ public class UserServiceImpl implements UserService {
     //    TODO
     @Override
     public Optional<UserDataDTO> getCartByUserId(Long userId) {
-
         return userRepository.findUserByIdAndCart(userId).map(userMapper::map);
     }
 
     @Override
     @Transactional
     public void questionCategory(Long categoryId, FaqQuestionDTO question) {
-
         DescriptionCategory descriptionCategory = descriptionCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Description category not found"));
-
         Faq faq = new Faq();
         faq.setQuestion(question.getQuestion());
         faq.setDateQuestionCreate(LocalDateTime.now());
         faq.setDescriptionCategory(descriptionCategory);
-
         descriptionCategory.getFaq().add(faq);
         descriptionCategoryRepository.save(descriptionCategory);
     }
@@ -102,13 +94,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void removeFaqFromCategory(Long categoryId, Long faqId) {
-
         DescriptionCategory category = descriptionCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category with id not found"));
-
         Faq faq = faqRepository.findById(faqId)
                 .orElseThrow(() -> new IllegalArgumentException("Faq with id not found"));
-
         if (category.getFaq().remove(faq)) {
             descriptionCategoryRepository.save(category);
         } else {
@@ -119,12 +108,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateQuestion(Long faqId, FaqQuestionDTO question) {
-
         Faq faq = faqRepository.findById(faqId)
                 .orElseThrow(() -> new IllegalArgumentException("Faq id not found"));
-
         faq.setQuestion(question.getQuestion());
-
         faqRepository.save(faq);
     }
 }

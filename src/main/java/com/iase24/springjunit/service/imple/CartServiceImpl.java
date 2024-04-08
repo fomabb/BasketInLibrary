@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,15 +36,12 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public Cart addCart(Cart cart) {
-
         return cartRepository.save(cart);
     }
 
     @Override
     public List<Cart> getCarts() {
-
         List<Cart> carts = cartRepository.findAll();
-
         return carts.stream()
                 .peek(cart -> {
                     UserDataDTO userDataDTO = new UserDataDTO();
@@ -58,28 +54,18 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart getCartById(Long cartId) {
-
-        Optional<Cart> optionalCart = cartRepository.findById(cartId);
-
-        if (optionalCart.isPresent()) {
-
-            return optionalCart.get();
-        }
-        throw new IllegalArgumentException("Cart with id " + cartId + " not found");
+        return cartRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalArgumentException("Cart with id " + cartId + " not found"));
     }
 
     @Override
     @Transactional
     public void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO) {
-
         Book book = bookService.getBookById(bookId);
-
         if (book.getId() != null) {
-
             if (book.getCount() <= 0) {
                 book.setCount(bookUpdateDTO.getCount());
             }
-
             Book updateCount = bookRepository.save(book);
             new BookUpdateDTO(updateCount.getCount(), updateCount.getStatus());
         } else {
@@ -95,21 +81,20 @@ public class CartServiceImpl implements CartService {
     public Cart addBookInCart(Long cartId, Long bookId) {
         Cart cart = getCartById(cartId);
         Book book = bookService.getBookById(bookId);
-
         if (book.getCount() > 0) {
+
             // Уменьшаем количество книги на складе
             book.setCount(book.getCount() - 1);
-            bookRepository.save(book); // Сохраняем изменения в книге
 
+            // Сохраняем изменения в книге
+            bookRepository.save(book);
             if (book.getCount() <= 0) {
                 book.setStatus(Status.INACTIVE);
             }
-
             BookCart bookCart = new BookCart();
             bookCart.setBook(book);
             bookCart.setCart(cart);
             bookCart.setCreationTime(LocalDateTime.now());
-
             bookCartRepository.saveAndFlush(bookCart);
             return cart;
         } else {
@@ -131,12 +116,14 @@ public class CartServiceImpl implements CartService {
             cartRepository.save(cart);
             // Проверка, остались ли еще книги в корзине
             if (cart.getBooks().isEmpty()) {
+
                 // Если корзина стала пустой, но книга была в ней до удаления,
                 // возвращаем книгу на склад
                 if (wasInCart) {
                     returnBookToStock(bookToRemove.getId());
                 }
             } else {
+
                 // Если в корзине еще остались книги, возвращаем книгу на склад
                 returnBookToStock(bookToRemove.getId());
             }
@@ -158,23 +145,15 @@ public class CartServiceImpl implements CartService {
     private void returnBookToStock(Long bookId) {
         Book book = bookService.getBookById(bookId);
         book.setCount(book.getCount() + 1);
-
         if (book.getCount() > 0) {
             book.setStatus(Status.ACTIVE);
         }
-
         bookRepository.save(book);
     }
 
     @Override
     public Cart getCartByLogin(String username) {
-
-        Optional<Cart> cartOptional = cartRepository.findCartByUser_Username(username);
-
-        if (cartOptional.isPresent()) {
-            return cartOptional.get();
-        } else {
-            throw new EntityNotFoundException("User with name: " + username + " not found");
-        }
+        return cartRepository.findCartByUser_Username(username)
+                .orElseThrow(() -> new EntityNotFoundException("User with name: " + username + " not found"));
     }
 }
