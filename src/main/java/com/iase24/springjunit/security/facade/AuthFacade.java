@@ -1,4 +1,4 @@
-package com.iase24.springjunit.security.service;
+package com.iase24.springjunit.security.facade;
 
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.User;
@@ -6,6 +6,7 @@ import com.iase24.springjunit.exception.AppError;
 import com.iase24.springjunit.security.dto.JwtRequest;
 import com.iase24.springjunit.security.dto.JwtResponse;
 import com.iase24.springjunit.security.dto.RegistrationUserDTO;
+import com.iase24.springjunit.security.service.AuthService;
 import com.iase24.springjunit.security.utils.JwtTokensUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,17 +16,16 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceController {
+public class AuthFacade {
 
     private final AuthService authService;
     private final JwtTokensUtil jwtTokensUtil;
     private final AuthenticationManager authenticationManager;
 
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
+    public ResponseEntity<?> createAuthToken(JwtRequest authRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authRequest.getUsername()
@@ -42,7 +42,7 @@ public class AuthServiceController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDTO registrationUserDTO) {
+    public ResponseEntity<?> createNewUser(RegistrationUserDTO registrationUserDTO) {
 
         if (!registrationUserDTO.getPassword().equals(registrationUserDTO.getConfirmPassword())) {
             return new ResponseEntity<>(new AppError(
@@ -57,6 +57,12 @@ public class AuthServiceController {
                     , HttpStatus.BAD_REQUEST);
         }
         User user = authService.registrationNewUser(registrationUserDTO);
+        return ResponseEntity.ok(new UserDataDTO(user.getId(), user.getUsername(), user.getEmail()));
+    }
+
+    //TODO
+    public ResponseEntity<?> updateRoleUser(Long userId) {
+        User user = authService.updateRoleUser(userId);
         return ResponseEntity.ok(new UserDataDTO(user.getId(), user.getUsername(), user.getEmail()));
     }
 }

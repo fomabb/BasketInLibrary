@@ -18,7 +18,7 @@ public interface CartService {
 
     Cart getCartById(Long cartId);
 
-    ResponseEntity<?> addBookInCart(Long cartId, Long bookId);
+    Cart addBookInCart(Long cartId, Long bookId);
 
     void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO);
 

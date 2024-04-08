@@ -1,7 +1,5 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.component.BookResponse;
-import com.iase24.springjunit.component.PaginationInfo;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
@@ -9,11 +7,9 @@ import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
-import com.iase24.springjunit.service.*;
+import com.iase24.springjunit.facade.AdminFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,24 +23,14 @@ import java.util.Optional;
 @Valid
 public class AdminController {
 
-    private final AdminService adminService;
-    private final UserService userService;
-    private final CartService cartService;
-    private final BookService bookService;
-
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return new ResponseEntity<>("Hello Admin!", HttpStatus.OK);
-    }
+    private final AdminFacade adminFacade;
 
     @PutMapping("/{faqId}")
     public FaqAnswerDTO answerForFaq(
             @PathVariable("faqId") Long faqId,
             @RequestBody FaqAnswerDTO answer
     ) {
-        adminService.answerForFaq(faqId, answer);
-
-        return answer;
+        return adminFacade.answerForFaq(faqId, answer);
     }
 
     @DeleteMapping("/categoryId/{categoryId}/faqId/{faqId}")
@@ -52,28 +38,19 @@ public class AdminController {
             @PathVariable("categoryId") Long categoryId,
             @PathVariable("faqId") Long faqId
     ) {
-        adminService.deleteFaq(categoryId, faqId);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
+        return adminFacade.deleteFaq(categoryId, faqId);
     }
 
     @PostMapping("/description")
     public DescriptionCategory createDescriptionCategory(@RequestBody DescriptionCategory descriptionCategory) {
-
-        adminService.createDescriptionCategory(descriptionCategory);
-
-        return descriptionCategory;
+        return adminFacade.createDescriptionCategory(descriptionCategory);
     }
 
 //=======================================================Book===========================================================
 
     @PostMapping("/newBooks")
     public List<Book> createNewBook(@RequestBody List<Book> book) {
-        bookService.createNewBook(book);
-
-        return book;
+        return adminFacade.createNewBook(book);
     }
 
     @PutMapping("/bookCount/{id}")
@@ -81,39 +58,31 @@ public class AdminController {
             @PathVariable("id") Long id,
             @RequestBody BookUpdateDTO bookUpdateDTO
     ) {
-        if (id != null) {
-            bookService.updateBookCount(id, bookUpdateDTO);
-        }
-
-        return bookUpdateDTO;
+        return adminFacade.updateBookCount(id, bookUpdateDTO);
     }
 
 //=======================================================User===========================================================
 
     @GetMapping("/allUsers")
     public List<UserDataDTO> getAllUsers() {
-
-        return userService.getAllUsers();
+        return adminFacade.getAllUsers();
     }
 
     @GetMapping("/cartByUser")
     public Cart getCartByUser(@RequestParam("username") String username) {
-
-        return cartService.getCartByLogin(username);
+        return adminFacade.getCartByUser(username);
     }
 
     @GetMapping("/user/{id}")
     public Optional<UserDataDTO> getUserById(@PathVariable("id") Long id) {
-
-        return userService.getUserById(id);
+        return adminFacade.getUserById(id);
     }
 
 //=======================================================Cart===========================================================
 
     @GetMapping("/allCarts")
     public List<Cart> getCarts() {
-
-        return cartService.getCarts();
+        return adminFacade.getCarts();
     }
 
 //=======================================================Tree===========================================================
@@ -121,9 +90,7 @@ public class AdminController {
     @PostMapping("/createCategory")
     public List<Node> createNewCategory(@RequestBody List<Node> node) {
 
-        bookService.createNewCategory(node);
-
-        return node;
+        return adminFacade.createNewCategory(node);
     }
 
     @PutMapping("/addChildrenId/{childrenId}")
@@ -131,9 +98,7 @@ public class AdminController {
             @PathVariable("childrenId") Long childrenId,
             @RequestParam Node parentNode
     ) {
-        bookService.addChildrenIdInParentId(childrenId, parentNode);
-
-        return parentNode;
+        return adminFacade.addChildrenIdInParentId(childrenId, parentNode);
     }
 
     @PutMapping("/addBookId/{bookId}/categoryId/{categoryId}")
@@ -141,8 +106,6 @@ public class AdminController {
             @PathVariable("bookId") Long bookId,
             @PathVariable("categoryId") Node categoryId
     ) {
-        bookService.addBookInCategory(bookId, categoryId);
-
-        return categoryId;
+        return adminFacade.addBookInCategory(bookId, categoryId);
     }
 }

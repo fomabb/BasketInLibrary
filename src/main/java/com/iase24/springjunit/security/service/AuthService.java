@@ -3,6 +3,7 @@ package com.iase24.springjunit.security.service;
 import com.iase24.springjunit.entities.User;
 import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.security.dto.RegistrationUserDTO;
+import com.iase24.springjunit.security.dto.UpdateRoleDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -58,5 +59,12 @@ public class AuthService implements UserDetailsService {
     public Optional<User> findUserByUsername(String username) {
 
         return userRepository.findUserByUsername(username);
+    }
+
+    //TODO
+    public User updateRoleUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(null);
+        user.setRoles(List.of(roleService.getAdminRole()));
+        return userRepository.save(user);
     }
 }

@@ -125,12 +125,14 @@ public class BookServiceImpl implements BookService {
 //===========================================================Tree=======================================================
 
     @Override
+    @Transactional
     public void createNewCategory(List<Node> node) {
 
         nodeRepository.saveAllAndFlush(node);
     }
 
     @Override
+    @Transactional
     public void addChildrenIdInParentId(Long childrenId, Node parentNode) {
 
         Node node = findNodeById(childrenId);
@@ -139,6 +141,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public void addBookInCategory(Long bookId, Node categoryId) {
 
         Book book = getBookById(bookId);

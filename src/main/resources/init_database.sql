@@ -7,9 +7,9 @@ CREATE INDEX IF NOT EXISTS book_trgm_idx ON book USING gin (title gin_trgm_ops);
 
 
 -- insert into role(name)
--- values ('ROLE_USER');
+-- values ('ROLE_ADMIN');
 --
 -- insert into role(name)
--- values ('ROLE_ADMIN');
+-- values ('ROLE_USER');
 
 

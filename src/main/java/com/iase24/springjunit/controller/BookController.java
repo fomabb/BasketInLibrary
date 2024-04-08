@@ -1,16 +1,12 @@
 package com.iase24.springjunit.controller;
 
 import com.iase24.springjunit.component.BookResponse;
-import com.iase24.springjunit.component.PaginationInfo;
 import com.iase24.springjunit.dto.BookDataDTO;
-import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.entities.Book;
-import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Status;
-import com.iase24.springjunit.service.BookService;
+import com.iase24.springjunit.facade.BookFacade;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,29 +20,20 @@ import java.util.Optional;
 @Transactional
 public class BookController {
 
-    private final BookService bookService;
+    private final BookFacade bookFacade;
 
     @GetMapping
     public BookResponse getAllBooks(
             @RequestParam int page,
             @RequestParam int size
     ) {
-        List<Book> books = bookService.getAll(PageRequest.of(page, size));
-
-        PaginationInfo info = new PaginationInfo();
-        info.setAmount(books.size());
-
-        BookResponse response = new BookResponse();
-        response.setData(books);
-        response.setPaginationInfo(info);
-
-        return response;
+        return bookFacade.getAllBooks(page, size);
     }
 
     @GetMapping("/{id}")
     public Book getBookById(@PathVariable("id") Long id) {
 
-        return bookService.getBookById(id);
+        return bookFacade.getBookById(id);
     }
 
 
@@ -56,7 +43,7 @@ public class BookController {
             @RequestParam("status") Status status
     ) {
 
-        return bookService.getBookByIdStatusActive(id, status);
+        return bookFacade.getBookByIdStatusActive(id, status);
     }
 
     @DeleteMapping("/user/cartId/{cartId}/bookId/{bookId}")
@@ -64,26 +51,26 @@ public class BookController {
             @PathVariable("cartId") Long cartId,
             @PathVariable("bookId") Long bookId
     ) {
-        bookService.deleteBookFromCart(cartId, bookId);
+        bookFacade.deleteBookFromCart(cartId, bookId);
     }
 
     @PutMapping("/update/counter")
     public void updateBookCounter(
             @RequestParam Long id, @RequestParam int count
     ) {
-        bookService.updateBookCounter(id, count);
+        bookFacade.updateBookCounter(id, count);
     }
 
     @GetMapping("/search")
     public List<BookDataDTO> findSearchBook(@RequestParam String text) {
 
-        return bookService.search(text);
+        return bookFacade.findSearchBook(text);
     }
 
     @GetMapping("/node/{nodeId}")
     public Node findNodeById(@PathVariable("nodeId") Long nodeId) {
 
-        return bookService.findNodeById(nodeId);
+        return bookFacade.findNodeById(nodeId);
     }
 
     @GetMapping("/category/{categoryId}")
@@ -93,17 +80,6 @@ public class BookController {
             @RequestParam int page,
             @RequestParam int size
     ) {
-        List<Book> books = bookService.findBooksChildCategoryId(categoryId, parent, PageRequest.of(page, size));
-        List<DescriptionCategory> description = bookService.findDescriptionCategory(categoryId);
-
-        PaginationInfo info = new PaginationInfo();
-        info.setAmount(books.size());
-
-        BookResponse response = new BookResponse();
-        response.setData(books);
-        response.setPaginationInfo(info);
-        response.setDescriptionData(description);
-
-        return response;
+        return bookFacade.getBooksByCategoryId(categoryId, parent, page, size);
     }
 }

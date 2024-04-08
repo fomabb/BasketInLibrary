@@ -92,7 +92,7 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     @Transactional
-    public ResponseEntity<?> addBookInCart(Long cartId, Long bookId) {
+    public Cart addBookInCart(Long cartId, Long bookId) {
         Cart cart = getCartById(cartId);
         Book book = bookService.getBookById(bookId);
 
@@ -111,16 +111,10 @@ public class CartServiceImpl implements CartService {
             bookCart.setCreationTime(LocalDateTime.now());
 
             bookCartRepository.saveAndFlush(bookCart);
+            return cart;
         } else {
-            return new ResponseEntity<>(new AppError(
-                    HttpStatus.NOT_FOUND.value(), "Book in stock not found")
-                    , HttpStatus.NOT_FOUND
-            );
+            throw new IllegalArgumentException("Book with id " + bookId + " not found");
         }
-        return new ResponseEntity<>(
-                "Book with id " + bookId + " added to the cart with id " + cartId
-                , HttpStatus.OK
-        );
     }
 
     @Override

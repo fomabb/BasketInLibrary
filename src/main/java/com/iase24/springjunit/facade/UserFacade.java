@@ -1,0 +1,69 @@
+package com.iase24.springjunit.facade;
+
+import com.iase24.springjunit.dto.CreateUserDTO;
+import com.iase24.springjunit.dto.FaqQuestionDTO;
+import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.entities.Cart;
+import com.iase24.springjunit.service.imple.CartServiceImpl;
+import com.iase24.springjunit.service.imple.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class UserFacade {
+
+    private final UserServiceImpl userService;
+    private final CartServiceImpl cartService;
+
+    public CreateUserDTO createNewUser(CreateUserDTO createUserDTO) {
+        userService.createNewUser(createUserDTO);
+        return createUserDTO;
+    }
+
+    public Optional<UserDataDTO> getUserById(Long id) {
+        return userService.getUserById(id);
+    }
+
+    //TODO
+    public Optional<UserDataDTO> getCartByUserId(Long userId) {
+        return userService.getCartByUserId(userId);
+    }
+
+//===========================================Cart=======================================================================
+
+    public Cart addBookInCart(Long cartId, Long bookId) {
+        return cartService.addBookInCart(cartId, bookId);
+    }
+
+    public Cart getCartById(Long cartId) {
+        return cartService.getCartById(cartId);
+    }
+
+    public ResponseEntity<?> removeFromCart(Long cartId, Long bookId) {
+        return cartService.removeFromCart(cartId, bookId);
+//        return ResponseEntity.ok().build();
+    }
+
+//===========================================FAQ========================================================================
+
+    public FaqQuestionDTO questionCategory(Long categoryId, FaqQuestionDTO question) {
+        userService.questionCategory(categoryId, question);
+        return question;
+    }
+
+    public FaqQuestionDTO updateQuestion(Long faqId, FaqQuestionDTO question) {
+        userService.updateQuestion(faqId, question);
+        return question;
+    }
+
+    public ResponseEntity<String> removeFaqFromCategory(Long categoryId, Long faqId) {
+        userService.removeFaqFromCategory(categoryId, faqId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
+    }
+}
