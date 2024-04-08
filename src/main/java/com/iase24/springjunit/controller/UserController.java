@@ -66,7 +66,7 @@ public class UserController {
 
 //===========================================FAQ========================================================================
 
-    @PostMapping("/faq/question/{categoryId}")
+    @PostMapping("/faq/question/categoryId/{categoryId}")
     public FaqQuestionDTO questionCategory(
             @PathVariable("categoryId") Long categoryId,
             @RequestBody FaqQuestionDTO question

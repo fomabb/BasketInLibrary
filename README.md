@@ -28,13 +28,13 @@
 
 **1. API Description of general methods for User**
 
- METHOD | PATH                                               | DESCRIPTION                                     
---------|----------------------------------------------------|-------------------------------------------------
- POST   | /auth/registration                                 | registration user with ROLE_USER and with create a personal shopping cart 
- POST   | /auth                                  | authentication user  
- POST   | /api/user/faq/question/{categoryId}                | ask a question by category by id                
- PUT   | /api/user/faq/update/faqId/{faqId}                 | update text question                
- GET    | /api/user/{id}                                     | get user by id                                  
+ METHOD | PATH                                                | DESCRIPTION                                     
+--------|-----------------------------------------------------|-------------------------------------------------
+ POST   | /auth/registration                                  | registration user with ROLE_USER and with create a personal shopping cart 
+ POST   | /auth                                               | authentication user  
+ POST   | /api/user/faq/question/categoryId/{categoryId}      | ask a question by category by id                
+ PUT   | /api/user/faq/update/faqId/{faqId}                  | update text question                
+ GET    | /api/user/{id}                                      | get user by id                                  
  GET    | /api/admin/allUsers                                 | get all user for admin                                   
  DELETE | /api/user/faq/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category  
 
@@ -420,11 +420,11 @@ ___Response all categories with books with the implementation of infinite tree d
 
 **5. API Description of general methods for Admin**
 
- METHOD | PATH                                       | DESCRIPTION                       
---------|--------------------------------------------|-----------------------------------
- PUT    | /api/admin/{faqId}                         | answer the question on the faq id and update text 
+ METHOD | PATH                                             | DESCRIPTION                       
+--------|--------------------------------------------------|-----------------------------------
+ PUT    | /api/admin/answer/faqId/{faqId}                  | answer the question on the faq id and update text 
  DELETE | /api/admin/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category 
- POST | /api/admin/description | create description by id category 
+ POST | /api/admin/description                           | create description by id category 
 
 ___Request body for description___
 

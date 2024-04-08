@@ -25,7 +25,7 @@ public class AdminController {
 
     private final AdminFacade adminFacade;
 
-    @PutMapping("/{faqId}")
+    @PutMapping("/answer/faqId/{faqId}")
     public FaqAnswerDTO answerForFaq(
             @PathVariable("faqId") Long faqId,
             @RequestBody FaqAnswerDTO answer
