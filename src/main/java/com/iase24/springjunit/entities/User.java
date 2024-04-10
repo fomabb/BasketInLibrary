@@ -47,18 +47,12 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 
-    @JsonBackReference
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Basket basket;
-
     @PostPersist
     public void onCreate() {
 
         if (cart == null) {
             cart = new Cart();
             cart.setDateTime(LocalDateTime.now());
-            basket = new Basket();
-            basket.setDateCreate(LocalDateTime.now());
         }
     }
 }

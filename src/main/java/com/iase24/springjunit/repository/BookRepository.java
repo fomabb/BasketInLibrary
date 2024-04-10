@@ -38,6 +38,4 @@ public interface BookRepository extends JpaRepository<Book, Long>, PagingAndSort
 
     @Query("select dc from DescriptionCategory dc where dc.id=:categoryId")
     List<DescriptionCategory> findDescriptionCategory(Long categoryId);
-
-    List<Book> findBooksByBookBasketsId(Long basketId);
 }
