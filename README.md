@@ -149,7 +149,7 @@ ___Response category book___
 }
 ```
 
-**2. API Description of general methods for User**
+**2. API Description of general methods for Basket**
 
  METHOD | PATH                                                                     | DESCRIPTION               
 --------|--------------------------------------------------------------------------|---------------------------
