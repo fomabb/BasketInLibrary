@@ -1,9 +1,6 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.BookInBasketDataDTO;
-import com.iase24.springjunit.dto.CreateUserDTO;
-import com.iase24.springjunit.dto.FaqQuestionDTO;
-import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.*;
 import com.iase24.springjunit.entities.Basket;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Cart;
@@ -106,5 +103,19 @@ public class UserController {
     @GetMapping("/basket/allBooksInBasket/basketId/{basketId}")
     public List<BookInBasketDataDTO> getBooksInBasketById(@PathVariable("basketId") Long basketId) {
         return basketFacade.getBooksInBasketById(basketId);
+    }
+
+    @PostMapping("/addBookInBasket/basketId/{basketId}/bookId/{bookId}")
+    public Basket createBasket(@PathVariable("basketId") Long basketId, @PathVariable("bookId") Long bookId) {
+        return basketFacade.createBasket(basketId, bookId);
+    }
+
+    @PutMapping("/updateBookQuantityInBasket/basketId/{basketId}/bookId/{bookId}")
+    public UpdateBookQuantityInBasket updateQuantity(
+            @PathVariable("basketId") Long basketId,
+            @PathVariable("bookId") Long bookId,
+            @RequestBody UpdateBookQuantityInBasket updateBookQuantity
+    ) {
+        return basketFacade.updateQuantity(basketId, bookId, updateBookQuantity);
     }
 }

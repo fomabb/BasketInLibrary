@@ -19,7 +19,6 @@ public class BookBasket {
     @Column(name = "id")
     private Long id;
 
-    @JsonBackReference("BookBasket-book")
     @ManyToOne
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
@@ -30,5 +29,5 @@ public class BookBasket {
     private Basket basket;
 
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity;
 }

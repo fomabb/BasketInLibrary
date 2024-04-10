@@ -1,6 +1,7 @@
 package com.iase24.springjunit.facade;
 
 import com.iase24.springjunit.dto.BookInBasketDataDTO;
+import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
 import com.iase24.springjunit.entities.Basket;
 import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.exception.AppError;
@@ -29,5 +30,13 @@ public class BasketFacade {
 
     public List<BookInBasketDataDTO> getBooksInBasketById(Long basketId) {
         return basketService.findBooksInBasketById(basketId);
+    }
+
+    public Basket createBasket(Long basketId, Long bookId) {
+        return basketService.addBookInBasket(basketId, bookId);
+    }
+
+    public UpdateBookQuantityInBasket updateQuantity(Long basketId, Long bookId, UpdateBookQuantityInBasket updateBookQuantity) {
+        return basketService.updateQuantityInBasket(basketId, bookId, updateBookQuantity);
     }
 }
