@@ -36,7 +36,8 @@
  PUT   | /api/user/faq/update/faqId/{faqId}                  | update text question                
  GET    | /api/user/{id}                                      | get user by id                                  
  GET    | /api/admin/allUsers                                 | get all user for admin                                   
- DELETE | /api/user/faq/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category  
+ DELETE | /api/user/faq/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category
+
 
 ___Request body for method registration new user with your basket___
 
@@ -148,7 +149,60 @@ ___Response category book___
 }
 ```
 
-**2. API Description of general methods for Book**
+**2. API Description of general methods for User**
+
+ METHOD | PATH                                                                     | DESCRIPTION               
+--------|--------------------------------------------------------------------------|---------------------------
+ POST   | /api/user/addBookInBasket/basketId/{basketId}/bookId/{bookId}            | add book in basket user 
+ PUT    | /api/user/updateBookQuantityInBasket/basketId/{basketId}/bookId/{bookId} | update quantity books in basket 
+ GET    | /api/user/basketId/{basketId}                                            | get basket by id user 
+
+___Request body for method PUT update quantity books in basket book id:5___
+
+```json
+{
+  "quantity" : 3
+}
+```
+
+___Response body for method GET basket___
+
+```json
+{
+    "id": 1,
+    "dateCreate": "10-04-2024 14:02",
+    "bookBaskets": [
+        {
+            "id": 6,
+            "book": {
+                "id": 4,
+                "title": "Rune",
+                "author": "James",
+                "genre": "Fantasy",
+                "status": "ACTIVE",
+                "publisher": "Miki",
+                "count": 1
+            },
+            "quantity": 1
+        },
+        {
+            "id": 5,
+            "book": {
+                "id": 5,
+                "title": "Private investigation",
+                "author": "Daniel Ribakoff",
+                "genre": "Detective",
+                "status": "ACTIVE",
+                "publisher": "Nike",
+                "count": 5
+            },
+            "quantity": 3
+        }
+    ]
+}
+```
+
+**3. API Description of general methods for Book**
 
  METHOD | PATH                                       | DESCRIPTION                                   
 --------|--------------------------------------------|-----------------------------------------------
@@ -207,7 +261,7 @@ ___Response body for method GET search /api/search?text=war kristi golden___
 ]
 ```
 
-**3. API Description of general methods for Cart**
+**4. API Description of general methods for Cart**
 
  METHOD | PATH                                      | DESCRIPTION                                                       
 --------|-------------------------------------------|-------------------------------------------------------------------
@@ -286,7 +340,7 @@ ___Response show all orders___
 ]
 ````
 
-**4. API Description of general methods for Tree**
+**5. API Description of general methods for Tree**
 
  METHOD | PATH                                                                        | DESCRIPTION                                                         
 --------|-----------------------------------------------------------------------------|---------------------------------------------------------------------
@@ -418,7 +472,7 @@ ___Response all categories with books with the implementation of infinite tree d
 }
 ```
 
-**5. API Description of general methods for Admin**
+**6. API Description of general methods for Admin**
 
  METHOD | PATH                                             | DESCRIPTION                       
 --------|--------------------------------------------------|-----------------------------------
