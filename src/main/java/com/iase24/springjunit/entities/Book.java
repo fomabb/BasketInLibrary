@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "book")
@@ -43,10 +45,17 @@ public class Book {
 
     @JsonBackReference
     @ManyToMany(mappedBy = "books")
-    List<Cart> carts = new ArrayList<>();
+    private List<Cart> carts = new ArrayList<>();
 
     @JsonBackReference("parent_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "node_id", referencedColumnName = "id")
     private Node node;
+
+//    @JsonBackReference
+//    @ManyToMany(mappedBy = "books")
+//    private List<Basket> baskets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "book")
+    private List<BookBasket> bookBaskets = new ArrayList<>();
 }

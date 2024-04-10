@@ -1,15 +1,20 @@
 package com.iase24.springjunit.controller;
 
+import com.iase24.springjunit.dto.BookInBasketDataDTO;
 import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.entities.Basket;
+import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Cart;
+import com.iase24.springjunit.facade.BasketFacade;
 import com.iase24.springjunit.facade.UserFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,6 +25,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserFacade userFacade;
+    private final BasketFacade basketFacade;
 
     @PostMapping
     public CreateUserDTO createNewUser(@RequestBody CreateUserDTO createUserDTO) {
@@ -88,5 +94,17 @@ public class UserController {
             @PathVariable("faqId") Long faqId
     ) {
         return userFacade.removeFaqFromCategory(categoryId, faqId);
+    }
+
+//===========================================Basket========================================================================
+
+    @GetMapping("/basketId/{id}")
+    public Basket getBasketById(@PathVariable("id") Long id) {
+        return basketFacade.getBasketById(id);
+    }
+
+    @GetMapping("/basket/allBooksInBasket/basketId/{basketId}")
+    public List<BookInBasketDataDTO> getBooksInBasketById(@PathVariable("basketId") Long basketId) {
+        return basketFacade.getBooksInBasketById(basketId);
     }
 }
