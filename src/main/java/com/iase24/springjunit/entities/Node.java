@@ -1,6 +1,7 @@
 package com.iase24.springjunit.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
@@ -19,7 +20,7 @@ public class Node {
     @Column(name = "id")
     private Long id;
 
-    @JsonBackReference("node-book")
+    @JsonBackReference("parent_id")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "FK_PARENT_ID"))
     private Node parent;
@@ -31,6 +32,7 @@ public class Node {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Node> children = new ArrayList<>();
 
+    @JsonBackReference("node-books")
     @OneToMany(mappedBy = "node", fetch = FetchType.LAZY,
         cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
     )

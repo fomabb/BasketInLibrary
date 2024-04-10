@@ -1,5 +1,6 @@
 package com.iase24.springjunit.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,10 +23,12 @@ public class BookCart {
     @Column(name = "id")
     private Long id;
 
+    @JsonBackReference("bookCart-book")
     @ManyToOne
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 
+    @JsonBackReference("bookCart-cart")
     @ManyToOne
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private Cart cart;

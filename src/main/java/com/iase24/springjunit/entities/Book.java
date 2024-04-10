@@ -48,7 +48,7 @@ public class Book {
     @ManyToMany(mappedBy = "books")
     private List<Cart> carts = new ArrayList<>();
 
-    @JsonBackReference("book-node")
+    @JsonBackReference("books-node")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "node_id", referencedColumnName = "id")
     private Node node;
