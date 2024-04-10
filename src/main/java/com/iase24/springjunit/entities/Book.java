@@ -1,6 +1,7 @@
 package com.iase24.springjunit.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -43,11 +44,11 @@ public class Book {
     @Column(name = "count")
     private int count;
 
-    @JsonBackReference
+    @JsonBackReference("book-cart")
     @ManyToMany(mappedBy = "books")
     private List<Cart> carts = new ArrayList<>();
 
-    @JsonBackReference("parent_id")
+    @JsonBackReference("book-node")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "node_id", referencedColumnName = "id")
     private Node node;
@@ -56,6 +57,7 @@ public class Book {
 //    @ManyToMany(mappedBy = "books")
 //    private List<Basket> baskets = new ArrayList<>();
 
+    @JsonBackReference("book-bookBasket")
     @OneToMany(mappedBy = "book")
-    private List<BookBasket> bookBaskets = new ArrayList<>();
+    private List<BookBasket> bookBaskets;
 }

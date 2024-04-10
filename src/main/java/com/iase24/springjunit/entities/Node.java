@@ -19,7 +19,7 @@ public class Node {
     @Column(name = "id")
     private Long id;
 
-    @JsonBackReference
+    @JsonBackReference("node-book")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "FK_PARENT_ID"))
     private Node parent;

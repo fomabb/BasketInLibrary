@@ -35,6 +35,7 @@ public class User {
 
     private String password;
 
+    @JsonBackReference("role-user")
     @ManyToMany
     @JoinTable(
             name = "users_roles",
@@ -43,11 +44,11 @@ public class User {
     )
     private Collection<Role> roles;
 
-    @JsonBackReference
+    @JsonBackReference("user-cart")
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 
-    @JsonBackReference
+    @JsonBackReference("user-basket")
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Basket basket;
 
