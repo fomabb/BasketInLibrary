@@ -129,6 +129,8 @@ public class BasketServiceImpl implements BasketService {
         }
         bookBasket.setQuantity(book.getCount()/bookBasket.getQuantity());
         bookCartRepository.saveAll(allOrdersByQuantity);
+
+        // проверяет, если колличество книг менше 1-го, тогда делается статус неактивным
         if (book.getCount() <= 0) {
             book.setStatus(Status.INACTIVE);
         }
