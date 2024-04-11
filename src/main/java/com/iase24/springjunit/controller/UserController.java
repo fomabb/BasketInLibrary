@@ -118,4 +118,20 @@ public class UserController {
     ) {
         return basketFacade.updateQuantity(basketId, bookId, updateBookQuantity);
     }
+
+    @DeleteMapping("/removeBookInBasket/basketId/{basketId}/bookId/{bookId}")
+    public ResponseEntity<?> removeBookInBasket(
+            @PathVariable("basketId") Long basketId,
+            @PathVariable("bookId") Long bookId
+    ) {
+        return basketFacade.removeBookInBasket(basketId, bookId);
+    }
+
+    @PostMapping("/createOrdersByQuantityInBasket/basketId/{basketId}/bookId/{bookId}")
+    public ResponseEntity<Book> toDoOrdersInBasketByQuantity(
+            @PathVariable("basketId") Long basketId,
+            @PathVariable("bookId") Long bookId
+    ) {
+        return basketFacade.toDoOrdersInBasketByQuantity(basketId, bookId);
+    }
 }

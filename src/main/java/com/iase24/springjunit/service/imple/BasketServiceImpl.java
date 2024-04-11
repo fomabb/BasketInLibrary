@@ -2,18 +2,20 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookInBasketDataDTO;
 import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
-import com.iase24.springjunit.entities.Basket;
-import com.iase24.springjunit.entities.Book;
-import com.iase24.springjunit.entities.BookBasket;
+import com.iase24.springjunit.entities.*;
 import com.iase24.springjunit.repository.BasketRepository;
 import com.iase24.springjunit.repository.BookBasketRepository;
+import com.iase24.springjunit.repository.BookCartRepository;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.service.BasketService;
 import com.iase24.springjunit.service.BookService;
+import com.iase24.springjunit.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +29,8 @@ public class BasketServiceImpl implements BasketService {
     private final BasketRepository basketRepository;
     private final BookRepository bookRepository;
     private final BookService bookService;
+    private final CartService cartService;
+    private final BookCartRepository bookCartRepository;
 
     @Override
     public Basket findBasketById(Long id) {
@@ -85,6 +89,53 @@ public class BasketServiceImpl implements BasketService {
             return new UpdateBookQuantityInBasket(bookBasket.getQuantity());
         } else {
             throw new IllegalArgumentException("Book count exceeded");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void removeBookInBasket(Long basketId, Long bookId) {
+        Book book = bookService.getBookById(bookId);
+        Basket basket = findBasketById(basketId);
+        BookBasket bookBasket = bookBasketRepository.findByBasketAndBook(basket, book)
+                .orElseThrow(() -> new RuntimeException("BookBasket not found"));
+        basket.getBookBaskets().remove(bookBasket);
+        if (!basket.getBookBaskets().contains(bookBasket)) {
+            basketRepository.save(basket);
+        } else {
+            throw new IllegalArgumentException("Delete book failed");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void toDoOrdersInBasketByQuantity(Long basketId, Long bookId) {
+        Basket basket = findBasketById(basketId);
+        Cart cart = cartService.getCartById(basketId);
+        Book book = bookService.getBookById(bookId);
+        BookBasket bookBasket = bookBasketRepository.findByBasketAndBook(basket, book)
+                .orElseThrow(() -> new RuntimeException("BookBasket not found")
+                );
+
+        // список всех заказов для сохранения в базу данных
+        List<BookCart> allOrdersByQuantity = new ArrayList<>();
+        for (int i = 0; i < bookBasket.getQuantity(); i++) {
+            BookCart bookCart = new BookCart();
+            book.setCount(book.getCount() - 1);
+            bookCart.setBook(book);
+            bookCart.setCart(cart);
+            bookCart.setCreationTime(LocalDateTime.now());
+            allOrdersByQuantity.add(bookCart);
+        }
+        bookBasket.setQuantity(book.getCount()/bookBasket.getQuantity());
+        bookCartRepository.saveAll(allOrdersByQuantity);
+        if (book.getCount() <= 0) {
+            book.setStatus(Status.INACTIVE);
+        }
+
+        // удаление книги из корзины если, колличество меньше 1-го
+        if (bookBasket.getQuantity() <= 0) {
+            removeBookInBasket(basketId, book.getId());
         }
     }
 }

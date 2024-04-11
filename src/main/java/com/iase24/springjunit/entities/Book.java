@@ -50,11 +50,7 @@ public class Book {
     @JoinColumn(name = "node_id", referencedColumnName = "id")
     private Node node;
 
-//    @JsonBackReference
-//    @ManyToMany(mappedBy = "books")
-//    private List<Basket> baskets = new ArrayList<>();
-
     @JsonBackReference("book-bookBasket")
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<BookBasket> bookBaskets = new ArrayList<>();
 }

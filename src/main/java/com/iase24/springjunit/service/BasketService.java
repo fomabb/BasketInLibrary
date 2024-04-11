@@ -16,4 +16,8 @@ public interface BasketService {
     Basket addBookInBasket(Long basketId, Long bookId);
 
     UpdateBookQuantityInBasket updateQuantityInBasket(Long basketId, Long bookId, UpdateBookQuantityInBasket updateQuantity);
+
+    void removeBookInBasket(Long basketId, Long bookId);
+
+    void toDoOrdersInBasketByQuantity(Long basketId, Long bookId);
 }

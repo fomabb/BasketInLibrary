@@ -28,15 +28,7 @@ public class Basket {
     @OneToOne(mappedBy = "basket")
     private User user;
 
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinTable(
-//            name = "book_basket",
-//            joinColumns = @JoinColumn(name = "basket_id"),
-//            inverseJoinColumns = @JoinColumn(name = "book_id"))
-//    private List<Book> books = new ArrayList<>();
-
-//    @JsonBackReference("basket-BookBasket")
-
-    @OneToMany(mappedBy = "basket")
+    @OneToMany(mappedBy = "basket", orphanRemoval = true,
+            cascade = CascadeType.ALL)
     private List<BookBasket> bookBaskets = new ArrayList<>();
 }

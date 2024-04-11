@@ -19,12 +19,12 @@ public class BookBasket {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 
     @JsonBackReference("BookBasket-basket")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "basket_id", referencedColumnName = "id")
     private Basket basket;
 

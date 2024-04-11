@@ -39,4 +39,14 @@ public class BasketFacade {
     public UpdateBookQuantityInBasket updateQuantity(Long basketId, Long bookId, UpdateBookQuantityInBasket updateBookQuantity) {
         return basketService.updateQuantityInBasket(basketId, bookId, updateBookQuantity);
     }
+
+    public ResponseEntity<?> removeBookInBasket(Long basketId, Long bookId) {
+        basketService.removeBookInBasket(basketId, bookId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Book> toDoOrdersInBasketByQuantity(Long basketId, Long quantity) {
+        basketService.toDoOrdersInBasketByQuantity(basketId, quantity);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

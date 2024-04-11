@@ -149,13 +149,15 @@ ___Response category book___
 }
 ```
 
-**2. API Description of general methods for User**
+**2. API Description of general methods for Basket**
 
- METHOD | PATH                                                                     | DESCRIPTION               
---------|--------------------------------------------------------------------------|---------------------------
- POST   | /api/user/addBookInBasket/basketId/{basketId}/bookId/{bookId}            | add book in basket user 
- PUT    | /api/user/updateBookQuantityInBasket/basketId/{basketId}/bookId/{bookId} | update quantity books in basket 
- GET    | /api/user/basketId/{basketId}                                            | get basket by id user 
+ METHOD | PATH                                                                         | DESCRIPTION                     
+--------|------------------------------------------------------------------------------|---------------------------------
+ POST   | /api/user/addBookInBasket/basketId/{basketId}/bookId/{bookId}                | add book in basket user         
+ POST   | /api/user/createOrdersByQuantityInBasket/basketId/{basketId}/bookId/{bookId} | create method adding books in orders by quantity         
+ PUT    | /api/user/updateBookQuantityInBasket/basketId/{basketId}/bookId/{bookId}     | update quantity books in basket 
+ GET    | /api/user/basketId/{basketId}                                                | get basket by id user           
+ DELETE | /removeBookInBasket/basketId/{basketId}/bookId/{bookId}                      | remove book from basket         
 
 ___Request body for method PUT update quantity books in basket book id:5___
 
