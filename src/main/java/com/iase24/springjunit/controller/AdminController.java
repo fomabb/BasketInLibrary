@@ -25,6 +25,10 @@ public class AdminController {
 
     private final AdminFacade adminFacade;
 
+    /**
+     * Метод для ответа на заданный пользователем вопрос
+     * @return JSON answer
+     */
     @PutMapping("/answer/faqId/{faqId}")
     public FaqAnswerDTO answerForFaq(
             @PathVariable("faqId") Long faqId,
@@ -33,6 +37,10 @@ public class AdminController {
         return adminFacade.answerForFaq(faqId, answer);
     }
 
+    /**
+     * Метод удаления вопросов и ответов
+     * @return Response entity ok
+     */
     @DeleteMapping("/categoryId/{categoryId}/faqId/{faqId}")
     public ResponseEntity<String> deleteFaq(
             @PathVariable("categoryId") Long categoryId,
@@ -41,6 +49,10 @@ public class AdminController {
         return adminFacade.deleteFaq(categoryId, faqId);
     }
 
+    /**
+     * Метод установки админом описания категории, внутри Node
+     * @return JSON description
+     */
     @PostMapping("/description")
     public DescriptionCategory createDescriptionCategory(@RequestBody DescriptionCategory descriptionCategory) {
         return adminFacade.createDescriptionCategory(descriptionCategory);
@@ -48,11 +60,19 @@ public class AdminController {
 
 //=======================================================Book===========================================================
 
+    /**
+     * Метод добавления новых книг на склад
+     * @return JSON created books
+     */
     @PostMapping("/newBooks")
     public List<Book> createNewBook(@RequestBody List<Book> book) {
         return adminFacade.createNewBook(book);
     }
 
+    /**
+     * Метод добавления колличества книги на складе
+     * @return bookUpdateDTO
+     */
     @PutMapping("/bookCount/{id}")
     public BookUpdateDTO updateBookCount(
             @PathVariable("id") Long id,
@@ -63,6 +83,10 @@ public class AdminController {
 
 //=======================================================User===========================================================
 
+    /**
+     * Показать всех зарегистрированных пользователей
+     * @return JSON all user
+     */
     @GetMapping("/allUsers")
     public List<UserDataDTO> getAllUsers() {
         return adminFacade.getAllUsers();
