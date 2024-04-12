@@ -4,6 +4,7 @@ import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.Cart;
+import com.iase24.springjunit.exception.AppError;
 import com.iase24.springjunit.service.imple.CartServiceImpl;
 import com.iase24.springjunit.service.imple.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +46,11 @@ public class UserFacade {
     }
 
     public ResponseEntity<?> removeFromCart(Long cartId, Long bookId) {
-        return cartService.removeFromCart(cartId, bookId);
-//        return ResponseEntity.ok().build();
+        cartService.removeFromCart(cartId, bookId);
+        return new ResponseEntity<>(
+                "Book with id " + bookId + " remove in cart with id " + cartId
+                , HttpStatus.OK
+        );
     }
 
 //===========================================FAQ========================================================================

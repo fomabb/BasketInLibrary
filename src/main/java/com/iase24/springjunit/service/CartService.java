@@ -22,7 +22,7 @@ public interface CartService {
 
     void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO);
 
-    ResponseEntity<?> removeFromCart(Long cartId, Long bookId);
+    void removeFromCart(Long cartId, Long bookId);
 
     Cart getCartByLogin(String username);
 }

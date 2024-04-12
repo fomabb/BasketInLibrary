@@ -104,15 +104,19 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> removeFromCart(Long cartId, Long bookId) {
+    public void removeFromCart(Long cartId, Long bookId) {
         Cart cart = getCartById(cartId);
         Book bookToRemove = bookService.getBookById(bookId);
+        Long originCartId = cart.getId();
+        LocalDateTime originCreationTime = cart.getDateTime();
 
         // Проверяем, была ли книга в корзине до удаления
         boolean wasInCart = cart.getBooks().contains(bookToRemove);
 
         // Удаление книги из корзины
         if (cart.getBooks().remove(bookToRemove)) {
+            cart.setId(originCartId);
+            cart.setDateTime(originCreationTime);
             cartRepository.save(cart);
             // Проверка, остались ли еще книги в корзине
             if (cart.getBooks().isEmpty()) {
@@ -128,15 +132,8 @@ public class CartServiceImpl implements CartService {
                 returnBookToStock(bookToRemove.getId());
             }
         } else {
-            return new ResponseEntity<>(new AppError(
-                    HttpStatus.NOT_FOUND.value(), "Book is Not in Cart")
-                    , HttpStatus.NOT_FOUND
-            );
+            throw new EntityNotFoundException("Book with id " + bookId + " not found");
         }
-        return new ResponseEntity<>(
-                "Book with id " + bookId + " remove in cart with id " + cartId
-                , HttpStatus.OK
-        );
     }
 
     /**
