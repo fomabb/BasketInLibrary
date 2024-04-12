@@ -127,7 +127,7 @@ public class BasketServiceImpl implements BasketService {
             bookCart.setCreationTime(LocalDateTime.now());
             allOrdersByQuantity.add(bookCart);
         }
-        bookBasket.setQuantity(book.getCount()/bookBasket.getQuantity());
+//        bookBasket.setQuantity(book.getCount()/bookBasket.getQuantity());
         bookCartRepository.saveAll(allOrdersByQuantity);
 
         // проверяет, если колличество книг менше 1-го, тогда делается статус неактивным
@@ -136,8 +136,8 @@ public class BasketServiceImpl implements BasketService {
         }
 
         // удаление книги из корзины если, колличество меньше 1-го
-        if (bookBasket.getQuantity() <= 0) {
+//        if (bookBasket.getQuantity() <= 0) {
             removeBookInBasket(basketId, book.getId());
-        }
+//        }
     }
 }
