@@ -24,11 +24,21 @@ public class UserController {
     private final UserFacade userFacade;
     private final BasketFacade basketFacade;
 
+    /**
+     * Регистрация нового пользователя
+     *
+     * @return user
+     */
     @PostMapping
     public CreateUserDTO createNewUser(@RequestBody CreateUserDTO createUserDTO) {
         return userFacade.createNewUser(createUserDTO);
     }
 
+    /**
+     * Найти пользователя по ID
+     *
+     * @return userDTO
+     */
     @GetMapping("/{id}")
     public Optional<UserDataDTO> getUserById(@PathVariable("id") Long id) {
         return userFacade.getUserById(id);
@@ -44,6 +54,9 @@ public class UserController {
 
 //===========================================Cart=======================================================================
 
+    /**
+     * Оформление заказа по ID товара
+     */
     @PutMapping("/cartId/{cartId}/bookId/{bookId}")
     public Cart addBookInCart(
             @PathVariable("cartId") Long cartId,
@@ -52,23 +65,35 @@ public class UserController {
         return userFacade.addBookInCart(cartId, bookId);
     }
 
+    /**
+     * Найти заказ по ID
+     *
+     * @return cart
+     */
     @GetMapping("/cartId/{cartId}")
     public Cart getCartById(@PathVariable("cartId") Long cartId) {
 
         return userFacade.getCartById(cartId);
     }
 
+    /**
+     * Отменить сформированный заказ
+     */
     @DeleteMapping("cartId/{cartId}/bookId/{bookId}")
     public ResponseEntity<?> removeFromCart(
             @PathVariable Long cartId,
             @PathVariable Long bookId
     ) {
         return userFacade.removeFromCart(cartId, bookId);
-//        return ResponseEntity.ok().build();
     }
 
 //===========================================FAQ========================================================================
 
+    /**
+     * Задать вопрос по категории
+     *
+     * @return question {DateTime/question}
+     */
     @PostMapping("/faq/question/categoryId/{categoryId}")
     public FaqQuestionDTO questionCategory(
             @PathVariable("categoryId") Long categoryId,
@@ -77,6 +102,11 @@ public class UserController {
         return userFacade.questionCategory(categoryId, question);
     }
 
+    /**
+     * Исправление ошибок в тексте вопроса
+     *
+     * @return question
+     */
     @PutMapping("/faq/update/faqId/{faqId}")
     public FaqQuestionDTO updateQuestion(
             @PathVariable("faqId") Long faqId,
@@ -85,6 +115,9 @@ public class UserController {
         return userFacade.updateQuestion(faqId, question);
     }
 
+    /**
+     * Удаление из категории коментария
+     */
     @DeleteMapping("/faq/categoryId/{categoryId}/faqId/{faqId}")
     public ResponseEntity<String> removeFaqFromCategory(
             @PathVariable("categoryId") Long categoryId,
@@ -95,21 +128,41 @@ public class UserController {
 
 //===========================================Basket========================================================================
 
+    /**
+     * Найти корзину по ID пользователя
+     *
+     * @return basket with things
+     */
     @GetMapping("/basketId/{id}")
     public Basket getBasketById(@PathVariable("id") Long id) {
         return basketFacade.getBasketById(id);
     }
 
+    /**
+     * Вывести все товары из корзины
+     *
+     * @return books
+     */
     @GetMapping("/basket/allBooksInBasket/basketId/{basketId}")
     public List<BookInBasketDataDTO> getBooksInBasketById(@PathVariable("basketId") Long basketId) {
         return basketFacade.getBooksInBasketById(basketId);
     }
 
+    /**
+     * Добавление товара в корзину
+     *
+     * @return basket with things
+     */
     @PostMapping("/addBookInBasket/basketId/{basketId}/bookId/{bookId}")
     public Basket createBasket(@PathVariable("basketId") Long basketId, @PathVariable("bookId") Long bookId) {
         return basketFacade.createBasket(basketId, bookId);
     }
 
+    /**
+     * Добавление/уменьшение заказов в корзине
+     *
+     * @return quantity
+     */
     @PutMapping("/updateBookQuantityInBasket/basketId/{basketId}/bookId/{bookId}")
     public UpdateBookQuantityInBasket updateQuantity(
             @PathVariable("basketId") Long basketId,
@@ -119,6 +172,9 @@ public class UserController {
         return basketFacade.updateQuantity(basketId, bookId, updateBookQuantity);
     }
 
+    /**
+     * Удаление товара из корзины
+     */
     @DeleteMapping("/removeBookInBasket/basketId/{basketId}/bookId/{bookId}")
     public ResponseEntity<?> removeBookInBasket(
             @PathVariable("basketId") Long basketId,
@@ -127,6 +183,11 @@ public class UserController {
         return basketFacade.removeBookInBasket(basketId, bookId);
     }
 
+    /**
+     * Сформировать заказ по колличеству товара
+     *
+     * @return cart
+     */
     @PostMapping("/createOrdersByQuantityInBasket/basketId/{basketId}/bookId/{bookId}")
     public ResponseEntity<Book> toDoOrdersInBasketByQuantity(
             @PathVariable("basketId") Long basketId,

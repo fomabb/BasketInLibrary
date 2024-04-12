@@ -10,7 +10,10 @@ import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,8 +43,9 @@ public class BookFacade {
         return bookService.getBookByIdStatusActive(id, status);
     }
 
-    public void deleteBookFromCart(Long cartId, Long bookId) {
+    public ResponseEntity<?> deleteBookFromCart(Long cartId, Long bookId) {
         bookService.deleteBookFromCart(cartId, bookId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public void updateBookCounter(Long id, int count) {

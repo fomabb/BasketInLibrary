@@ -26,7 +26,8 @@ public class AdminController {
     private final AdminFacade adminFacade;
 
     /**
-     * Метод для ответа на заданный пользователем вопрос
+     * Добавление коментария на заданный пользователем вопрос
+     *
      * @return JSON answer
      */
     @PutMapping("/answer/faqId/{faqId}")
@@ -38,7 +39,8 @@ public class AdminController {
     }
 
     /**
-     * Метод удаления вопросов и ответов
+     * Удаление вопросов и ответов
+     *
      * @return Response entity ok
      */
     @DeleteMapping("/categoryId/{categoryId}/faqId/{faqId}")
@@ -50,7 +52,8 @@ public class AdminController {
     }
 
     /**
-     * Метод установки админом описания категории, внутри Node
+     * Добавление админом описания категории, внутри Node
+     *
      * @return JSON description
      */
     @PostMapping("/description")
@@ -61,7 +64,8 @@ public class AdminController {
 //=======================================================Book===========================================================
 
     /**
-     * Метод добавления новых книг на склад
+     * Добавление новых книг на склад
+     *
      * @return JSON created books
      */
     @PostMapping("/newBooks")
@@ -70,7 +74,8 @@ public class AdminController {
     }
 
     /**
-     * Метод добавления колличества книги на складе
+     * Добавление колличества книги на складе
+     *
      * @return bookUpdateDTO
      */
     @PutMapping("/bookCount/{id}")
@@ -84,7 +89,8 @@ public class AdminController {
 //=======================================================User===========================================================
 
     /**
-     * Показать всех зарегистрированных пользователей
+     * Выводит всех зарегистрированных пользователей
+     *
      * @return JSON all user
      */
     @GetMapping("/allUsers")
@@ -92,11 +98,21 @@ public class AdminController {
         return adminFacade.getAllUsers();
     }
 
+    /**
+     * Вывод пользователя с заказами по имени
+     *
+     * @return user with order
+     */
     @GetMapping("/cartByUser")
     public Cart getCartByUser(@RequestParam("username") String username) {
         return adminFacade.getCartByUser(username);
     }
 
+    /**
+     * Найти пользователя по ID
+     *
+     * @return user by id
+     */
     @GetMapping("/user/{id}")
     public Optional<UserDataDTO> getUserById(@PathVariable("id") Long id) {
         return adminFacade.getUserById(id);
@@ -104,6 +120,11 @@ public class AdminController {
 
 //=======================================================Cart===========================================================
 
+    /**
+     * Показать все зарегистрированные заказы
+     *
+     * @return all orders
+     */
     @GetMapping("/allCarts")
     public List<Cart> getCarts() {
         return adminFacade.getCarts();
@@ -111,12 +132,22 @@ public class AdminController {
 
 //=======================================================Tree===========================================================
 
+    /**
+     * Создание категории
+     *
+     * @return JSON
+     */
     @PostMapping("/createCategory")
     public List<Node> createNewCategory(@RequestBody List<Node> node) {
 
         return adminFacade.createNewCategory(node);
     }
 
+    /**
+     * Добавление дочерней категории в родительскую
+     *
+     * @return JSON
+     */
     @PutMapping("/addChildrenId/{childrenId}")
     public Node addChildrenIdInParentId(
             @PathVariable("childrenId") Long childrenId,
@@ -125,6 +156,11 @@ public class AdminController {
         return adminFacade.addChildrenIdInParentId(childrenId, parentNode);
     }
 
+    /**
+     * Добавление книг в категорию
+     *
+     * @return JSON
+     */
     @PutMapping("/addBookId/{bookId}/categoryId/{categoryId}")
     public Node addBookInCategory(
             @PathVariable("bookId") Long bookId,

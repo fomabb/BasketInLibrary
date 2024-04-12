@@ -22,6 +22,11 @@ public class CartController {
         return cartFacade.addCart(cart);
     }
 
+    /**
+     * Показать все заказы
+     *
+     * @return carts
+     */
     @GetMapping("/allCarts/{cartId}")
     public List<BookCartDataDTO> getAllCarts(@PathVariable("cartId") Long cartId) {
         return cartFacade.getAllCarts(cartId);

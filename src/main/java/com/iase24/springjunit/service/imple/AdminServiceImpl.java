@@ -23,8 +23,12 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public void answerForFaq(Long faqId, FaqAnswerDTO answer) {
+
+        // находим коментарий по ID проверяем или есть такой, если нет выводим exception
         Faq faq = faqRepository.findById(faqId)
                 .orElseThrow(() -> new IllegalArgumentException("Faq id: " + faqId + " not found"));
+
+        // сохранение в базу данных
         faq.setAnswer(answer.getAnswer());
         faq.setDateAnswerCreate(LocalDateTime.now());
         faqRepository.save(faq);
@@ -33,10 +37,16 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public void deleteFaq(Long categoryId, Long faqId) {
+
+        // находим категорию по ID проверяем или есть такая, если нет выводим exception
         DescriptionCategory category = descriptionCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Category id not found"));
+
+        // находим коментарий по ID проверяем или есть такой, если нет выводим exception
         Faq faq = faqRepository.findById(faqId)
                 .orElseThrow(() -> new IllegalArgumentException("Faq id not found"));
+
+        // удаляем коментарий с проверкой или удалился такой, если нет значит выведет exception
         if (category.getFaq().remove(faq)) {
             descriptionCategoryRepository.save(category);
         } else {
@@ -47,6 +57,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public void createDescriptionCategory(DescriptionCategory descriptionCategory) {
+
+        // добавление коментария к категории
         descriptionCategoryRepository.save(descriptionCategory);
     }
 }
