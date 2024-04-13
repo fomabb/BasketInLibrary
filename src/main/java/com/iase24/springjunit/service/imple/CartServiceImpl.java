@@ -6,7 +6,6 @@ import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.BookCart;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.entities.Status;
-import com.iase24.springjunit.exception.AppError;
 import com.iase24.springjunit.repository.BookCartRepository;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.repository.CartRepository;
@@ -14,8 +13,6 @@ import com.iase24.springjunit.service.BookService;
 import com.iase24.springjunit.service.CartService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,13 +99,19 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    //TODO: необходимо изменить логику, для того, чтобы не изменялся ID и LocalDateTime
     @Override
     @Transactional
     public void removeFromCart(Long cartId, Long bookId) {
         Cart cart = getCartById(cartId);
-        Book bookToRemove = bookService.getBookById(bookId);
+
+        //TODO: в процессе изменения
+        // сохранение изначального ID и даты====================
         Long originCartId = cart.getId();
         LocalDateTime originCreationTime = cart.getDateTime();
+        //======================================================
+
+        Book bookToRemove = bookService.getBookById(bookId);
 
         // Проверяем, была ли книга в корзине до удаления
         boolean wasInCart = cart.getBooks().contains(bookToRemove);
@@ -118,6 +121,7 @@ public class CartServiceImpl implements CartService {
             cart.setId(originCartId);
             cart.setDateTime(originCreationTime);
             cartRepository.save(cart);
+
             // Проверка, остались ли еще книги в корзине
             if (cart.getBooks().isEmpty()) {
 

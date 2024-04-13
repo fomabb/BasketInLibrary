@@ -103,7 +103,7 @@ public class UserController {
     }
 
     /**
-     * Исправление ошибок в тексте вопроса
+     * Обновление тексте вопроса
      *
      * @return question
      */
