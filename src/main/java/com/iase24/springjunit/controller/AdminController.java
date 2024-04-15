@@ -3,10 +3,7 @@ package com.iase24.springjunit.controller;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.entities.Book;
-import com.iase24.springjunit.entities.Cart;
-import com.iase24.springjunit.entities.DescriptionCategory;
-import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.entities.*;
 import com.iase24.springjunit.facade.AdminFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +46,16 @@ public class AdminController {
             @PathVariable("faqId") Long faqId
     ) {
         return adminFacade.deleteFaq(categoryId, faqId);
+    }
+
+    /**
+     * Посмотреть не прочитанные вопросы
+     *
+      * @return JSON questions
+     */
+    @GetMapping("/faq/NotRead")
+    public List<Faq> getFaqQuestionNotRead() {
+        return adminFacade.getFaqQuestionNotRead();
     }
 
     /**

@@ -3,10 +3,7 @@ package com.iase24.springjunit.facade;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.entities.Book;
-import com.iase24.springjunit.entities.Cart;
-import com.iase24.springjunit.entities.DescriptionCategory;
-import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.entities.*;
 import com.iase24.springjunit.service.AdminService;
 import com.iase24.springjunit.service.BookService;
 import com.iase24.springjunit.service.CartService;
@@ -31,6 +28,10 @@ public class AdminFacade {
     public FaqAnswerDTO answerForFaq(Long faqId, FaqAnswerDTO answer) {
         adminService.answerForFaq(faqId, answer);
         return answer;
+    }
+
+    public List<Faq> getFaqQuestionNotRead() {
+        return adminService.findAllFaqIsQuestionNotRead();
     }
 
     public ResponseEntity<String> deleteFaq(Long categoryId, Long faqId) {

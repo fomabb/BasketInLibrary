@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -60,5 +61,13 @@ public class AdminServiceImpl implements AdminService {
 
         // добавление коментария к категории
         descriptionCategoryRepository.save(descriptionCategory);
+    }
+
+    @Override
+    public List<Faq> findAllFaqIsQuestionNotRead() {
+        return faqRepository.findAllByAnswerIsNull()
+                .stream()
+                .sorted((o1, o2) -> 0)
+                .toList();
     }
 }

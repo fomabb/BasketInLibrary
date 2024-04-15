@@ -71,7 +71,7 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * Метод добавляющий книгу в корзину заказов пользователя
+     * Метод добавляющий книгу в картачку заказов пользователя
      */
     @Override
     @Transactional

@@ -481,6 +481,7 @@ ___Response all categories with books with the implementation of infinite tree d
  PUT    | /api/admin/answer/faqId/{faqId}                  | answer the question on the faq id and update text 
  DELETE | /api/admin/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category 
  POST | /api/admin/description                           | create description by id category 
+ GET | /api/admin/faq/NotRead                           | show not read question 
 
 ___Request body for description___
 
