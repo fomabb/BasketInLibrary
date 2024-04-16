@@ -3,8 +3,8 @@ package com.iase24.springjunit.facade;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.dto.UserUpdateDTO;
 import com.iase24.springjunit.entities.*;
+import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.service.AdminService;
 import com.iase24.springjunit.service.BookService;
 import com.iase24.springjunit.service.CartService;
@@ -25,6 +25,7 @@ public class AdminFacade {
     private final UserService userService;
     private final CartService cartService;
     private final BookService bookService;
+    private final BookRepository bookRepository;
 
     public FaqAnswerDTO answerForFaq(Long faqId, FaqAnswerDTO answer) {
         adminService.answerForFaq(faqId, answer);
@@ -100,5 +101,21 @@ public class AdminFacade {
     public Node addBookInCategory(Long bookId, Node categoryId) {
         bookService.addBookInCategory(bookId, categoryId);
         return categoryId;
+    }
+
+    public ResponseEntity<?> addBooksInCategoryByName(String categoryName) {
+
+        List<Book> books = bookRepository.findBooksByCategoryName(categoryName);
+
+        System.out.println(books.get(0).getGenre());
+
+        if (categoryName.equals(books.get(0).getGenre())) {
+            bookService.addBooksInCategoryByName(categoryName);
+            return ResponseEntity
+                    .status(HttpStatus.ACCEPTED)
+                    .body(String.format("Books added to Category with name %s successfully", categoryName));
+        } else {
+            throw new IllegalArgumentException("Invalid category name");
+        }
     }
 }

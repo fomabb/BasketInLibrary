@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "book")
@@ -53,4 +54,17 @@ public class Book {
     @JsonBackReference("book-bookBasket")
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<BookBasket> bookBaskets = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return Objects.equals(genre, book.genre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(genre);
+    }
 }

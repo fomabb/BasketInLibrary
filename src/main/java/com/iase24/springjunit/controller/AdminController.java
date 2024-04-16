@@ -3,7 +3,6 @@ package com.iase24.springjunit.controller;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.dto.UserUpdateDTO;
 import com.iase24.springjunit.entities.*;
 import com.iase24.springjunit.facade.AdminFacade;
 import jakarta.validation.Valid;
@@ -52,7 +51,7 @@ public class AdminController {
     /**
      * Посмотреть не прочитанные вопросы
      *
-      * @return JSON questions
+     * @return JSON questions
      */
     @GetMapping("/faq/NotRead")
     public List<Faq> getFaqQuestionNotRead() {
@@ -180,5 +179,15 @@ public class AdminController {
             @PathVariable("categoryId") Node categoryId
     ) {
         return adminFacade.addBookInCategory(bookId, categoryId);
+    }
+
+    /**
+     * Добавление продуктов в каатегорию по названию категории
+     *
+     * @return ResponseEntity
+     */
+    @PutMapping("/addBooks/toCategory/name")
+    public ResponseEntity<?> addBooksInCategoryByName(@RequestParam("categoryName") String categoryName) {
+        return adminFacade.addBooksInCategoryByName(categoryName);
     }
 }

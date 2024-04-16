@@ -8,4 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public interface NodeRepository extends JpaRepository<Node, Long> {
+    Node findByCategory(String category);
 }

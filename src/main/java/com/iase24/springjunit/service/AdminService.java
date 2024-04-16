@@ -19,4 +19,6 @@ public interface AdminService {
     List<Faq> findAllFaqIsQuestionNotRead();
 
     void updateUserRolesByUsername(Long userId);
+
+
 }

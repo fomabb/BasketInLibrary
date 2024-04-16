@@ -33,6 +33,8 @@ public interface BookService {
 
     void addBookInCategory(Long bookId, Node categoryId);
 
+    void addBooksInCategoryByName(String categoryName);
+
     void createNewCategory(List<Node> node);
 
     void addChildrenIdInParentId(Long childrenId, Node parentNode);
