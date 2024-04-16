@@ -1,5 +1,6 @@
 package com.iase24.springjunit.repository;
 
+import com.iase24.springjunit.entities.Role;
 import com.iase24.springjunit.entities.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmailAndPassword(String email, String password);
 
-//    TODO
+    //    TODO
     @Query(value =
             "select * from cart c join users ut on ut.id = c.id where c.id=:id"
             , nativeQuery = true)

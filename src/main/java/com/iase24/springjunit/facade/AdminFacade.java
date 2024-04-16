@@ -3,6 +3,7 @@ package com.iase24.springjunit.facade;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.UserUpdateDTO;
 import com.iase24.springjunit.entities.*;
 import com.iase24.springjunit.service.AdminService;
 import com.iase24.springjunit.service.BookService;
@@ -72,6 +73,10 @@ public class AdminFacade {
 
     public Optional<UserDataDTO> getUserById(Long id) {
         return userService.getUserById(id);
+    }
+
+    public void updateUserRole(Long userId) {
+        adminService.updateUserRolesByUsername(userId);
     }
 
 //=======================================================Cart===========================================================

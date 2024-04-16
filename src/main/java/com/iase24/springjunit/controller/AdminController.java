@@ -3,6 +3,7 @@ package com.iase24.springjunit.controller;
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.UserUpdateDTO;
 import com.iase24.springjunit.entities.*;
 import com.iase24.springjunit.facade.AdminFacade;
 import jakarta.validation.Valid;
@@ -123,6 +124,11 @@ public class AdminController {
     @GetMapping("/user/{id}")
     public Optional<UserDataDTO> getUserById(@PathVariable("id") Long id) {
         return adminFacade.getUserById(id);
+    }
+
+    @PutMapping("/updateRole/{userId}")
+    public void updateUserRole(@PathVariable("userId") Long userId) {
+        adminFacade.updateUserRole(userId);
     }
 
 //=======================================================Cart===========================================================
