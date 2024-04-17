@@ -346,9 +346,10 @@ ___Response show all orders___
 
  METHOD | PATH                                                                        | DESCRIPTION                                                         
 --------|-----------------------------------------------------------------------------|---------------------------------------------------------------------
- POST   | /api/admin/createCategory                                                         | create new category in tree                                         
- PUT    | /api/admin/addChildrenId/{childId}?parentNode={parentId}                          | add children category in parent                                     
- PUT    | /api/admin/addBookId/{bookId}/categoryId/{categoryId}                             | add book in category for tree                                       
+ POST   | /api/admin/createCategory                                                   | create new category in tree                                         
+ PUT    | /api/admin/addChildrenId/{childId}?parentNode={parentId}                    | add children category in parent                                     
+ PUT    | /api/admin/addBookId/{bookId}/categoryId/{categoryId}                       | add book in category for tree                                       
+ PUT    | /api/admin/addBooks/inCategory/name?categoryName={categoryName}             | add books in category for tree by books genre                                       
  GET    | /api/book/category/{categoryId}?parent={true/false}&page={page}&size={size} | display all books for the category by id {true}parent, {false}child 
 
 ___Request body for create categories method___
@@ -476,12 +477,12 @@ ___Response all categories with books with the implementation of infinite tree d
 
 **6. API Description of general methods for Admin**
 
- METHOD | PATH                                             | DESCRIPTION                       
---------|--------------------------------------------------|-----------------------------------
- PUT    | /api/admin/answer/faqId/{faqId}                  | answer the question on the faq id and update text 
- DELETE | /api/admin/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category 
- POST   | /api/admin/create/descriptionByName              | create description by category name 
- GET    | /api/admin/faq/NotRead                           | show not read question 
+ METHOD | PATH                                                            | DESCRIPTION                       
+--------|-----------------------------------------------------------------|-----------------------------------
+ PUT    | /api/admin/answer/faqId/{faqId}                                 | answer the question on the faq id and update text 
+ DELETE | /api/admin/categoryId/{categoryId}/faqId/{faqId}                | remove faq from description category 
+ POST   | /api/admin/create/descriptionByName?categoryName={categoryName} | create description by category name 
+ GET    | /api/admin/faq/NotRead                                          | show not read question 
 
 ___Request body for description___
 
