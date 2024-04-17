@@ -1,12 +1,11 @@
 package com.iase24.springjunit.service.imple;
 
+import com.iase24.springjunit.dto.DescriptionDataDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
-import com.iase24.springjunit.entities.DescriptionCategory;
-import com.iase24.springjunit.entities.Faq;
-import com.iase24.springjunit.entities.Role;
-import com.iase24.springjunit.entities.User;
+import com.iase24.springjunit.entities.*;
 import com.iase24.springjunit.repository.DescriptionCategoryRepository;
 import com.iase24.springjunit.repository.FaqRepository;
+import com.iase24.springjunit.repository.NodeRepository;
 import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.security.service.RoleService;
 import com.iase24.springjunit.service.AdminService;
@@ -28,6 +27,7 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final EntityManager entityManager;
+    private final NodeRepository nodeRepository;
 
     @Override
     @Transactional
@@ -64,14 +64,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    @Transactional
-    public void createDescriptionCategory(DescriptionCategory descriptionCategory) {
-
-        // добавление коментария к категории
-        descriptionCategoryRepository.save(descriptionCategory);
-    }
-
-    @Override
     public List<Faq> findAllFaqIsQuestionNotRead() {
         return faqRepository.findAllByAnswerIsNull()
                 .stream()
@@ -98,6 +90,20 @@ public class AdminServiceImpl implements AdminService {
         Role roleAdmin = roleService.getAdminRole();
         user.getRoles().add(roleAdmin);
         userRepository.save(user);
+    }
+
+
+    @Override
+    @Transactional
+    public void createDescriptionByCategoryName(String categoryName, DescriptionDataDTO descriptionDataDTO) {
+        Node node = nodeRepository.findByCategory(categoryName);
+        DescriptionCategory descriptionCategory = new DescriptionCategory();
+        descriptionCategory.setId(node.getId());
+        descriptionCategory.setCategory(categoryName);
+        descriptionCategory.setTitle(descriptionDataDTO.getTitle());
+        descriptionCategory.setDescription(descriptionDataDTO.getDescription());
+        DescriptionCategory descriptionCreate = descriptionCategoryRepository.save(descriptionCategory);
+        new DescriptionDataDTO(descriptionCreate.getId(), descriptionCreate.getCategory(), descriptionCreate.getTitle(), descriptionCreate.getCategory());
     }
 }
 

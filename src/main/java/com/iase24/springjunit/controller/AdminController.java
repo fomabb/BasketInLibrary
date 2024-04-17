@@ -1,6 +1,7 @@
 package com.iase24.springjunit.controller;
 
 import com.iase24.springjunit.dto.BookUpdateDTO;
+import com.iase24.springjunit.dto.DescriptionDataDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.*;
@@ -59,13 +60,16 @@ public class AdminController {
     }
 
     /**
-     * Добавление админом описания категории, внутри Node
+     * Добавление админом описания категориипо названию категории
      *
      * @return JSON description
      */
-    @PostMapping("/description")
-    public DescriptionCategory createDescriptionCategory(@RequestBody DescriptionCategory descriptionCategory) {
-        return adminFacade.createDescriptionCategory(descriptionCategory);
+    @PostMapping("/create/descriptionByName")
+    public ResponseEntity<String> createDescriptionByCategoryName(
+            @RequestParam("categoryName") String categoryName,
+            @RequestBody DescriptionDataDTO descriptionCategory
+    ) {
+        return adminFacade.createDescriptionByCategoryName(categoryName, descriptionCategory);
     }
 
 //=======================================================Book===========================================================
@@ -186,7 +190,7 @@ public class AdminController {
      *
      * @return ResponseEntity
      */
-    @PutMapping("/addBooks/toCategory/name")
+    @PutMapping("/addBooks/inCategory/name")
     public ResponseEntity<?> addBooksInCategoryByName(@RequestParam("categoryName") String categoryName) {
         return adminFacade.addBooksInCategoryByName(categoryName);
     }

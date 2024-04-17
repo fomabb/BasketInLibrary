@@ -1,5 +1,6 @@
 package com.iase24.springjunit.service;
 
+import com.iase24.springjunit.dto.DescriptionDataDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UserUpdateDTO;
 import com.iase24.springjunit.entities.DescriptionCategory;
@@ -14,11 +15,9 @@ public interface AdminService {
 
     void deleteFaq(Long categoryId, Long faqId);
 
-    void createDescriptionCategory(DescriptionCategory descriptionCategory);
-
     List<Faq> findAllFaqIsQuestionNotRead();
 
     void updateUserRolesByUsername(Long userId);
 
-
+    void createDescriptionByCategoryName(String categoryName, DescriptionDataDTO descriptionCategory);
 }

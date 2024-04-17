@@ -1,6 +1,7 @@
 package com.iase24.springjunit.facade;
 
 import com.iase24.springjunit.dto.BookUpdateDTO;
+import com.iase24.springjunit.dto.DescriptionDataDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.*;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,9 +45,11 @@ public class AdminFacade {
                 .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
     }
 
-    public DescriptionCategory createDescriptionCategory(DescriptionCategory descriptionCategory) {
-        adminService.createDescriptionCategory(descriptionCategory);
-        return descriptionCategory;
+    public ResponseEntity<String> createDescriptionByCategoryName(String categoryName, DescriptionDataDTO descriptionCategory) {
+        adminService.createDescriptionByCategoryName(categoryName, descriptionCategory);
+        return ResponseEntity
+                .status(HttpStatus.ACCEPTED)
+                .body(String.format("Category with name %s successfully created", categoryName));
     }
 
 //=======================================================Book===========================================================
@@ -106,8 +110,6 @@ public class AdminFacade {
     public ResponseEntity<?> addBooksInCategoryByName(String categoryName) {
 
         List<Book> books = bookRepository.findBooksByCategoryName(categoryName);
-
-        System.out.println(books.get(0).getGenre());
 
         if (categoryName.equals(books.get(0).getGenre())) {
             bookService.addBooksInCategoryByName(categoryName);
