@@ -20,13 +20,13 @@ public class Faq {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "question")
+    @Column(name = "question", columnDefinition = "text")
     private String question;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateQuestionCreate;
 
-    @Column(name = "answer")
+    @Column(name = "answer", columnDefinition = "text")
     private String answer;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")

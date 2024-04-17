@@ -122,17 +122,17 @@ public class CartServiceImpl implements CartService {
             cart.setDateTime(originCreationTime);
             cartRepository.save(cart);
 
-            // Проверка, остались ли еще книги в корзине
+            // Проверка, остались ли еще книги в карте
             if (cart.getBooks().isEmpty()) {
 
-                // Если корзина стала пустой, но книга была в ней до удаления,
+                // Если карта стала пустой, но книга была в ней до удаления,
                 // возвращаем книгу на склад
                 if (wasInCart) {
                     returnBookToStock(bookToRemove.getId());
                 }
             } else {
 
-                // Если в корзине еще остались книги, возвращаем книгу на склад
+                // Если в карте еще остались книги, возвращаем книгу на склад
                 returnBookToStock(bookToRemove.getId());
             }
         } else {
