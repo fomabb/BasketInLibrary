@@ -22,6 +22,7 @@ public class DescriptionCategory {
 
     private String category;
 
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
     @OneToMany(mappedBy = "descriptionCategory"

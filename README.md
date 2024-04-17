@@ -22,7 +22,7 @@
 
 ## ER diagram for the data model
 
-![basket_library_db.png](src%2Fmain%2Fresources%2Fimage%2Fbasket_library_db.png)
+![data_base_schema.png](src%2Fmain%2Fresources%2Fimage%2Fdata_base_schema.png)
 
 ## RESTful API
 
