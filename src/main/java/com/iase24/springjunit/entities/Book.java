@@ -32,6 +32,12 @@ public class Book {
     @Column(name = "genre")
     private String genre;
 
+    @Column(name = "price")
+    private float price;
+
+    @Column(name = "delivery")
+    private int delivery;
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "status")
     private Status status;

@@ -81,7 +81,7 @@ ___Response user with basket___
     "user": {
       "id": 1,
       "login": "Ric",
-      "email": "Ric@gmail.com",
+      "email": "ric@gmail.com",
       "password": "$2a$10$iSOYg/4dUsKaYn.a5V/THO11XkQnpcKsG0jyGE/i4U3xDQarcakDW",
       "roles": [
         {
@@ -112,6 +112,8 @@ ___Response category book___
       "title": "Rune",
       "author": "James",
       "genre": "Fantasy",
+      "price": 11.9,
+      "delivery": 4,
       "status": "ACTIVE",
       "publisher": "Miki",
       "count": 1
@@ -121,6 +123,8 @@ ___Response category book___
       "title": "WarCraft",
       "author": "Kristi Golden",
       "genre": "Fantasy",
+      "price": 19.0,
+      "delivery": 2,
       "status": "ACTIVE",
       "publisher": "Miki",
       "count": 1
@@ -181,6 +185,8 @@ ___Response body for method GET basket___
                 "title": "Rune",
                 "author": "James",
                 "genre": "Fantasy",
+                "price": 11.9,
+                "delivery": 4,
                 "status": "ACTIVE",
                 "publisher": "Miki",
                 "count": 1
@@ -194,6 +200,8 @@ ___Response body for method GET basket___
                 "title": "Private investigation",
                 "author": "Daniel Ribakoff",
                 "genre": "Detective",
+                "price": 9.0,
+                "delivery": 2,
                 "status": "ACTIVE",
                 "publisher": "Nike",
                 "count": 5
@@ -222,6 +230,8 @@ ___Request body for method POST create new books___
     "title": "Private investigation",
     "author": "Daniel Ribakoff",
     "genre": "Detective",
+    "price": 9.0,
+    "delivery": 2,
     "status": "ACTIVE",
     "publisher": "Nik",
     "count": 7
@@ -230,6 +240,8 @@ ___Request body for method POST create new books___
     "title": "WarCraft",
     "author": "Kristi Golden",
     "genre": "Fantasy",
+    "price": 19.0,
+    "delivery": 2,
     "status": "ACTIVE",
     "publisher": "Miki",
     "count": 3
@@ -256,6 +268,8 @@ ___Response body for method GET search /api/search?text=war kristi golden___
     "title": "WarCraft",
     "author": "Kristi Golden",
     "genre": "Fantasy",
+    "price": 19.0,
+    "delivery": 2,
     "status": "INACTIVE",
     "publisher": "Miki",
     "count": 0
@@ -286,6 +300,8 @@ ___Response for cart___
       "title": "WarCraft",
       "author": "Kristi Golden",
       "genre": "Fantasy",
+      "price": 19.0,
+      "delivery": 2,
       "status": "ACTIVE",
       "publisher": "Miki",
       "count": 1
@@ -295,6 +311,8 @@ ___Response for cart___
       "title": "Private investigation",
       "author": "Daniel Ribakoff",
       "genre": "Detective",
+      "price": 9.0,
+      "delivery": 2,
       "status": "ACTIVE",
       "publisher": "Nik",
       "count": 1
@@ -321,6 +339,8 @@ ___Response show all orders___
       "title": "WarCraft",
       "author": "Kristi Golden",
       "genre": "Fantasy",
+      "price": 19.0,
+      "delivery": 2,
       "status": "ACTIVE",
       "publisher": "Miki",
       "count": 1
@@ -334,6 +354,8 @@ ___Response show all orders___
       "title": "Private investigation",
       "author": "Daniel Ribakoff",
       "genre": "Detective",
+      "price": 9.0,
+      "delivery": 2,
       "status": "ACTIVE",
       "publisher": "Nik",
       "count": 1
@@ -390,6 +412,8 @@ ___Response all categories with books with the implementation of infinite tree d
               "title": "War and Peace",
               "author": "Tolstoy",
               "genre": "Action",
+              "price": 6.22,
+              "delivery": 4,
               "status": "Active",
               "publisher": "Mike",
               "count": 1
@@ -399,6 +423,8 @@ ___Response all categories with books with the implementation of infinite tree d
               "title": "Goal",
               "author": "Eliyagu",
               "genre": "Action",
+              "price": 12.5,
+              "delivery": 2,
               "status": "ACTIVE",
               "publisher": "Rik",
               "count": 1
@@ -415,6 +441,8 @@ ___Response all categories with books with the implementation of infinite tree d
               "title": "Rune",
               "author": "James",
               "genre": "Fantasy",
+              "price": 11.9,
+              "delivery": 4,
               "status": "ACTIVE",
               "publisher": "Miki",
               "count": 1
@@ -424,6 +452,8 @@ ___Response all categories with books with the implementation of infinite tree d
               "title": "WarCraft",
               "author": "Kristi Golden",
               "genre": "Fantasy",
+              "price": 19.0,
+              "delivery": 2,
               "status": "ACTIVE",
               "publisher": "Miki",
               "count": 1
@@ -440,6 +470,8 @@ ___Response all categories with books with the implementation of infinite tree d
               "title": "Private investigation",
               "author": "Daniel Ribakoff",
               "genre": "Detective",
+              "price": 9.0,
+              "delivery": 2,
               "status": "ACTIVE",
               "publisher": "Nik",
               "count": 1
@@ -449,6 +481,8 @@ ___Response all categories with books with the implementation of infinite tree d
               "title": "The girl with the dragon tattoo",
               "author": "Stig Larsson",
               "genre": "Detective",
+              "price": 11.0,
+              "delivery": 3,
               "status": "ACTIVE",
               "publisher": "Nik",
               "count": 1
@@ -513,6 +547,8 @@ ___Response answer___
       "title": "Rune",
       "author": "James",
       "genre": "Fantasy",
+      "price": 11.9,
+      "delivery": 4,
       "status": "ACTIVE",
       "publisher": "Miki",
       "count": 1
@@ -522,6 +558,8 @@ ___Response answer___
       "title": "WarCraft",
       "author": "Kristi Golden",
       "genre": "Fantasy",
+      "price": 19.0,
+      "delivery": 2,
       "status": "ACTIVE",
       "publisher": "Miki",
       "count": 1

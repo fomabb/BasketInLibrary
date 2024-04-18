@@ -62,7 +62,12 @@ public class BasketServiceImpl implements BasketService {
             bookBasket.setBook(book);
             bookBasket.setBasket(basket);
             bookBasket.setQuantity(1);
+            bookBasket.setPriceQuantity(book.getPrice());
+
             bookBasketRepository.save(bookBasket);
+
+            // устанавливаем общую сумму за все товары
+            basket.setAllPrice(bookBasketRepository.findBooksByBasket(basket));
             return basket;
         } else {
             throw new IllegalArgumentException("Basket count exceeded");
@@ -83,8 +88,19 @@ public class BasketServiceImpl implements BasketService {
 
         // Проверить, не превышает ли новое количество доступное количество книги ии проверяем не меньше ли доступного
         if (updateBookQuantity.getQuantity() <= book.getCount() && updateBookQuantity.getQuantity() > 0) {
-            // Обновить количество в существующем BookBasket
+
+            // обновить количество в существующем BookBasket
             bookBasket.setQuantity(updateBookQuantity.getQuantity());
+
+            // увеличиваем price в самой корзине по колличеству товара
+            bookBasket.setPriceQuantity(bookBasket.getBook().getPrice() * bookBasket.getQuantity());
+
+            bookBasketRepository.findBooksByBasket(basket);
+
+            // устанавливаем общую сумму за все товары
+            basket.setAllPrice(bookBasketRepository.findBooksByBasket(basket));
+
+            // сохраняем изменения в базе данных
             bookBasketRepository.save(bookBasket);
             return new UpdateBookQuantityInBasket(bookBasket.getQuantity());
         } else {
@@ -99,9 +115,17 @@ public class BasketServiceImpl implements BasketService {
         Basket basket = findBasketById(basketId);
         BookBasket bookBasket = bookBasketRepository.findByBasketAndBook(basket, book)
                 .orElseThrow(() -> new RuntimeException("BookBasket not found"));
+
         basket.getBookBaskets().remove(bookBasket);
+
         if (!basket.getBookBaskets().contains(bookBasket)) {
             basketRepository.save(basket);
+            if (basket.getBookBaskets().isEmpty()) {
+                basket.setAllPrice(0.0f);
+            } else {
+                // устанавливаем общую сумму за все товары
+                basket.setAllPrice(bookBasketRepository.findBooksByBasket(basket));
+            }
         } else {
             throw new IllegalArgumentException("Delete book failed");
         }
@@ -127,17 +151,18 @@ public class BasketServiceImpl implements BasketService {
             bookCart.setCreationTime(LocalDateTime.now());
             allOrdersByQuantity.add(bookCart);
         }
-//        bookBasket.setQuantity(book.getCount()/bookBasket.getQuantity());
         bookCartRepository.saveAll(allOrdersByQuantity);
+        if (basket.getBookBaskets().isEmpty()) {
+            basket.setAllPrice(0.0f);
+        } else {
+            // устанавливаем общую сумму за все товары
+            basket.setAllPrice(bookBasketRepository.findBooksByBasket(basket));
+        }
 
         // проверяет, если колличество книг менше 1-го, тогда делается статус неактивным
         if (book.getCount() <= 0) {
             book.setStatus(Status.INACTIVE);
         }
-
-        // удаление книги из корзины если, колличество меньше 1-го
-//        if (bookBasket.getQuantity() <= 0) {
-            removeBookInBasket(basketId, book.getId());
-//        }
+        removeBookInBasket(basketId, book.getId());
     }
 }

@@ -24,6 +24,9 @@ public class Basket {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateCreate;
 
+    @Column(name = "all_price")
+    private float allPrice;
+
     @JsonBackReference("basket-user")
     @OneToOne(mappedBy = "basket")
     private User user;

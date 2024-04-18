@@ -30,4 +30,7 @@ public class BookBasket {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @Column(name = "price_quantity")
+    private Float priceQuantity;
 }

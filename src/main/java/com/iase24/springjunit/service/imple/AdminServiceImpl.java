@@ -9,7 +9,6 @@ import com.iase24.springjunit.repository.NodeRepository;
 import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.security.service.RoleService;
 import com.iase24.springjunit.service.AdminService;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,6 @@ public class AdminServiceImpl implements AdminService {
     private final DescriptionCategoryRepository descriptionCategoryRepository;
     private final UserRepository userRepository;
     private final RoleService roleService;
-    private final EntityManager entityManager;
     private final NodeRepository nodeRepository;
 
     @Override
@@ -74,17 +72,6 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     @Override
     public void updateUserRolesByUsername(Long userId) {
-//        User user = entityManager.find(User.class, userId);
-//        if (user != null) {
-//            Role roleAdmin = entityManager.createQuery("SELECT r FROM Role r WHERE r.name = 'ROLE_ADMIN'", Role.class)
-//                    .getSingleResult();
-//
-//            user.getRoles().add(roleAdmin);
-//            entityManager.refresh(user);
-//    } else {
-//        throw new IllegalArgumentException("User not found");
-//    }
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User id: " + userId + " not found"));
         Role roleAdmin = roleService.getAdminRole();
@@ -96,14 +83,25 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public void createDescriptionByCategoryName(String categoryName, DescriptionDataDTO descriptionDataDTO) {
+
+        // находим категорию по названию
         Node node = nodeRepository.findByCategory(categoryName);
+
+        // создаем новый объект описания категории в котрый устанавливаем ID и название категории из node
         DescriptionCategory descriptionCategory = new DescriptionCategory();
         descriptionCategory.setId(node.getId());
         descriptionCategory.setCategory(categoryName);
+
+        // создаем тело JSON {"title":", "description":" "}
         descriptionCategory.setTitle(descriptionDataDTO.getTitle());
         descriptionCategory.setDescription(descriptionDataDTO.getDescription());
+
+        // сохраняем в базу данных
         DescriptionCategory descriptionCreate = descriptionCategoryRepository.save(descriptionCategory);
-        new DescriptionDataDTO(descriptionCreate.getId(), descriptionCreate.getCategory(), descriptionCreate.getTitle(), descriptionCreate.getCategory());
+
+        // создаем новый объект DTO и выводим все поля
+        new DescriptionDataDTO(descriptionCreate.getId(), descriptionCreate.getCategory(), descriptionCreate.getTitle(),
+                descriptionCreate.getCategory());
     }
 }
 
