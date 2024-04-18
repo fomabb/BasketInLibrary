@@ -2,7 +2,6 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookCartDataDTO;
 import com.iase24.springjunit.dto.UpdateDeliveryDTO;
-import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.BookCart;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.entities.enumerated.DeliveryReport;
@@ -11,15 +10,12 @@ import com.iase24.springjunit.mapper.book_cart.BookCartMapper;
 import com.iase24.springjunit.repository.BookCartRepository;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.service.BookCartService;
-import com.iase24.springjunit.service.CartService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +25,6 @@ public class BookCartServiceImpl implements BookCartService {
 
     private final BookCartRepository bookCartRepository;
     private final BookCartMapper bookCartMapper;
-    private final CartServiceImpl cartService;
     private final BookRepository bookRepository;
 
     @Override
@@ -55,7 +50,6 @@ public class BookCartServiceImpl implements BookCartService {
             // 1. Отчет о доставке на пункт пропуска
             case 1:
                 bookCart.setDeliveryReport(DeliveryReport.DELIVERED);
-                ;
                 bookCart.setDeliveryReportDate(LocalDateTime.now());
                 break;
             // 2. Еслии пользователь забрал продукт
@@ -69,13 +63,8 @@ public class BookCartServiceImpl implements BookCartService {
             case 3:
                 if (bookCart.getDeliveryReport() == DeliveryReport.DELIVERED) {
                     bookCart.setDeliveryReport(DeliveryReport.CANCELLED);
-
-//                    if (bookCart.getReportOnTheEventDate() == null) {
                     bookCart.getBook().setCount(bookCart.getBook().getCount() + 1);
                     bookCart.setReportOnTheEventDate(LocalDateTime.now());
-//                } else {
-//                    throw new IllegalArgumentException("Status CANCELLED");
-//                }
                     if (bookCart.getBook().getCount() > 0) {
                         bookCart.getBook().setStatus(Status.ACTIVE);
                     }
@@ -87,6 +76,29 @@ public class BookCartServiceImpl implements BookCartService {
                 throw new IllegalStateException("Unexpected value: " + bookCart.getStatusDeliveryId());
         }
     }
+
+    @Override
+    public List<BookCart> findDeliveryReportByCartId(Long cartId) {
+        return bookCartRepository.findAllByCart_Id(cartId)
+                .stream()
+                .filter(bookCart -> bookCart.getStatusDeliveryId() == null || bookCart.getStatusDeliveryId() == 1)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookCart> findArchiveOrdersByCartId(Long cartId) {
+        if (cartId != null) {
+            return bookCartRepository.findAllByCart_Id(cartId)
+                    .stream()
+                    .filter(bookCart -> bookCart.getDeliveryReport().equals(DeliveryReport.RECEIVING)
+                            || bookCart.getDeliveryReport().equals(DeliveryReport.CANCELLED)
+                    )
+                    .collect(Collectors.toList());
+        } else {
+            throw new IllegalArgumentException("Cart ID is not exist");
+        }
+    }
+
 
     public BookCart findByCartId(Long cartId) {
         return bookCartRepository.findById(cartId)

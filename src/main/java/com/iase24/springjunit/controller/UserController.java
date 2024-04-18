@@ -3,6 +3,7 @@ package com.iase24.springjunit.controller;
 import com.iase24.springjunit.dto.*;
 import com.iase24.springjunit.entities.Basket;
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.BookCart;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.facade.BasketFacade;
 import com.iase24.springjunit.facade.UserFacade;
@@ -126,7 +127,7 @@ public class UserController {
         return userFacade.removeFaqFromCategory(categoryId, faqId);
     }
 
-//===========================================Basket========================================================================
+//===========================================Basket=====================================================================
 
     /**
      * Найти корзину по ID пользователя
@@ -194,5 +195,17 @@ public class UserController {
             @PathVariable("bookId") Long bookId
     ) {
         return basketFacade.toDoOrdersInBasketByQuantity(basketId, bookId);
+    }
+
+//===========================================Basket=====================================================================
+
+    @GetMapping("/show/report/cartId/{cartId}")
+    public List<BookCart> findDeliveryReportByCartId(@PathVariable("cartId") Long cartId) {
+        return userFacade.findDeliveryReportByCartId(cartId);
+    }
+
+    @GetMapping("/show/archive/orders/cartId/{cartId}")
+    public List<BookCart> findArchiveOrdersByCartId(@PathVariable("cartId") Long cartId) {
+        return userFacade.findArchiveOrdersByCartId(cartId);
     }
 }

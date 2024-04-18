@@ -3,8 +3,11 @@ package com.iase24.springjunit.facade;
 import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.BookCart;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.exception.AppError;
+import com.iase24.springjunit.service.BookCartService;
 import com.iase24.springjunit.service.imple.CartServiceImpl;
 import com.iase24.springjunit.service.imple.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +24,7 @@ public class UserFacade {
 
     private final UserServiceImpl userService;
     private final CartServiceImpl cartService;
+    private final BookCartService bookCartService;
 
     public CreateUserDTO createNewUser(CreateUserDTO createUserDTO) {
         userService.createNewUser(createUserDTO);
@@ -69,5 +74,15 @@ public class UserFacade {
         userService.removeFaqFromCategory(categoryId, faqId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
+    }
+
+//===========================================Basket=====================================================================
+
+    public List<BookCart> findDeliveryReportByCartId(Long cartId) {
+        return bookCartService.findDeliveryReportByCartId(cartId);
+    }
+
+    public List<BookCart> findArchiveOrdersByCartId(Long cartId) {
+        return bookCartService.findArchiveOrdersByCartId(cartId);
     }
 }
