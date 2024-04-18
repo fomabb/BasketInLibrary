@@ -36,8 +36,6 @@
  PUT   | /api/user/faq/update/faqId/{faqId}                  | update text question                
  GET    | /api/user/{id}                                      | get user by id                                  
  GET    | /api/admin/allUsers                                 | get all user for admin                                   
- DELETE | /api/user/faq/categoryId/{categoryId}/faqId/{faqId} | remove faq from description category
-
 
 ___Request body for method registration new user with your basket___
 

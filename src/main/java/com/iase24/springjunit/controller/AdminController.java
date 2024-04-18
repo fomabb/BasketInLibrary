@@ -1,9 +1,6 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.BookUpdateDTO;
-import com.iase24.springjunit.dto.DescriptionDataDTO;
-import com.iase24.springjunit.dto.FaqAnswerDTO;
-import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.*;
 import com.iase24.springjunit.entities.*;
 import com.iase24.springjunit.facade.AdminFacade;
 import jakarta.validation.Valid;
@@ -193,5 +190,15 @@ public class AdminController {
     @PutMapping("/addBooks/inCategory/name")
     public ResponseEntity<?> addBooksInCategoryByName(@RequestParam("categoryName") String categoryName) {
         return adminFacade.addBooksInCategoryByName(categoryName);
+    }
+
+//=======================================================BookCart=======================================================
+
+    @PutMapping("/downloadStatusDelivery/cartId/{cartId}")
+    public ResponseEntity<?> deliveryReportController(
+            @PathVariable("cartId") Long cartId,
+            @RequestBody UpdateDeliveryDTO updateDeliveryDTO
+    ) {
+        return adminFacade.deliveryReportController(cartId, updateDeliveryDTO);
     }
 }

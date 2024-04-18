@@ -1,18 +1,10 @@
 package com.iase24.springjunit.facade;
 
-import com.iase24.springjunit.dto.BookUpdateDTO;
-import com.iase24.springjunit.dto.DescriptionDataDTO;
-import com.iase24.springjunit.dto.FaqAnswerDTO;
-import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.entities.Book;
-import com.iase24.springjunit.entities.Cart;
-import com.iase24.springjunit.entities.Faq;
-import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.dto.*;
+import com.iase24.springjunit.entities.*;
+import com.iase24.springjunit.repository.BookCartRepository;
 import com.iase24.springjunit.repository.BookRepository;
-import com.iase24.springjunit.service.AdminService;
-import com.iase24.springjunit.service.BookService;
-import com.iase24.springjunit.service.CartService;
-import com.iase24.springjunit.service.UserService;
+import com.iase24.springjunit.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +20,10 @@ public class AdminFacade {
     private final AdminService adminService;
     private final UserService userService;
     private final CartService cartService;
+    private final BookCartService bookCartService;
     private final BookService bookService;
     private final BookRepository bookRepository;
+    private final BookCartRepository bookCartRepository;
 
     public FaqAnswerDTO answerForFaq(Long faqId, FaqAnswerDTO answer) {
         adminService.answerForFaq(faqId, answer);
@@ -121,5 +115,17 @@ public class AdminFacade {
         } else {
             throw new IllegalArgumentException("Invalid category name");
         }
+    }
+
+//=======================================================BookCart=======================================================
+
+    public ResponseEntity<?> deliveryReportController(Long cartId, UpdateDeliveryDTO updateDeliveryDTO) {
+        if (cartId != null) {
+            bookCartService.deliveryReport(cartId, updateDeliveryDTO);
+            return ResponseEntity
+                    .status(HttpStatus.ACCEPTED)
+                    .body(String.format("Cart with ID %s successfully delivered", cartId));
+        }
+        throw new IllegalArgumentException("Invalid cartId");
     }
 }

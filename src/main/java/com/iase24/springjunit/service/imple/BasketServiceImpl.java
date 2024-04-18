@@ -3,6 +3,7 @@ package com.iase24.springjunit.service.imple;
 import com.iase24.springjunit.dto.BookInBasketDataDTO;
 import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
 import com.iase24.springjunit.entities.*;
+import com.iase24.springjunit.entities.enumerated.DeliveryReport;
 import com.iase24.springjunit.repository.BasketRepository;
 import com.iase24.springjunit.repository.BookBasketRepository;
 import com.iase24.springjunit.repository.BookCartRepository;
@@ -42,7 +43,8 @@ public class BasketServiceImpl implements BasketService {
     public List<BookInBasketDataDTO> findBooksInBasketById(Long basketId) {
         return bookRepository.findBooksByBookBasketsId(basketId)
                 .stream()
-                .map(book -> new BookInBasketDataDTO(book.getId(), book.getTitle(), book.getCount())).collect(Collectors.toList());
+                .map(book -> new BookInBasketDataDTO(book.getId(), book.getTitle(), book.getCount()))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -149,6 +151,7 @@ public class BasketServiceImpl implements BasketService {
             bookCart.setBook(book);
             bookCart.setCart(cart);
             bookCart.setCreationTime(LocalDateTime.now());
+            bookCart.setDeliveryReport(DeliveryReport.HALFWAY_THROUGH);
             allOrdersByQuantity.add(bookCart);
         }
         bookCartRepository.saveAll(allOrdersByQuantity);

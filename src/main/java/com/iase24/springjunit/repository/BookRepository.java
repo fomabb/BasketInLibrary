@@ -1,6 +1,7 @@
 package com.iase24.springjunit.repository;
 
 import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.BookCart;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
@@ -43,4 +44,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, PagingAndSort
 
     @Query("select b from Book b where b.genre=:category")
     List<Book> findBooksByCategoryName(String category);
+
+    @Query("select b from Book b join BookCart bc on b.id=bc.id where bc.id=:categoryId")
+    Book findBookByCategoryId(Long categoryId);
 }

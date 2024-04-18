@@ -6,6 +6,7 @@ import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.BookCart;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.entities.Status;
+import com.iase24.springjunit.entities.enumerated.DeliveryReport;
 import com.iase24.springjunit.repository.BookCartRepository;
 import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.repository.CartRepository;
@@ -92,6 +93,7 @@ public class CartServiceImpl implements CartService {
             bookCart.setBook(book);
             bookCart.setCart(cart);
             bookCart.setCreationTime(LocalDateTime.now());
+            bookCart.setDeliveryReport(DeliveryReport.HALFWAY_THROUGH);
             bookCartRepository.saveAndFlush(bookCart);
             return cart;
         } else {
@@ -143,7 +145,7 @@ public class CartServiceImpl implements CartService {
     /**
      * Метод добавляющий книгу на склад после удаления из заказов
      */
-    private void returnBookToStock(Long bookId) {
+    public void returnBookToStock(Long bookId) {
         Book book = bookService.getBookById(bookId);
         book.setCount(book.getCount() + 1);
         if (book.getCount() > 0) {
