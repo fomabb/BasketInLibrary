@@ -28,14 +28,14 @@
 
 **1. API Description of general methods for User**
 
-| METHOD | PATH                                           | DESCRIPTION                                                               
-|--------|------------------------------------------------|---------------------------------------------------------------------------
-| POST   | /auth/registration                             | registration user with ROLE_USER and with create a personal shopping cart 
-| POST   | /auth                                          | authentication user                                                       
-| POST   | /api/user/faq/question/categoryId/{categoryId} | ask a question by category by id                                          
-| PUT    | /api/user/faq/update/faqId/{faqId}             | update text question                                                      
-| GET    | /api/user/{id}                                 | get user by id                                                            
-| GET    | /api/admin/allUsers                            | get all user for admin                                                    
+| METHOD | PATH                                           | DESCRIPTION                                                               |
+|--------|------------------------------------------------|---------------------------------------------------------------------------|
+| POST   | /auth/registration                             | registration user with ROLE_USER and with create a personal shopping cart |
+| POST   | /auth                                          | authentication user                                                       |
+| POST   | /api/user/faq/question/categoryId/{categoryId} | ask a question by category by id                                          |
+| PUT    | /api/user/faq/update/faqId/{faqId}             | update text question                                                      |
+| GET    | /api/user/{id}                                 | get user by id                                                            |
+| GET    | /api/admin/allUsers                            | get all user for admin                                                    |
 
 ___Request body for method registration new user with your basket___
 
@@ -154,13 +154,13 @@ ___Response category book___
 
 **2. API Description of general methods for Basket**
 
-| METHOD | PATH                                                                         | DESCRIPTION                        
-|--------|------------------------------------------------------------------------------|------------------------------------
-| POST   | /api/user/addBookInBasket/basketId/{basketId}/bookId/{bookId}                | add book in basket user            
-| POST   | /api/user/createOrdersByQuantityInBasket/basketId/{basketId}/bookId/{bookId} | adding books in orders by quantity 
-| PUT    | /api/user/updateBookQuantityInBasket/basketId/{basketId}/bookId/{bookId}     | update quantity books in basket    
-| GET    | /api/user/basketId/{basketId}                                                | get basket by id user              
-| DELETE | /removeBookInBasket/basketId/{basketId}/bookId/{bookId}                      | remove book from basket            
+| METHOD | PATH                                                                         | DESCRIPTION                        |
+|--------|------------------------------------------------------------------------------|------------------------------------|
+| POST   | /api/user/addBookInBasket/basketId/{basketId}/bookId/{bookId}                | add book in basket user            |
+| POST   | /api/user/createOrdersByQuantityInBasket/basketId/{basketId}/bookId/{bookId} | adding books in orders by quantity |
+| PUT    | /api/user/updateBookQuantityInBasket/basketId/{basketId}/bookId/{bookId}     | update quantity books in basket    |
+| GET    | /api/user/basketId/{basketId}                                                | get basket by id user              |
+| DELETE | /removeBookInBasket/basketId/{basketId}/bookId/{bookId}                      | remove book from basket            |
 
 ___Request body for method PUT update quantity books in basket book id:5___
 
@@ -213,13 +213,13 @@ ___Response body for method GET basket___
 
 **3. API Description of general methods for Book**
 
-| METHOD | PATH                                       | DESCRIPTION                                   
-|--------|--------------------------------------------|-----------------------------------------------
-| POST   | /api/book                                  | create new books                              
-| PUT    | /api/book/{bookId}                         | updating the count of books in stock          
-| GET    | /api/book/{id}                             | get book by id                                
-| GET    | /api/book?page={page}&size={size}          | get all books                                 
-| GET    | /api/book/search?text={title/genre/author} | full-text search for books from the warehouse 
+| METHOD | PATH                                       | DESCRIPTION                                   |
+|--------|--------------------------------------------|-----------------------------------------------|
+| POST   | /api/book                                  | create new books                              |
+| PUT    | /api/book/{bookId}                         | updating the count of books in stock          |
+| GET    | /api/book/{id}                             | get book by id                                |
+| GET    | /api/book?page={page}&size={size}          | get all books                                 |
+| GET    | /api/book/search?text={title/genre/author} | full-text search for books from the warehouse |
 
 ___Request body for method POST create new books___
 
@@ -278,14 +278,14 @@ ___Response body for method GET search /api/search?text=war kristi golden___
 
 **4. API Description of general methods for Cart**
 
-| METHOD | PATH                                      | DESCRIPTION                                                       
-|--------|-------------------------------------------|-------------------------------------------------------------------
-| PUT    | /api/user/cartId/{cartId}/bookId/{bookId} | adding a book to the user's cart from the book warehouse          
-| DELETE | /api/user/cartId/{cartId}/bookId/{bookId} | returning  a book from a user's shopping cart to a book warehouse 
-| GET    | /api/cart/{id}                            | get cart by id                                                    
-| GET    | /api/cart                                 | get all carts users                                               
-| GET    | /api/admin/cartByUser?username={username} | get cart user's by login                                          
-| GET    | /api/cart/allCarts/{cartId}               | show aa orders by Id cart                                         
+| METHOD | PATH                                      | DESCRIPTION                                                       |
+|--------|-------------------------------------------|-------------------------------------------------------------------|
+| PUT    | /api/user/cartId/{cartId}/bookId/{bookId} | adding a book to the user's cart from the book warehouse          |
+| DELETE | /api/user/cartId/{cartId}/bookId/{bookId} | returning  a book from a user's shopping cart to a book warehouse |
+| GET    | /api/cart/{id}                            | get cart by id                                                    |
+| GET    | /api/cart                                 | get all carts users                                               |
+| GET    | /api/admin/cartByUser?username={username} | get cart user's by login                                          |
+| GET    | /api/cart/allCarts/{cartId}               | show aa orders by Id cart                                         |
 
 ___Response for cart___
 
@@ -365,13 +365,13 @@ ___Response show all orders___
 
 **5. API Description of general methods for Tree**
 
-| METHOD | PATH                                                                        | DESCRIPTION                                                         
-|--------|-----------------------------------------------------------------------------|---------------------------------------------------------------------
-| POST   | /api/admin/createCategory                                                   | create new category in tree                                         
-| PUT    | /api/admin/addChildrenId/{childId}?parentNode={parentId}                    | add children category in parent                                     
-| PUT    | /api/admin/addBookId/{bookId}/categoryId/{categoryId}                       | add book in category for tree                                       
-| PUT    | /api/admin/addBooks/inCategory/name?categoryName={categoryName}             | add books in category for tree by books genre                       
-| GET    | /api/book/category/{categoryId}?parent={true/false}&page={page}&size={size} | display all books for the category by id {true}parent, {false}child 
+| METHOD | PATH                                                                        | DESCRIPTION                                                         |
+|--------|-----------------------------------------------------------------------------|---------------------------------------------------------------------|
+| POST   | /api/admin/createCategory                                                   | create new category in tree                                         |
+| PUT    | /api/admin/addChildrenId/{childId}?parentNode={parentId}                    | add children category in parent                                     |
+| PUT    | /api/admin/addBookId/{bookId}/categoryId/{categoryId}                       | add book in category for tree                                       |
+| PUT    | /api/admin/addBooks/inCategory/name?categoryName={categoryName}             | add books in category for tree by books genre                       |
+| GET    | /api/book/category/{categoryId}?parent={true/false}&page={page}&size={size} | display all books for the category by id {true}parent, {false}child |
 
 ___Request body for create categories method___
 
@@ -510,12 +510,12 @@ ___Response all categories with books with the implementation of infinite tree d
 
 **6. API Description of general methods for Admin**
 
-| METHOD | PATH                                                            | DESCRIPTION                                       
-|--------|-----------------------------------------------------------------|---------------------------------------------------
-| PUT    | /api/admin/answer/faqId/{faqId}                                 | answer the question on the faq id and update text 
-| DELETE | /api/admin/categoryId/{categoryId}/faqId/{faqId}                | remove faq from description category              
-| POST   | /api/admin/create/descriptionByName?categoryName={categoryName} | create description by category name               
-| GET    | /api/admin/faq/NotRead                                          | show not read question                            
+| METHOD | PATH                                                            | DESCRIPTION                                       |
+|--------|-----------------------------------------------------------------|---------------------------------------------------|
+| PUT    | /api/admin/answer/faqId/{faqId}                                 | answer the question on the faq id and update text |
+| DELETE | /api/admin/categoryId/{categoryId}/faqId/{faqId}                | remove faq from description category              |
+| POST   | /api/admin/create/descriptionByName?categoryName={categoryName} | create description by category name               |
+| GET    | /api/admin/faq/NotRead                                          | show not read question                            |
 
 ___Request body for description___
 
@@ -589,5 +589,5 @@ ___Response answer___
 
 ### My application requests in Postman
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/d9af219fea3fe665c736?action=collection%2Fimport)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/21948648/2sA3JFCk5E)
   
