@@ -194,6 +194,14 @@ public class AdminController {
 
 //=======================================================BookCart=======================================================
 
+    /**
+     * Обновление отчета о доставке (1,2,3)
+     * 1. Отчет о доставке на пункт пропуска
+     * 2. Еслии пользователь забрал продукт
+     * 3. Отмена заказа
+     *
+     * @return ResponseEntity
+     */
     @PutMapping("/downloadStatusDelivery/cartId/{cartId}")
     public ResponseEntity<?> deliveryReportController(
             @PathVariable("cartId") Long cartId,

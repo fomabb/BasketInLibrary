@@ -42,7 +42,7 @@ public class BookCartServiceImpl implements BookCartService {
         // находим карточку заказа по ID
         BookCart bookCart = findByCartId(cartId);
 
-        // устанавливаем статус от 1 до 3 в зависимости
+        // устанавливаем статус от 1 до 3 в зависимости от case
         bookCart.setStatusDeliveryId(updateDeliveryDTO.getStatusDeliveryId());
 
         switch (bookCart.getStatusDeliveryId()) {
