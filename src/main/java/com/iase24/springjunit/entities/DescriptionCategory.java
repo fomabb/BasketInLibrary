@@ -15,17 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "descriptions")
+@Table(name = "description")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class DescriptionCategory {
 
     @Id
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "category")
     private String category;
 
     @Column(name = "description", columnDefinition = "text")

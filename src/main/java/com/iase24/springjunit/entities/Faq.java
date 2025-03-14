@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "faqs")
+@Table(name = "faq")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,18 +26,21 @@ public class Faq {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "question", columnDefinition = "text")
     private String question;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    @Column(name = "date_question_create")
     private LocalDateTime dateQuestionCreate;
 
     @Column(name = "answer", columnDefinition = "text")
     private String answer;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    @Column(name = "date_answer_create")
     private LocalDateTime dateAnswerCreate;
 
     @JsonBackReference
