@@ -3,10 +3,8 @@ package com.iase24.springjunit.facade;
 import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.entities.Book;
-import com.iase24.springjunit.entities.BookCart;
-import com.iase24.springjunit.entities.Cart;
-import com.iase24.springjunit.exception.AppError;
+import com.iase24.springjunit.entities.Order;
+import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.service.BookCartService;
 import com.iase24.springjunit.service.imple.CartServiceImpl;
 import com.iase24.springjunit.service.imple.UserServiceImpl;
@@ -40,20 +38,20 @@ public class UserFacade {
         return userService.getCartByUserId(userId);
     }
 
-//===========================================Cart=======================================================================
+//===========================================Order=======================================================================
 
-    public Cart addBookInCart(Long cartId, Long bookId) {
+    public Order addBookInCart(Long cartId, Long bookId) {
         return cartService.addBookInCart(cartId, bookId);
     }
 
-    public Cart getCartById(Long cartId) {
+    public Order getCartById(Long cartId) {
         return cartService.getCartById(cartId);
     }
 
     public ResponseEntity<?> removeFromCart(Long cartId, Long bookId) {
         cartService.removeFromCart(cartId, bookId);
         return new ResponseEntity<>(
-                "Book with id " + bookId + " remove in cart with id " + cartId
+                "Product with id " + bookId + " remove in order with id " + cartId
                 , HttpStatus.OK
         );
     }
@@ -76,13 +74,13 @@ public class UserFacade {
                 .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
     }
 
-//===========================================Basket=====================================================================
+//===========================================Cart=====================================================================
 
-    public List<BookCart> findDeliveryReportByCartId(Long cartId) {
+    public List<ProductOrder> findDeliveryReportByCartId(Long cartId) {
         return bookCartService.findDeliveryReportByCartId(cartId);
     }
 
-    public List<BookCart> findArchiveOrdersByCartId(Long cartId) {
+    public List<ProductOrder> findArchiveOrdersByCartId(Long cartId) {
         return bookCartService.findArchiveOrdersByCartId(cartId);
     }
 }

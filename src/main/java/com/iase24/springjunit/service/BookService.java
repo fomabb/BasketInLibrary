@@ -2,9 +2,9 @@ package com.iase24.springjunit.service;
 
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
-import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.Status;
 import org.springframework.data.domain.PageRequest;
 
@@ -13,18 +13,18 @@ import java.util.Optional;
 
 public interface BookService {
 
-    List<Book> getAll(PageRequest pageRequest);
+    List<Product> getAll(PageRequest pageRequest);
 
-    void createNewBook(List<Book> book);
+    void createNewBook(List<Product> product);
 
-    Book getBookById(Long id);
+    Product getBookById(Long id);
 
     void updateBookCount(Long id, BookUpdateDTO bookUpdateDTO);
 
     //TODO
     void updateBookCounter(Long id, int count);
 
-    Optional<Book> getBookByIdStatusActive(Long id, Status status);
+    Optional<Product> getBookByIdStatusActive(Long id, Status status);
 
 
     void deleteBookFromCart(Long cartId, Long bookId);
@@ -41,7 +41,7 @@ public interface BookService {
 
     Node findNodeById(Long nodeId);
 
-    List<Book> findBooksChildCategoryId(Long categoryId, boolean parent, PageRequest pageRequest);
+    List<Product> findBooksChildCategoryId(Long categoryId, boolean parent, PageRequest pageRequest);
 
     List<DescriptionCategory> findDescriptionCategory(Long categoryId);
 }

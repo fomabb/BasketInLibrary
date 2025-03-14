@@ -2,9 +2,9 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookUpdateDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.entities.Book;
-import com.iase24.springjunit.entities.BookCart;
-import com.iase24.springjunit.entities.Cart;
+import com.iase24.springjunit.entities.Order;
+import com.iase24.springjunit.entities.Product;
+import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.entities.enumerated.DeliveryReport;
 import com.iase24.springjunit.repository.BookCartRepository;
@@ -33,14 +33,14 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public Cart addCart(Cart cart) {
-        return cartRepository.save(cart);
+    public Order addCart(Order order) {
+        return cartRepository.save(order);
     }
 
     @Override
-    public List<Cart> getCarts() {
-        List<Cart> carts = cartRepository.findAll();
-        return carts.stream()
+    public List<Order> getCarts() {
+        List<Order> orders = cartRepository.findAll();
+        return orders.stream()
                 .peek(cart -> {
                     UserDataDTO userDataDTO = new UserDataDTO();
                     userDataDTO.setId(cart.getUser().getId());
@@ -51,23 +51,23 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getCartById(Long cartId) {
+    public Order getCartById(Long cartId) {
         return cartRepository.findById(cartId)
-                .orElseThrow(() -> new IllegalArgumentException("Cart with id " + cartId + " not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Order with id " + cartId + " not found"));
     }
 
     @Override
     @Transactional
     public void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO) {
-        Book book = bookService.getBookById(bookId);
-        if (book.getId() != null) {
-            if (book.getCount() <= 0) {
-                book.setCount(bookUpdateDTO.getCount());
+        Product product = bookService.getBookById(bookId);
+        if (product.getId() != null) {
+            if (product.getCount() <= 0) {
+                product.setCount(bookUpdateDTO.getCount());
             }
-            Book updateCount = bookRepository.save(book);
+            Product updateCount = bookRepository.save(product);
             new BookUpdateDTO(updateCount.getCount(), updateCount.getStatus());
         } else {
-            throw new IllegalArgumentException("Book with id " + bookId + " not found");
+            throw new IllegalArgumentException("Product with id " + bookId + " not found");
         }
     }
 
@@ -76,28 +76,28 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     @Transactional
-    public Cart addBookInCart(Long cartId, Long bookId) {
-        Cart cart = getCartById(cartId);
-        Book book = bookService.getBookById(bookId);
-        if (book.getCount() > 0) {
+    public Order addBookInCart(Long cartId, Long bookId) {
+        Order order = getCartById(cartId);
+        Product product = bookService.getBookById(bookId);
+        if (product.getCount() > 0) {
 
             // Уменьшаем количество книги на складе
-            book.setCount(book.getCount() - 1);
+            product.setCount(product.getCount() - 1);
 
             // Сохраняем изменения в книге
-            bookRepository.save(book);
-            if (book.getCount() <= 0) {
-                book.setStatus(Status.INACTIVE);
+            bookRepository.save(product);
+            if (product.getCount() <= 0) {
+                product.setStatus(Status.INACTIVE);
             }
-            BookCart bookCart = new BookCart();
-            bookCart.setBook(book);
-            bookCart.setCart(cart);
-            bookCart.setCreationTime(LocalDateTime.now());
-            bookCart.setDeliveryReport(DeliveryReport.HALFWAY_THROUGH);
-            bookCartRepository.saveAndFlush(bookCart);
-            return cart;
+            ProductOrder productOrder = new ProductOrder();
+            productOrder.setProduct(product);
+            productOrder.setOrder(order);
+            productOrder.setCreationTime(LocalDateTime.now());
+            productOrder.setDeliveryReport(DeliveryReport.HALFWAY_THROUGH);
+            bookCartRepository.saveAndFlush(productOrder);
+            return order;
         } else {
-            throw new IllegalArgumentException("Book with id " + bookId + " not found");
+            throw new IllegalArgumentException("Product with id " + bookId + " not found");
         }
     }
 
@@ -105,40 +105,40 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public void removeFromCart(Long cartId, Long bookId) {
-        Cart cart = getCartById(cartId);
+        Order order = getCartById(cartId);
 
         //TODO: в процессе изменения
         // сохранение изначального ID и даты====================
-        Long originCartId = cart.getId();
-        LocalDateTime originCreationTime = cart.getDateTime();
+        Long originCartId = order.getId();
+        LocalDateTime originCreationTime = order.getDateTime();
         //======================================================
 
-        Book bookToRemove = bookService.getBookById(bookId);
+        Product productToRemove = bookService.getBookById(bookId);
 
         // Проверяем, была ли книга в корзине до удаления
-        boolean wasInCart = cart.getBooks().contains(bookToRemove);
+        boolean wasInCart = order.getProducts().contains(productToRemove);
 
         // Удаление книги из корзины
-        if (cart.getBooks().remove(bookToRemove)) {
-            cart.setId(originCartId);
-            cart.setDateTime(originCreationTime);
-            cartRepository.save(cart);
+        if (order.getProducts().remove(productToRemove)) {
+            order.setId(originCartId);
+            order.setDateTime(originCreationTime);
+            cartRepository.save(order);
 
             // Проверка, остались ли еще книги в карте
-            if (cart.getBooks().isEmpty()) {
+            if (order.getProducts().isEmpty()) {
 
                 // Если карта стала пустой, но книга была в ней до удаления,
                 // возвращаем книгу на склад
                 if (wasInCart) {
-                    returnBookToStock(bookToRemove.getId());
+                    returnBookToStock(productToRemove.getId());
                 }
             } else {
 
                 // Если в карте еще остались книги, возвращаем книгу на склад
-                returnBookToStock(bookToRemove.getId());
+                returnBookToStock(productToRemove.getId());
             }
         } else {
-            throw new EntityNotFoundException("Book with id " + bookId + " not found");
+            throw new EntityNotFoundException("Product with id " + bookId + " not found");
         }
     }
 
@@ -146,16 +146,16 @@ public class CartServiceImpl implements CartService {
      * Метод добавляющий книгу на склад после удаления из заказов
      */
     public void returnBookToStock(Long bookId) {
-        Book book = bookService.getBookById(bookId);
-        book.setCount(book.getCount() + 1);
-        if (book.getCount() > 0) {
-            book.setStatus(Status.ACTIVE);
+        Product product = bookService.getBookById(bookId);
+        product.setCount(product.getCount() + 1);
+        if (product.getCount() > 0) {
+            product.setStatus(Status.ACTIVE);
         }
-        bookRepository.save(book);
+        bookRepository.save(product);
     }
 
     @Override
-    public Cart getCartByLogin(String username) {
+    public Order getCartByLogin(String username) {
         return cartRepository.findCartByUser_Username(username)
                 .orElseThrow(() -> new EntityNotFoundException("User with name: " + username + " not found"));
     }

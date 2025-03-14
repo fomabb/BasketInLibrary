@@ -2,7 +2,7 @@ package com.iase24.springjunit.facade;
 
 import com.iase24.springjunit.dto.BookCartDataDTO;
 import com.iase24.springjunit.dto.BookUpdateDTO;
-import com.iase24.springjunit.entities.Cart;
+import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.service.BookCartService;
 import com.iase24.springjunit.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,8 @@ public class CartFacade {
     private final CartService cartService;
     private final BookCartService bookCartService;
 
-    public Cart addCart(Cart cart) {
-        return cartService.addCart(cart);
+    public Order addCart(Order order) {
+        return cartService.addCart(order);
     }
 
     public List<BookCartDataDTO> getAllCarts(Long cartId) {

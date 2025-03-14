@@ -2,8 +2,8 @@ package com.iase24.springjunit.facade;
 
 import com.iase24.springjunit.dto.BookInBasketDataDTO;
 import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
-import com.iase24.springjunit.entities.Basket;
-import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.Cart;
+import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.exception.AppError;
 import com.iase24.springjunit.service.BasketService;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,10 @@ public class BasketFacade {
 
     private final BasketService basketService;
 
-    public Basket getBasketById(Long id) {
+    public Cart getBasketById(Long id) {
         if (id == null) {
             new ResponseEntity<>(
-                    new AppError(HttpStatus.NOT_FOUND.value(), "Basket not found"), HttpStatus.NOT_FOUND
+                    new AppError(HttpStatus.NOT_FOUND.value(), "Cart not found"), HttpStatus.NOT_FOUND
             );
         }
         return basketService.findBasketById(id);
@@ -32,7 +32,7 @@ public class BasketFacade {
         return basketService.findBooksInBasketById(basketId);
     }
 
-    public Basket createBasket(Long basketId, Long bookId) {
+    public Cart createBasket(Long basketId, Long bookId) {
         return basketService.addBookInBasket(basketId, bookId);
     }
 
@@ -45,7 +45,7 @@ public class BasketFacade {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Book> toDoOrdersInBasketByQuantity(Long basketId, Long quantity) {
+    public ResponseEntity<Product> toDoOrdersInBasketByQuantity(Long basketId, Long quantity) {
         basketService.toDoOrdersInBasketByQuantity(basketId, quantity);
         return new ResponseEntity<>(HttpStatus.OK);
     }

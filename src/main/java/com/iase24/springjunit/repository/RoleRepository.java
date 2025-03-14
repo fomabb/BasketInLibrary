@@ -1,7 +1,6 @@
 package com.iase24.springjunit.repository;
 
 import com.iase24.springjunit.entities.Role;
-import jakarta.persistence.SequenceGenerators;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,6 @@
 package com.iase24.springjunit.dto;
 
-import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +20,7 @@ public class CartDataDTO {
 
     private LocalDateTime dateTime;
 
-    private List<Book> books;
+    private List<Product> products;
 
     private User user;
 }

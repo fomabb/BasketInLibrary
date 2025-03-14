@@ -1,7 +1,7 @@
 package com.iase24.springjunit.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +20,6 @@ public class BookCartDataDTO {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime creationTime;
 
-    private Book book;
+    private Product product;
 
 }

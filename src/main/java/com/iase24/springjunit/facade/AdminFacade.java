@@ -1,10 +1,21 @@
 package com.iase24.springjunit.facade;
 
-import com.iase24.springjunit.dto.*;
-import com.iase24.springjunit.entities.*;
+import com.iase24.springjunit.dto.BookUpdateDTO;
+import com.iase24.springjunit.dto.DescriptionDataDTO;
+import com.iase24.springjunit.dto.FaqAnswerDTO;
+import com.iase24.springjunit.dto.UpdateDeliveryDTO;
+import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.entities.Faq;
+import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.entities.Order;
+import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.repository.BookCartRepository;
 import com.iase24.springjunit.repository.BookRepository;
-import com.iase24.springjunit.service.*;
+import com.iase24.springjunit.service.AdminService;
+import com.iase24.springjunit.service.BookCartService;
+import com.iase24.springjunit.service.BookService;
+import com.iase24.springjunit.service.CartService;
+import com.iase24.springjunit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,11 +59,11 @@ public class AdminFacade {
                 .body(String.format("Category with name %s successfully created", categoryName));
     }
 
-//=======================================================Book===========================================================
+//=======================================================Product===========================================================
 
-    public List<Book> createNewBook(List<Book> book) {
-        bookService.createNewBook(book);
-        return book;
+    public List<Product> createNewBook(List<Product> product) {
+        bookService.createNewBook(product);
+        return product;
     }
 
     public BookUpdateDTO updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) {
@@ -68,7 +79,7 @@ public class AdminFacade {
         return userService.getAllUsers();
     }
 
-    public Cart getCartByUser(String username) {
+    public Order getCartByUser(String username) {
         return cartService.getCartByLogin(username);
     }
 
@@ -80,9 +91,9 @@ public class AdminFacade {
         adminService.updateUserRolesByUsername(userId);
     }
 
-//=======================================================Cart===========================================================
+//=======================================================Order===========================================================
 
-    public List<Cart> getCarts() {
+    public List<Order> getCarts() {
         return cartService.getCarts();
     }
 
@@ -105,9 +116,9 @@ public class AdminFacade {
 
     public ResponseEntity<?> addBooksInCategoryByName(String categoryName) {
 
-        List<Book> books = bookRepository.findBooksByCategoryName(categoryName);
+        List<Product> products = bookRepository.findBooksByCategoryName(categoryName);
 
-        if (categoryName.equals(books.get(0).getGenre())) {
+        if (categoryName.equals(products.get(0).getGenre())) {
             bookService.addBooksInCategoryByName(categoryName);
             return ResponseEntity
                     .status(HttpStatus.ACCEPTED)
@@ -117,14 +128,14 @@ public class AdminFacade {
         }
     }
 
-//=======================================================BookCart=======================================================
+//=======================================================ProductOrder=======================================================
 
     public ResponseEntity<?> deliveryReportController(Long cartId, UpdateDeliveryDTO updateDeliveryDTO) {
         if (cartId != null) {
             bookCartService.deliveryReport(cartId, updateDeliveryDTO);
             return ResponseEntity
                     .status(HttpStatus.ACCEPTED)
-                    .body(String.format("Cart with ID %s successfully delivered", cartId));
+                    .body(String.format("Order with ID %s successfully delivered", cartId));
         }
         throw new IllegalArgumentException("Invalid cartId");
     }

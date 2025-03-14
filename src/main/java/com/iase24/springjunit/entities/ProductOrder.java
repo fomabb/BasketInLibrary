@@ -3,7 +3,16 @@ package com.iase24.springjunit.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iase24.springjunit.entities.enumerated.DeliveryReport;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,27 +21,27 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "book_cart")
+@Table(name = "products_orders")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookCart {
+public class ProductOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @JsonBackReference("bookCart-book")
+    @JsonBackReference("bookCart-product")
     @ManyToOne
-    @JoinColumn(name = "book_id", referencedColumnName = "id")
-    private Book book;
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private Product product;
 
-    @JsonBackReference("bookCart-cart")
+    @JsonBackReference("bookCart-order")
     @ManyToOne
-    @JoinColumn(name = "cart_id", referencedColumnName = "id")
-    private Cart cart;
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "delivery_report")

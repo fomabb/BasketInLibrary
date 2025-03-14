@@ -1,6 +1,5 @@
 package com.iase24.springjunit.dto;
 
-import com.iase24.springjunit.entities.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

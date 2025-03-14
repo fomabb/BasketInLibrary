@@ -1,7 +1,7 @@
 package com.iase24.springjunit.mapper.cart;
 
 import com.iase24.springjunit.dto.CartDataDTO;
-import com.iase24.springjunit.entities.Cart;
+import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.mapper.Mapper;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 @Component
-public class CartMapper implements Mapper<Cart, CartDataDTO> {
+public class CartMapper implements Mapper<Order, CartDataDTO> {
 
     private static final CartMapper INSTANCE = new CartMapper();
 
@@ -19,11 +19,11 @@ public class CartMapper implements Mapper<Cart, CartDataDTO> {
     }
 
     @Override
-    public CartDataDTO map(Cart object) {
+    public CartDataDTO map(Order object) {
         return CartDataDTO.builder()
                 .id(object.getId())
                 .dateTime(object.getDateTime())
-                .books(object.getBooks())
+                .products(object.getProducts())
                 .user(object.getUser())
                 .build();
     }

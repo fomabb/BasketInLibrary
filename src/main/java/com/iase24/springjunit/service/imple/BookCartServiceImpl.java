@@ -2,7 +2,7 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookCartDataDTO;
 import com.iase24.springjunit.dto.UpdateDeliveryDTO;
-import com.iase24.springjunit.entities.BookCart;
+import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.entities.enumerated.DeliveryReport;
 import com.iase24.springjunit.exception.EntityNotFoundException;
@@ -40,45 +40,45 @@ public class BookCartServiceImpl implements BookCartService {
     public void deliveryReport(Long cartId, UpdateDeliveryDTO updateDeliveryDTO) {
 
         // находим карточку заказа по ID
-        BookCart bookCart = findByCartId(cartId);
+        ProductOrder productOrder = findByCartId(cartId);
 
         // устанавливаем статус от 1 до 3 в зависимости от case
-        bookCart.setStatusDeliveryId(updateDeliveryDTO.getStatusDeliveryId());
+        productOrder.setStatusDeliveryId(updateDeliveryDTO.getStatusDeliveryId());
 
-        switch (bookCart.getStatusDeliveryId()) {
+        switch (productOrder.getStatusDeliveryId()) {
 
             // 1. Отчет о доставке на пункт пропуска
             case 1:
-                bookCart.setDeliveryReport(DeliveryReport.DELIVERED);
-                bookCart.setDeliveryReportDate(LocalDateTime.now());
+                productOrder.setDeliveryReport(DeliveryReport.DELIVERED);
+                productOrder.setDeliveryReportDate(LocalDateTime.now());
                 break;
             // 2. Еслии пользователь забрал продукт
             case 2:
-                if (bookCart.getDeliveryReport() == DeliveryReport.DELIVERED) {
-                    bookCart.setDeliveryReport(DeliveryReport.RECEIVING);
-                    bookCart.setReportOnTheEventDate(LocalDateTime.now());
+                if (productOrder.getDeliveryReport() == DeliveryReport.DELIVERED) {
+                    productOrder.setDeliveryReport(DeliveryReport.RECEIVING);
+                    productOrder.setReportOnTheEventDate(LocalDateTime.now());
                     break;
                 }
                 // 3. Отмена заказа
             case 3:
-                if (bookCart.getDeliveryReport() == DeliveryReport.DELIVERED) {
-                    bookCart.setDeliveryReport(DeliveryReport.CANCELLED);
-                    bookCart.getBook().setCount(bookCart.getBook().getCount() + 1);
-                    bookCart.setReportOnTheEventDate(LocalDateTime.now());
-                    if (bookCart.getBook().getCount() > 0) {
-                        bookCart.getBook().setStatus(Status.ACTIVE);
+                if (productOrder.getDeliveryReport() == DeliveryReport.DELIVERED) {
+                    productOrder.setDeliveryReport(DeliveryReport.CANCELLED);
+                    productOrder.getProduct().setCount(productOrder.getProduct().getCount() + 1);
+                    productOrder.setReportOnTheEventDate(LocalDateTime.now());
+                    if (productOrder.getProduct().getCount() > 0) {
+                        productOrder.getProduct().setStatus(Status.ACTIVE);
                     }
                     break;
                 } else {
                     throw new IllegalArgumentException("Status CANCELLED");
                 }
             default:
-                throw new IllegalStateException("Unexpected value: " + bookCart.getStatusDeliveryId());
+                throw new IllegalStateException("Unexpected value: " + productOrder.getStatusDeliveryId());
         }
     }
 
     @Override
-    public List<BookCart> findDeliveryReportByCartId(Long cartId) {
+    public List<ProductOrder> findDeliveryReportByCartId(Long cartId) {
         return bookCartRepository.findAllByCart_Id(cartId)
                 .stream()
                 .filter(bookCart -> bookCart.getStatusDeliveryId() == null || bookCart.getStatusDeliveryId() == 1)
@@ -86,7 +86,7 @@ public class BookCartServiceImpl implements BookCartService {
     }
 
     @Override
-    public List<BookCart> findArchiveOrdersByCartId(Long cartId) {
+    public List<ProductOrder> findArchiveOrdersByCartId(Long cartId) {
         if (cartId != null) {
             return bookCartRepository.findAllByCart_Id(cartId)
                     .stream()
@@ -95,13 +95,13 @@ public class BookCartServiceImpl implements BookCartService {
                     )
                     .collect(Collectors.toList());
         } else {
-            throw new IllegalArgumentException("Cart ID is not exist");
+            throw new IllegalArgumentException("Order ID is not exist");
         }
     }
 
 
-    public BookCart findByCartId(Long cartId) {
+    public ProductOrder findByCartId(Long cartId) {
         return bookCartRepository.findById(cartId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Book cart with id %s not found", cartId)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Product order with id %s not found", cartId)));
     }
 }

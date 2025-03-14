@@ -1,6 +1,5 @@
 package com.iase24.springjunit.repository;
 
-import com.iase24.springjunit.entities.Role;
 import com.iase24.springjunit.entities.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

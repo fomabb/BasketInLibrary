@@ -1,12 +1,28 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.*;
-import com.iase24.springjunit.entities.*;
+import com.iase24.springjunit.dto.BookUpdateDTO;
+import com.iase24.springjunit.dto.DescriptionDataDTO;
+import com.iase24.springjunit.dto.FaqAnswerDTO;
+import com.iase24.springjunit.dto.UpdateDeliveryDTO;
+import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.entities.Faq;
+import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.entities.Order;
+import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.facade.AdminFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -69,16 +85,16 @@ public class AdminController {
         return adminFacade.createDescriptionByCategoryName(categoryName, descriptionCategory);
     }
 
-//=======================================================Book===========================================================
+//=======================================================Product===========================================================
 
     /**
      * Добавление новых книг на склад
      *
-     * @return JSON created books
+     * @return JSON created products
      */
     @PostMapping("/newBooks")
-    public List<Book> createNewBook(@RequestBody List<Book> book) {
-        return adminFacade.createNewBook(book);
+    public List<Product> createNewBook(@RequestBody List<Product> product) {
+        return adminFacade.createNewBook(product);
     }
 
     /**
@@ -112,7 +128,7 @@ public class AdminController {
      * @return user with order
      */
     @GetMapping("/cartByUser")
-    public Cart getCartByUser(@RequestParam("username") String username) {
+    public Order getCartByUser(@RequestParam("username") String username) {
         return adminFacade.getCartByUser(username);
     }
 
@@ -131,7 +147,7 @@ public class AdminController {
         adminFacade.updateUserRole(userId);
     }
 
-//=======================================================Cart===========================================================
+//=======================================================Order===========================================================
 
     /**
      * Показать все зарегистрированные заказы
@@ -139,7 +155,7 @@ public class AdminController {
      * @return all orders
      */
     @GetMapping("/allCarts")
-    public List<Cart> getCarts() {
+    public List<Order> getCarts() {
         return adminFacade.getCarts();
     }
 
@@ -192,7 +208,7 @@ public class AdminController {
         return adminFacade.addBooksInCategoryByName(categoryName);
     }
 
-//=======================================================BookCart=======================================================
+//=======================================================ProductOrder=======================================================
 
     /**
      * Обновление отчета о доставке (1,2,3)

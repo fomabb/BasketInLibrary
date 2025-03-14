@@ -2,14 +2,21 @@ package com.iase24.springjunit.controller;
 
 import com.iase24.springjunit.component.BookResponse;
 import com.iase24.springjunit.dto.BookDataDTO;
-import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.facade.BookFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,15 +46,15 @@ public class BookController {
     /**
      * Найти книгу по ID
      *
-     * @return book
+     * @return product
      */
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable("id") Long id) {
+    public Product getBookById(@PathVariable("id") Long id) {
         return bookFacade.getBookById(id);
     }
 
     @GetMapping("/active/{id}")
-    public Optional<Book> getBookByIdStatusActive(
+    public Optional<Product> getBookByIdStatusActive(
             @PathVariable("id") Long id,
             @RequestParam("status") Status status
     ) {
@@ -75,7 +82,7 @@ public class BookController {
     /**
      * Полнотекстовый поиск всех товаров
      *
-     * @return books by text
+     * @return products by text
      */
     @GetMapping("/search")
     public List<BookDataDTO> findSearchBook(@RequestParam String text) {
@@ -95,7 +102,7 @@ public class BookController {
     /**
      * Показать книги в категории
      *
-     * @return books
+     * @return products
      */
     @GetMapping("/category/{categoryId}")
     public BookResponse getBooksByCategoryId(
