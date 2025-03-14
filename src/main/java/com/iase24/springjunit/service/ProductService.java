@@ -2,7 +2,8 @@ package com.iase24.springjunit.service;
 
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
-import com.iase24.springjunit.dto.request.NodeDataDtoRequest;
+import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
+import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
@@ -29,13 +30,13 @@ public interface ProductService {
 
     List<BookDataDTO> search(String text);
 
-    void addBookInCategory(Long bookId, Node categoryId);
+    void addBookInCategory(BookToCategoryDataDtoRequest dataDtoRequest);
 
     void addBooksInCategoryByName(String categoryName);
 
     void createNewCategory(List<Node> node);
 
-    void addChildNodeToParent(NodeDataDtoRequest dataDtoRequest);
+    void addChildNodeToParent(ChildrenCategoryToParentDataDtoRequest dataDtoRequest);
 
     Node findNodeById(Long nodeId);
 

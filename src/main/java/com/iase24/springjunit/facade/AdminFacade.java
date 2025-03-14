@@ -5,7 +5,8 @@ import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.UpdateDeliveryDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.dto.request.NodeDataDtoRequest;
+import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
+import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
 import com.iase24.springjunit.entities.Faq;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Order;
@@ -102,13 +103,12 @@ public class AdminFacade {
         return node;
     }
 
-    public void addChildNodeToParent(NodeDataDtoRequest request) {
+    public void addChildNodeToParent(ChildrenCategoryToParentDataDtoRequest request) {
         productService.addChildNodeToParent(request);
     }
 
-    public Node addBookInCategory(Long bookId, Node categoryId) {
-        productService.addBookInCategory(bookId, categoryId);
-        return categoryId;
+    public void addBookInCategory(BookToCategoryDataDtoRequest request) {
+        productService.addBookInCategory(request);
     }
 
     public ResponseEntity<?> addBooksInCategoryByName(String categoryName) {

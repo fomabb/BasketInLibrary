@@ -2,7 +2,8 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
-import com.iase24.springjunit.dto.request.NodeDataDtoRequest;
+import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
+import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
@@ -128,11 +129,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void addChildNodeToParent(NodeDataDtoRequest dtoRequest) {
+    public void addChildNodeToParent(ChildrenCategoryToParentDataDtoRequest dtoRequest) {
         Node node = findNodeById(dtoRequest.getChildrenId());
         node.setParent(dtoRequest.getParentNode());
 
-        NodeDataDtoRequest.builder()
+        ChildrenCategoryToParentDataDtoRequest.builder()
                 .childrenId(node.getId())
                 .parentNode(dtoRequest.getParentNode().getParent())
                 .build();
@@ -142,9 +143,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void addBookInCategory(Long bookId, Node categoryId) {
-        Product product = getBookById(bookId);
-        product.setNode(categoryId);
+    public void addBookInCategory(BookToCategoryDataDtoRequest dataDtoRequest) {
+        Product product = getBookById(dataDtoRequest.getBookId());
+        product.setNode(dataDtoRequest.getCategoryId());
+
+        BookToCategoryDataDtoRequest.builder()
+                .bookId(product.getId())
+                .categoryId(dataDtoRequest.getCategoryId().getParent())
+                .build();
+
         productRepository.saveAndFlush(product);
     }
 

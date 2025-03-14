@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class NodeDataDtoRequest {
+public class ChildrenCategoryToParentDataDtoRequest {
 
     private Long childrenId;
     private Node parentNode;

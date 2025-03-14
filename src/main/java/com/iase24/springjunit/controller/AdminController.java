@@ -5,7 +5,8 @@ import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.UpdateDeliveryDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.dto.request.NodeDataDtoRequest;
+import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
+import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
 import com.iase24.springjunit.dto.response.CommonExceptionResponse;
 import com.iase24.springjunit.entities.Faq;
 import com.iase24.springjunit.entities.Node;
@@ -208,21 +209,17 @@ public class AdminController {
      *
      */
     @PutMapping("/add-child-node/to/parent-node")
-    public void addChildNodeToParent(@RequestBody NodeDataDtoRequest request) {
+    public void addChildNodeToParent(@RequestBody ChildrenCategoryToParentDataDtoRequest request) {
         adminFacade.addChildNodeToParent(request);
     }
 
     /**
      * Добавление книг в категорию
      *
-     * @return JSON
      */
-    @PutMapping("/addBookId/{bookId}/categoryId/{categoryId}")
-    public Node addBookInCategory(
-            @PathVariable("bookId") Long bookId,
-            @PathVariable("categoryId") Node categoryId
-    ) {
-        return adminFacade.addBookInCategory(bookId, categoryId);
+    @PutMapping("/add-book-to-category")
+    public void addBookInCategory(@RequestBody BookToCategoryDataDtoRequest request) {
+        adminFacade.addBookInCategory(request);
     }
 
     /**
