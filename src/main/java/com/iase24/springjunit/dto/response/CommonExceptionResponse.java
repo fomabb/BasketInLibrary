@@ -1,6 +1,5 @@
 package com.iase24.springjunit.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 

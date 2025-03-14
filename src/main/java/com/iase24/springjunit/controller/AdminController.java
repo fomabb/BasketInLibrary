@@ -113,10 +113,7 @@ public class AdminController {
      * @return JSON description
      */
     @PostMapping("/create/descriptionByName")
-    public ResponseEntity<String> createDescriptionByCategoryName(
-//            @RequestParam("categoryName") String categoryName,
-            @RequestBody DescriptionDataDTO descriptionCategory
-    ) {
+    public ResponseEntity<String> createDescriptionByCategoryName(@RequestBody DescriptionDataDTO descriptionCategory) {
         return adminFacade.createDescriptionByCategoryName(descriptionCategory);
     }
 
