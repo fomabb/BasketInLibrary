@@ -1,20 +1,37 @@
 package com.iase24.springjunit.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "book")
+@Table(name = "products")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Book {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,27 +63,27 @@ public class Book {
     private String publisher;
 
     @Column(name = "count")
-    private int count;
+    private Integer count;
 
-    @JsonBackReference("book-cart")
-    @ManyToMany(mappedBy = "books")
-    private List<Cart> carts = new ArrayList<>();
+    @JsonBackReference("product-order")
+    @ManyToMany(mappedBy = "products")
+    private List<Order> orders = new ArrayList<>();
 
-    @JsonBackReference("books-node")
+    @JsonBackReference("products-node")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "node_id", referencedColumnName = "id")
     private Node node;
 
-    @JsonBackReference("book-bookBasket")
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<BookBasket> bookBaskets = new ArrayList<>();
+    @JsonBackReference("product-bookBasket")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductCart> productCarts = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
-        return Objects.equals(genre, book.genre);
+        Product product = (Product) o;
+        return Objects.equals(genre, product.genre);
     }
 
     @Override

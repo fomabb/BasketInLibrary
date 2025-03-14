@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BookInBasketDataDTO {
-    private Long id;
-    private String title;
-    private int quantity;
+public class ProductUpdateDTO {
+    private int count;
+    private Status status;
 }

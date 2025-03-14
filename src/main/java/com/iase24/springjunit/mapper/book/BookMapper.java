@@ -1,7 +1,7 @@
 package com.iase24.springjunit.mapper.book;
 
 import com.iase24.springjunit.dto.BookDataDTO;
-import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.mapper.Mapper;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Component
 @NoArgsConstructor(access = PRIVATE)
-public class BookMapper implements Mapper<Book, BookDataDTO> {
+public class BookMapper implements Mapper<Product, BookDataDTO> {
 
     private static final BookMapper INSTANCE = new BookMapper();
 
@@ -19,7 +19,7 @@ public class BookMapper implements Mapper<Book, BookDataDTO> {
     }
 
     @Override
-    public BookDataDTO map(Book object) {
+    public BookDataDTO map(Product object) {
         return BookDataDTO.builder()
                 .id(object.getId())
                 .title(object.getTitle())

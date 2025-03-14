@@ -3,71 +3,70 @@ package com.iase24.springjunit.facade;
 import com.iase24.springjunit.component.BookResponse;
 import com.iase24.springjunit.component.PaginationInfo;
 import com.iase24.springjunit.dto.BookDataDTO;
-import com.iase24.springjunit.entities.Book;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.Status;
-import com.iase24.springjunit.service.BookService;
+import com.iase24.springjunit.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BookFacade {
+public class ProductFacade {
 
-    private final BookService bookService;
+    private final ProductService productService;
 
     public BookResponse getAllBooks(int page, int size) {
-        List<Book> books = bookService.getAll(PageRequest.of(page, size));
+        List<Product> products = productService.getAll(PageRequest.of(page, size));
         PaginationInfo info = new PaginationInfo();
-        info.setAmount(books.size());
+        info.setAmount(products.size());
         BookResponse response = new BookResponse();
-        response.setData(books);
+        response.setData(products);
         response.setPaginationInfo(info);
         return response;
     }
 
-    public Book getBookById(Long id) {
-        return bookService.getBookById(id);
+    public Product getBookById(Long id) {
+        return productService.getBookById(id);
     }
 
 
-    public Optional<Book> getBookByIdStatusActive(Long id, Status status) {
-        return bookService.getBookByIdStatusActive(id, status);
+    public Optional<Product> getBookByIdStatusActive(Long id, Status status) {
+        return productService.getBookByIdStatusActive(id, status);
     }
 
     public ResponseEntity<?> deleteBookFromCart(Long cartId, Long bookId) {
-        bookService.deleteBookFromCart(cartId, bookId);
+        productService.deleteBookFromCart(cartId, bookId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public void updateBookCounter(Long id, int count) {
-        bookService.updateBookCounter(id, count);
+        productService.updateBookCounter(id, count);
     }
 
     public List<BookDataDTO> findSearchBook(String text) {
-        return bookService.search(text);
+        return productService.search(text);
     }
 
     public Node findNodeById(Long nodeId) {
-        return bookService.findNodeById(nodeId);
+        return productService.findNodeById(nodeId);
     }
 
     public BookResponse getBooksByCategoryId(Long categoryId, Boolean parent, int page, int size
     ) {
-        List<Book> books = bookService.findBooksChildCategoryId(categoryId, parent, PageRequest.of(page, size));
-        List<DescriptionCategory> description = bookService.findDescriptionCategory(categoryId);
+        List<Product> products = productService.findBooksChildCategoryId(categoryId, parent, PageRequest.of(page, size));
+        List<DescriptionCategory> description = productService.findDescriptionCategory(categoryId);
         PaginationInfo info = new PaginationInfo();
-        info.setAmount(books.size());
+        info.setAmount(products.size());
         BookResponse response = new BookResponse();
-        response.setData(books);
+        response.setData(products);
         response.setPaginationInfo(info);
         response.setDescriptionData(description);
         return response;

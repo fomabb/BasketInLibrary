@@ -1,10 +1,21 @@
 package com.iase24.springjunit.facade;
 
-import com.iase24.springjunit.dto.*;
-import com.iase24.springjunit.entities.*;
-import com.iase24.springjunit.repository.BookCartRepository;
-import com.iase24.springjunit.repository.BookRepository;
-import com.iase24.springjunit.service.*;
+import com.iase24.springjunit.dto.ProductUpdateDTO;
+import com.iase24.springjunit.dto.DescriptionDataDTO;
+import com.iase24.springjunit.dto.FaqAnswerDTO;
+import com.iase24.springjunit.dto.UpdateDeliveryDTO;
+import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.entities.Faq;
+import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.entities.Order;
+import com.iase24.springjunit.entities.Product;
+import com.iase24.springjunit.repository.ProductOrderRepository;
+import com.iase24.springjunit.repository.ProductRepository;
+import com.iase24.springjunit.service.AdminService;
+import com.iase24.springjunit.service.ProductOrderService;
+import com.iase24.springjunit.service.ProductService;
+import com.iase24.springjunit.service.OrderService;
+import com.iase24.springjunit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +30,11 @@ public class AdminFacade {
 
     private final AdminService adminService;
     private final UserService userService;
-    private final CartService cartService;
-    private final BookCartService bookCartService;
-    private final BookService bookService;
-    private final BookRepository bookRepository;
-    private final BookCartRepository bookCartRepository;
+    private final OrderService orderService;
+    private final ProductOrderService productOrderService;
+    private final ProductService productService;
+    private final ProductRepository productRepository;
+    private final ProductOrderRepository productOrderRepository;
 
     public FaqAnswerDTO answerForFaq(Long faqId, FaqAnswerDTO answer) {
         adminService.answerForFaq(faqId, answer);
@@ -48,18 +59,18 @@ public class AdminFacade {
                 .body(String.format("Category with name %s successfully created", categoryName));
     }
 
-//=======================================================Book===========================================================
+//=======================================================Product===========================================================
 
-    public List<Book> createNewBook(List<Book> book) {
-        bookService.createNewBook(book);
-        return book;
+    public List<Product> createNewBook(List<Product> product) {
+        productService.createNewBook(product);
+        return product;
     }
 
-    public BookUpdateDTO updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) {
+    public ProductUpdateDTO updateBookCount(Long id, ProductUpdateDTO productUpdateDTO) {
         if (id != null) {
-            bookService.updateBookCount(id, bookUpdateDTO);
+            productService.updateBookCount(id, productUpdateDTO);
         }
-        return bookUpdateDTO;
+        return productUpdateDTO;
     }
 
 //=======================================================User===========================================================
@@ -68,8 +79,8 @@ public class AdminFacade {
         return userService.getAllUsers();
     }
 
-    public Cart getCartByUser(String username) {
-        return cartService.getCartByLogin(username);
+    public Order getCartByUser(String username) {
+        return orderService.getOrderByLogin(username);
     }
 
     public Optional<UserDataDTO> getUserById(Long id) {
@@ -80,35 +91,35 @@ public class AdminFacade {
         adminService.updateUserRolesByUsername(userId);
     }
 
-//=======================================================Cart===========================================================
+//=======================================================Order===========================================================
 
-    public List<Cart> getCarts() {
-        return cartService.getCarts();
+    public List<Order> getCarts() {
+        return orderService.getOrders();
     }
 
 //=======================================================Tree===========================================================
 
     public List<Node> createNewCategory(List<Node> node) {
-        bookService.createNewCategory(node);
+        productService.createNewCategory(node);
         return node;
     }
 
     public Node addChildrenIdInParentId(Long childrenId, Node parentNode) {
-        bookService.addChildrenIdInParentId(childrenId, parentNode);
+        productService.addChildrenIdInParentId(childrenId, parentNode);
         return parentNode;
     }
 
     public Node addBookInCategory(Long bookId, Node categoryId) {
-        bookService.addBookInCategory(bookId, categoryId);
+        productService.addBookInCategory(bookId, categoryId);
         return categoryId;
     }
 
     public ResponseEntity<?> addBooksInCategoryByName(String categoryName) {
 
-        List<Book> books = bookRepository.findBooksByCategoryName(categoryName);
+        List<Product> products = productRepository.findBooksByCategoryName(categoryName);
 
-        if (categoryName.equals(books.get(0).getGenre())) {
-            bookService.addBooksInCategoryByName(categoryName);
+        if (categoryName.equals(products.get(0).getGenre())) {
+            productService.addBooksInCategoryByName(categoryName);
             return ResponseEntity
                     .status(HttpStatus.ACCEPTED)
                     .body(String.format("Books added to Category with name %s successfully", categoryName));
@@ -117,14 +128,14 @@ public class AdminFacade {
         }
     }
 
-//=======================================================BookCart=======================================================
+//=======================================================ProductOrder=======================================================
 
     public ResponseEntity<?> deliveryReportController(Long cartId, UpdateDeliveryDTO updateDeliveryDTO) {
         if (cartId != null) {
-            bookCartService.deliveryReport(cartId, updateDeliveryDTO);
+            productOrderService.deliveryReport(cartId, updateDeliveryDTO);
             return ResponseEntity
                     .status(HttpStatus.ACCEPTED)
-                    .body(String.format("Cart with ID %s successfully delivered", cartId));
+                    .body(String.format("Order with ID %s successfully delivered", cartId));
         }
         throw new IllegalArgumentException("Invalid cartId");
     }

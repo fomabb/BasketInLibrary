@@ -1,22 +1,21 @@
 package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookDataDTO;
-import com.iase24.springjunit.dto.BookUpdateDTO;
-import com.iase24.springjunit.entities.Book;
+import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.mapper.book.BookMapper;
-import com.iase24.springjunit.repository.BookRepository;
-import com.iase24.springjunit.repository.CartRepository;
+import com.iase24.springjunit.repository.ProductRepository;
+import com.iase24.springjunit.repository.OrderRepository;
 import com.iase24.springjunit.repository.NodeRepository;
-import com.iase24.springjunit.service.BookService;
+import com.iase24.springjunit.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -25,18 +24,18 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BookServiceImpl implements BookService {
+public class ProductServiceImpl implements ProductService {
 
-    private final BookRepository bookRepository;
-    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
     private final NodeRepository nodeRepository;
     private final BookMapper bookMapper;
 
     @Override
-    public Optional<Book> getBookByIdStatusActive(Long id, Status status) {
+    public Optional<Product> getBookByIdStatusActive(Long id, Status status) {
 
         if (status == Status.ACTIVE) {
-            return bookRepository.findById(id);
+            return productRepository.findById(id);
         }
         return Optional.empty();
     }
@@ -46,63 +45,63 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void deleteBookFromCart(Long cartId, Long bookId) {
-        cartRepository.findById(cartId);
-        bookRepository.deleteById(bookId);
+        orderRepository.findById(cartId);
+        productRepository.deleteById(bookId);
     }
 
     @Override
-    public List<Book> getAll(PageRequest pageRequest) {
-        return bookRepository.findAll(pageRequest).toList();
+    public List<Product> getAll(PageRequest pageRequest) {
+        return productRepository.findAll(pageRequest).toList();
     }
 
     @Override
     @Transactional
-    public void createNewBook(List<Book> book) {
-        if (book != null) {
-            bookRepository.saveAllAndFlush(book);
+    public void createNewBook(List<Product> product) {
+        if (product != null) {
+            productRepository.saveAllAndFlush(product);
         }
     }
 
     @Override
-    public Book getBookById(Long id) {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Book with id " + id + " not found"));
+    public Product getBookById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Product with id " + id + " not found"));
     }
 
     @Override
     @Transactional
-    public void updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) {
-        Book book = getBookById(id);
-        book.setCount(bookUpdateDTO.getCount());
-        if (book.getCount() > 0) {
-            book.setStatus(Status.ACTIVE);
-        } else if (book.getCount() == 0) {
-            book.setStatus(Status.INACTIVE);
+    public void updateBookCount(Long id, ProductUpdateDTO productUpdateDTO) {
+        Product product = getBookById(id);
+        product.setCount(productUpdateDTO.getCount());
+        if (product.getCount() > 0) {
+            product.setStatus(Status.ACTIVE);
+        } else if (product.getCount() == 0) {
+            product.setStatus(Status.INACTIVE);
         } else {
             throw new IllegalArgumentException("IllegalAccessException");
         }
-        Book updateBook = bookRepository.save(book);
-        new BookUpdateDTO(updateBook.getCount(), updateBook.getStatus());
+        Product updateProduct = productRepository.save(product);
+        new ProductUpdateDTO(updateProduct.getCount(), updateProduct.getStatus());
     }
 
     //TODO
     @Override
     @Transactional
     public void updateBookCounter(Long id, int count) {
-        Book book = getBookById(id);
-        if (book != null) {
+        Product product = getBookById(id);
+        if (product != null) {
             if (count <= 0) {
-                book.setStatus(Status.INACTIVE);
+                product.setStatus(Status.INACTIVE);
             } else {
-                book.setStatus(Status.ACTIVE);
+                product.setStatus(Status.ACTIVE);
             }
-            bookRepository.saveAndFlush(book);
+            productRepository.saveAndFlush(product);
         }
     }
 
     @Override
     public List<BookDataDTO> search(String text) {
-        return bookRepository.search(text)
+        return productRepository.search(text)
                 .stream()
                 .map(bookMapper::map)
                 .collect(Collectors.toList());
@@ -127,20 +126,20 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void addBookInCategory(Long bookId, Node categoryId) {
-        Book book = getBookById(bookId);
-        book.setNode(categoryId);
-        bookRepository.saveAndFlush(book);
+        Product product = getBookById(bookId);
+        product.setNode(categoryId);
+        productRepository.saveAndFlush(product);
     }
 
     @Override
     @Transactional
     public void addBooksInCategoryByName(String categoryName) {
-        List<Book> books = bookRepository.findBooksByCategoryName(categoryName);
+        List<Product> products = productRepository.findBooksByCategoryName(categoryName);
         Node node = nodeRepository.findByCategory(categoryName);
-        books.forEach(book -> {
+        products.forEach(book -> {
             book.setNode(node);
         });
-        bookRepository.saveAllAndFlush(books);
+        productRepository.saveAllAndFlush(products);
     }
 
     @Override
@@ -150,20 +149,20 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findBooksChildCategoryId(Long categoryId, boolean parent, PageRequest pageRequest) {
+    public List<Product> findBooksChildCategoryId(Long categoryId, boolean parent, PageRequest pageRequest) {
         if (parent) {
-            return bookRepository.findBooksParentCategoryId(categoryId, pageRequest).stream()
-                    .sorted(Comparator.comparing(Book::getGenre))
+            return productRepository.findBooksParentCategoryId(categoryId, pageRequest).stream()
+                    .sorted(Comparator.comparing(Product::getGenre))
                     .collect(Collectors.toList());
         } else {
-            return bookRepository.findBooksChildCategoryId(categoryId, pageRequest).stream()
-                    .sorted(Comparator.comparing(Book::getAuthor))
+            return productRepository.findBooksChildCategoryId(categoryId, pageRequest).stream()
+                    .sorted(Comparator.comparing(Product::getAuthor))
                     .collect(Collectors.toList());
         }
     }
 
     @Override
     public List<DescriptionCategory> findDescriptionCategory(Long category) {
-        return bookRepository.findDescriptionCategory(category);
+        return productRepository.findDescriptionCategory(category);
     }
 }
