@@ -6,6 +6,7 @@ import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.facade.ProductFacade;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 @Transactional
+@Tag(name = "Склад продуктов", description = "API для управления продуктами")
 public class ProductController {
 
     private final ProductFacade productFacade;

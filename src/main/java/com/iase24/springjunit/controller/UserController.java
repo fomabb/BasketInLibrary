@@ -11,6 +11,7 @@ import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.facade.CartFacade;
 import com.iase24.springjunit.facade.UserFacade;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Valid
+@Tag(name = "Пользователи", description = "API для управления пользователями")
 public class UserController {
 
     private final UserFacade userFacade;

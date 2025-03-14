@@ -9,7 +9,14 @@ import com.iase24.springjunit.entities.Faq;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.entities.Product;
+import com.iase24.springjunit.exceptionhandler.CommonExceptionResponse;
 import com.iase24.springjunit.facade.AdminFacade;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +37,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
 @Valid
+@Tag(name = "Админка", description = "API для управления приложением")
 public class AdminController {
 
     private final AdminFacade adminFacade;
@@ -39,6 +47,20 @@ public class AdminController {
      *
      * @return JSON answer
      */
+    @Operation(summary = "Задать вопрос",
+            description = """
+                    По ID FAQ написать вопрос.
+                    """,
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "ОК",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = FaqAnswerDTO.class)))
+                            }),
+                    @ApiResponse(responseCode = "500", description = "Ошибка сервера",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommonExceptionResponse.class))
+                            })
+            })
     @PutMapping("/answer/faqId/{faqId}")
     public FaqAnswerDTO answerForFaq(
             @PathVariable("faqId") Long faqId,
@@ -52,6 +74,20 @@ public class AdminController {
      *
      * @return Response entity ok
      */
+    @Operation(summary = "Удаление FAQ",
+            description = """
+                    По ID FAQ и category ID удалить FAQ.
+                    """,
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "ОК",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = String.class)))
+                            }),
+                    @ApiResponse(responseCode = "500", description = "Ошибка сервера",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommonExceptionResponse.class))
+                            })
+            })
     @DeleteMapping("/categoryId/{categoryId}/faqId/{faqId}")
     public ResponseEntity<String> deleteFaq(
             @PathVariable("categoryId") Long categoryId,
