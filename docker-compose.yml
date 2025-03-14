@@ -1,6 +1,6 @@
 services:
   shop-with-cart:
-    image: shop-with-cart:0.0.1
+    image: fomabb/shop-with-cart:0.0.1
     build:
       context: .
       dockerfile: Dockerfile
