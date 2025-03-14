@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api/v1/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Valid
 public class UserController {

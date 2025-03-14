@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api/v1/products")
+@RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 @Transactional
 public class ProductController {
