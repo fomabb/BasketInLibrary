@@ -1,0 +1,34 @@
+services:
+  shop-with-cart:
+    image: shop-with-cart:0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      POSTGRES_DB_URL: jdbc:postgresql://cart-product-db/library_db
+      POSTGRES_DB_USERNAME: postgres
+      POSTGRES_DB_PASSWORD: postgres
+      JWT_SECRET_KEY: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
+      JWT_EXPIRATION_TIME: 60m
+      PORT: 8084
+      SPRING_PROFILES_ACTIVE: dev
+    depends_on:
+      - cart-product-db
+
+  cart-product-db:
+    image: postgres:16.8-alpine3.20
+    environment:
+      POSTGRES_DB: library_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+      - pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pg_data:
