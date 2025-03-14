@@ -1,24 +1,30 @@
 package com.iase24.springjunit.service.imple;
 
-import com.iase24.springjunit.dto.BookUpdateDTO;
-import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.ProductInCartDataDTO;
+import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
+import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.entities.Product;
+import com.iase24.springjunit.entities.ProductCart;
 import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.entities.enumerated.DeliveryReport;
-import com.iase24.springjunit.repository.BookCartRepository;
-import com.iase24.springjunit.repository.BookRepository;
 import com.iase24.springjunit.repository.CartRepository;
-import com.iase24.springjunit.service.BookService;
+import com.iase24.springjunit.repository.ProductCartRepository;
+import com.iase24.springjunit.repository.ProductOrderRepository;
+import com.iase24.springjunit.repository.ProductRepository;
 import com.iase24.springjunit.service.CartService;
-import jakarta.persistence.EntityNotFoundException;
+import com.iase24.springjunit.service.ProductService;
+import com.iase24.springjunit.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,137 +32,146 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class CartServiceImpl implements CartService {
 
+    private final ProductCartRepository productCartRepository;
     private final CartRepository cartRepository;
-    private final BookService bookService;
-    private final BookRepository bookRepository;
-    private final BookCartRepository bookCartRepository;
+    private final ProductRepository productRepository;
+    private final ProductService productService;
+    private final OrderService orderService;
+    private final ProductOrderRepository productOrderRepository;
 
     @Override
-    @Transactional
-    public Order addCart(Order order) {
-        return cartRepository.save(order);
+    public Cart findCartById(Long id) {
+        return cartRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Cart with id: %s not found", id)));
     }
 
     @Override
-    public List<Order> getCarts() {
-        List<Order> orders = cartRepository.findAll();
-        return orders.stream()
-                .peek(cart -> {
-                    UserDataDTO userDataDTO = new UserDataDTO();
-                    userDataDTO.setId(cart.getUser().getId());
-                    userDataDTO.setUsername(cart.getUser().getUsername());
-                    userDataDTO.setEmail(cart.getUser().getEmail());
-                })
+    public List<ProductInCartDataDTO> findProductInCartById(Long cartId) {
+        return productRepository.findBooksByProductCartsId(cartId)
+                .stream()
+                .map(book -> new ProductInCartDataDTO(book.getId(), book.getTitle(), book.getCount()))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public Order getCartById(Long cartId) {
-        return cartRepository.findById(cartId)
-                .orElseThrow(() -> new IllegalArgumentException("Order with id " + cartId + " not found"));
-    }
-
-    @Override
     @Transactional
-    public void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO) {
-        Product product = bookService.getBookById(bookId);
-        if (product.getId() != null) {
-            if (product.getCount() <= 0) {
-                product.setCount(bookUpdateDTO.getCount());
-            }
-            Product updateCount = bookRepository.save(product);
-            new BookUpdateDTO(updateCount.getCount(), updateCount.getStatus());
+    @Override
+    public Cart addProductInCart(Long basketId, Long productId) {
+        Cart cart = findCartById(basketId);
+        Product product = productService.getBookById(productId);
+
+        // Проверяем, есть ли уже книга в корзине
+        Optional<ProductCart> existingBookBasket = productCartRepository.findByCartAndProduct(cart, product);
+        if (existingBookBasket.isPresent()) {
+            throw new IllegalArgumentException("Product is already in the cart");
+        }
+        if (product.getCount() > 0) {
+            productRepository.save(product);
+            ProductCart productCart = new ProductCart();
+            productCart.setProduct(product);
+            productCart.setCart(cart);
+            productCart.setQuantity(1);
+            productCart.setPriceQuantity(BigDecimal.valueOf(product.getPrice()));
+
+            productCartRepository.save(productCart);
+
+            // устанавливаем общую сумму за все товары
+            cart.setAllPrice(BigDecimal.valueOf(productCartRepository.findBooksByBasket(cart)));
+            return cart;
         } else {
-            throw new IllegalArgumentException("Product with id " + bookId + " not found");
+            throw new IllegalArgumentException("Cart count exceeded");
         }
     }
 
-    /**
-     * Метод добавляющий книгу в картачку заказов пользователя
-     */
-    @Override
     @Transactional
-    public Order addBookInCart(Long cartId, Long bookId) {
-        Order order = getCartById(cartId);
-        Product product = bookService.getBookById(bookId);
-        if (product.getCount() > 0) {
+    @Override
+    public UpdateBookQuantityInBasket updateQuantityInCart(
+            Long basketId, Long productId, UpdateBookQuantityInBasket updateBookQuantity
+    ) {
+        Cart cart = findCartById(basketId);
+        Product product = productService.getBookById(productId);
 
-            // Уменьшаем количество книги на складе
-            product.setCount(product.getCount() - 1);
+        // Найти существующий ProductCart для данной корзины и книги
+        ProductCart productCart = productCartRepository.findByCartAndProduct(cart, product)
+                .orElseThrow(() -> new RuntimeException("ProductCart not found"));
 
-            // Сохраняем изменения в книге
-            bookRepository.save(product);
-            if (product.getCount() <= 0) {
-                product.setStatus(Status.INACTIVE);
+        // Проверить, не превышает ли новое количество доступное количество книги ии проверяем не меньше ли доступного
+        if (updateBookQuantity.getQuantity() <= product.getCount() && updateBookQuantity.getQuantity() > 0) {
+
+            // обновить количество в существующем ProductCart
+            productCart.setQuantity(updateBookQuantity.getQuantity());
+
+            // увеличиваем price в самой корзине по колличеству товара
+            productCart.setPriceQuantity(BigDecimal.valueOf(productCart.getProduct().getPrice() * productCart.getQuantity()));
+
+            productCartRepository.findBooksByBasket(cart);
+
+            // устанавливаем общую сумму за все товары
+            cart.setAllPrice(BigDecimal.valueOf(productCartRepository.findBooksByBasket(cart)));
+
+            // сохраняем изменения в базе данных
+            productCartRepository.save(productCart);
+            return new UpdateBookQuantityInBasket(productCart.getQuantity());
+        } else {
+            throw new IllegalArgumentException("Product count exceeded");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void removeProductInCart(Long cartId, Long productId) {
+        Product product = productService.getBookById(productId);
+        Cart cart = findCartById(cartId);
+        ProductCart productCart = productCartRepository.findByCartAndProduct(cart, product)
+                .orElseThrow(() -> new RuntimeException("ProductCart not found"));
+
+        cart.getProductsCarts().remove(productCart);
+
+        if (!cart.getProductsCarts().contains(productCart)) {
+            cartRepository.save(cart);
+            if (cart.getProductsCarts().isEmpty()) {
+                cart.setAllPrice(BigDecimal.valueOf(0.0));
+            } else {
+                // устанавливаем общую сумму за все товары
+                cart.setAllPrice(BigDecimal.valueOf(productCartRepository.findBooksByBasket(cart)));
             }
+        } else {
+            throw new IllegalArgumentException("Delete product failed");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void toDoOrdersInCartByQuantity(Long cartId, Long productId) {
+        Cart cart = findCartById(cartId);
+        Order order = orderService.getOrderById(cartId);
+        Product product = productService.getBookById(productId);
+        ProductCart productCart = productCartRepository.findByCartAndProduct(cart, product)
+                .orElseThrow(() -> new RuntimeException("ProductCart not found")
+                );
+
+        // список всех заказов для сохранения в базу данных
+        List<ProductOrder> allOrdersByQuantity = new ArrayList<>();
+        for (int i = 0; i < productCart.getQuantity(); i++) {
             ProductOrder productOrder = new ProductOrder();
+            product.setCount(product.getCount() - 1);
             productOrder.setProduct(product);
             productOrder.setOrder(order);
             productOrder.setCreationTime(LocalDateTime.now());
             productOrder.setDeliveryReport(DeliveryReport.HALFWAY_THROUGH);
-            bookCartRepository.saveAndFlush(productOrder);
-            return order;
+            allOrdersByQuantity.add(productOrder);
+        }
+        productOrderRepository.saveAll(allOrdersByQuantity);
+        if (cart.getProductsCarts().isEmpty()) {
+            cart.setAllPrice(BigDecimal.valueOf(0.0));
         } else {
-            throw new IllegalArgumentException("Product with id " + bookId + " not found");
+            // устанавливаем общую сумму за все товары
+            cart.setAllPrice(BigDecimal.valueOf(productCartRepository.findBooksByBasket(cart)));
         }
-    }
 
-    //TODO: необходимо изменить логику, для того, чтобы не изменялся ID и LocalDateTime
-    @Override
-    @Transactional
-    public void removeFromCart(Long cartId, Long bookId) {
-        Order order = getCartById(cartId);
-
-        //TODO: в процессе изменения
-        // сохранение изначального ID и даты====================
-        Long originCartId = order.getId();
-        LocalDateTime originCreationTime = order.getDateTime();
-        //======================================================
-
-        Product productToRemove = bookService.getBookById(bookId);
-
-        // Проверяем, была ли книга в корзине до удаления
-        boolean wasInCart = order.getProducts().contains(productToRemove);
-
-        // Удаление книги из корзины
-        if (order.getProducts().remove(productToRemove)) {
-            order.setId(originCartId);
-            order.setDateTime(originCreationTime);
-            cartRepository.save(order);
-
-            // Проверка, остались ли еще книги в карте
-            if (order.getProducts().isEmpty()) {
-
-                // Если карта стала пустой, но книга была в ней до удаления,
-                // возвращаем книгу на склад
-                if (wasInCart) {
-                    returnBookToStock(productToRemove.getId());
-                }
-            } else {
-
-                // Если в карте еще остались книги, возвращаем книгу на склад
-                returnBookToStock(productToRemove.getId());
-            }
-        } else {
-            throw new EntityNotFoundException("Product with id " + bookId + " not found");
+        // проверяет, если колличество книг менше 1-го, тогда делается статус неактивным
+        if (product.getCount() <= 0) {
+            product.setStatus(Status.INACTIVE);
         }
-    }
-
-    /**
-     * Метод добавляющий книгу на склад после удаления из заказов
-     */
-    public void returnBookToStock(Long bookId) {
-        Product product = bookService.getBookById(bookId);
-        product.setCount(product.getCount() + 1);
-        if (product.getCount() > 0) {
-            product.setStatus(Status.ACTIVE);
-        }
-        bookRepository.save(product);
-    }
-
-    @Override
-    public Order getCartByLogin(String username) {
-        return cartRepository.findCartByUser_Username(username)
-                .orElseThrow(() -> new EntityNotFoundException("User with name: " + username + " not found"));
+        removeProductInCart(cartId, product.getId());
     }
 }

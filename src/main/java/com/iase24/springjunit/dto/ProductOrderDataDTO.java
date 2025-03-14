@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BookCartDataDTO {
+public class ProductOrderDataDTO {
 
     private Long orderNumber;
 

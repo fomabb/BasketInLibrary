@@ -1,6 +1,6 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.BookUpdateDTO;
+import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.DescriptionDataDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.UpdateDeliveryDTO;
@@ -13,7 +13,6 @@ import com.iase24.springjunit.facade.AdminFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,8 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(value = "/api/admin/")
+@RequestMapping(value = "/api/v1/admin")
 @RequiredArgsConstructor
 @Valid
 public class AdminController {
@@ -100,14 +98,14 @@ public class AdminController {
     /**
      * Добавление колличества книги на складе
      *
-     * @return bookUpdateDTO
+     * @return productUpdateDTO
      */
     @PutMapping("/bookCount/{id}")
-    public BookUpdateDTO updateBookCount(
+    public ProductUpdateDTO updateBookCount(
             @PathVariable("id") Long id,
-            @RequestBody BookUpdateDTO bookUpdateDTO
+            @RequestBody ProductUpdateDTO productUpdateDTO
     ) {
-        return adminFacade.updateBookCount(id, bookUpdateDTO);
+        return adminFacade.updateBookCount(id, productUpdateDTO);
     }
 
 //=======================================================User===========================================================

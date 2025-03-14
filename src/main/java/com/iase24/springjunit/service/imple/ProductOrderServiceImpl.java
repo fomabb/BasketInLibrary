@@ -1,15 +1,15 @@
 package com.iase24.springjunit.service.imple;
 
-import com.iase24.springjunit.dto.BookCartDataDTO;
+import com.iase24.springjunit.dto.ProductOrderDataDTO;
 import com.iase24.springjunit.dto.UpdateDeliveryDTO;
 import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.entities.enumerated.DeliveryReport;
 import com.iase24.springjunit.exception.EntityNotFoundException;
 import com.iase24.springjunit.mapper.book_cart.BookCartMapper;
-import com.iase24.springjunit.repository.BookCartRepository;
-import com.iase24.springjunit.repository.BookRepository;
-import com.iase24.springjunit.service.BookCartService;
+import com.iase24.springjunit.repository.ProductOrderRepository;
+import com.iase24.springjunit.repository.ProductRepository;
+import com.iase24.springjunit.service.ProductOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,15 +21,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BookCartServiceImpl implements BookCartService {
+public class ProductOrderServiceImpl implements ProductOrderService {
 
-    private final BookCartRepository bookCartRepository;
+    private final ProductOrderRepository productOrderRepository;
     private final BookCartMapper bookCartMapper;
-    private final BookRepository bookRepository;
+    private final ProductRepository productRepository;
 
     @Override
-    public List<BookCartDataDTO> findAllByCartId(Long cartId) {
-        return bookCartRepository.findAllByCart_Id(cartId)
+    public List<ProductOrderDataDTO> findAllByOrderId(Long cartId) {
+        return productOrderRepository.findAllByOrder_Id(cartId)
                 .stream()
                 .map(bookCartMapper::map)
                 .collect(Collectors.toList());
@@ -78,8 +78,8 @@ public class BookCartServiceImpl implements BookCartService {
     }
 
     @Override
-    public List<ProductOrder> findDeliveryReportByCartId(Long cartId) {
-        return bookCartRepository.findAllByCart_Id(cartId)
+    public List<ProductOrder> findDeliveryReportByOrderId(Long cartId) {
+        return productOrderRepository.findAllByOrder_Id(cartId)
                 .stream()
                 .filter(bookCart -> bookCart.getStatusDeliveryId() == null || bookCart.getStatusDeliveryId() == 1)
                 .collect(Collectors.toList());
@@ -88,7 +88,7 @@ public class BookCartServiceImpl implements BookCartService {
     @Override
     public List<ProductOrder> findArchiveOrdersByCartId(Long cartId) {
         if (cartId != null) {
-            return bookCartRepository.findAllByCart_Id(cartId)
+            return productOrderRepository.findAllByOrder_Id(cartId)
                     .stream()
                     .filter(bookCart -> bookCart.getDeliveryReport().equals(DeliveryReport.RECEIVING)
                             || bookCart.getDeliveryReport().equals(DeliveryReport.CANCELLED)
@@ -101,7 +101,7 @@ public class BookCartServiceImpl implements BookCartService {
 
 
     public ProductOrder findByCartId(Long cartId) {
-        return bookCartRepository.findById(cartId)
+        return productOrderRepository.findById(cartId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Product order with id %s not found", cartId)));
     }
 }

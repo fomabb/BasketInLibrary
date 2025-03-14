@@ -1,6 +1,6 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.BookInBasketDataDTO;
+import com.iase24.springjunit.dto.ProductInCartDataDTO;
 import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
@@ -9,12 +9,11 @@ import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.ProductOrder;
-import com.iase24.springjunit.facade.BasketFacade;
+import com.iase24.springjunit.facade.CartFacade;
 import com.iase24.springjunit.facade.UserFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,14 +27,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(value = "/api/user")
+@RequestMapping(value = "/api/v1/users")
 @RequiredArgsConstructor
 @Valid
 public class UserController {
 
     private final UserFacade userFacade;
-    private final BasketFacade basketFacade;
+    private final CartFacade cartFacade;
 
     /**
      * Регистрация нового пользователя
@@ -148,7 +146,7 @@ public class UserController {
      */
     @GetMapping("/basketId/{id}")
     public Cart getBasketById(@PathVariable("id") Long id) {
-        return basketFacade.getBasketById(id);
+        return cartFacade.getCartById(id);
     }
 
     /**
@@ -157,8 +155,8 @@ public class UserController {
      * @return products
      */
     @GetMapping("/basket/allBooksInBasket/basketId/{basketId}")
-    public List<BookInBasketDataDTO> getBooksInBasketById(@PathVariable("basketId") Long basketId) {
-        return basketFacade.getBooksInBasketById(basketId);
+    public List<ProductInCartDataDTO> getBooksInBasketById(@PathVariable("basketId") Long basketId) {
+        return cartFacade.getProductsInCartById(basketId);
     }
 
     /**
@@ -168,7 +166,7 @@ public class UserController {
      */
     @PostMapping("/addBookInBasket/basketId/{basketId}/bookId/{bookId}")
     public Cart createBasket(@PathVariable("basketId") Long basketId, @PathVariable("bookId") Long bookId) {
-        return basketFacade.createBasket(basketId, bookId);
+        return cartFacade.createCart(basketId, bookId);
     }
 
     /**
@@ -182,7 +180,7 @@ public class UserController {
             @PathVariable("bookId") Long bookId,
             @RequestBody UpdateBookQuantityInBasket updateBookQuantity
     ) {
-        return basketFacade.updateQuantity(basketId, bookId, updateBookQuantity);
+        return cartFacade.updateQuantity(basketId, bookId, updateBookQuantity);
     }
 
     /**
@@ -193,7 +191,7 @@ public class UserController {
             @PathVariable("basketId") Long basketId,
             @PathVariable("bookId") Long bookId
     ) {
-        return basketFacade.removeBookInBasket(basketId, bookId);
+        return cartFacade.removeProductInCart(basketId, bookId);
     }
 
     /**
@@ -206,7 +204,7 @@ public class UserController {
             @PathVariable("basketId") Long basketId,
             @PathVariable("bookId") Long bookId
     ) {
-        return basketFacade.toDoOrdersInBasketByQuantity(basketId, bookId);
+        return cartFacade.toDoOrdersInCartByQuantity(basketId, bookId);
     }
 
 //===========================================Cart=====================================================================

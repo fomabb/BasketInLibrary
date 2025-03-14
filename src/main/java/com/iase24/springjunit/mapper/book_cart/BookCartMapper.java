@@ -1,6 +1,6 @@
 package com.iase24.springjunit.mapper.book_cart;
 
-import com.iase24.springjunit.dto.BookCartDataDTO;
+import com.iase24.springjunit.dto.ProductOrderDataDTO;
 import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.mapper.Mapper;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Component
 @NoArgsConstructor(access = PRIVATE)
-public class BookCartMapper implements Mapper<ProductOrder, BookCartDataDTO> {
+public class BookCartMapper implements Mapper<ProductOrder, ProductOrderDataDTO> {
 
     private static final BookCartMapper INSTANCE = new BookCartMapper();
 
@@ -19,8 +19,8 @@ public class BookCartMapper implements Mapper<ProductOrder, BookCartDataDTO> {
     }
 
     @Override
-    public BookCartDataDTO map(ProductOrder object) {
-        return BookCartDataDTO.builder()
+    public ProductOrderDataDTO map(ProductOrder object) {
+        return ProductOrderDataDTO.builder()
                 .orderNumber(object.getId())
                 .creationTime(object.getCreationTime())
                 .product(object.getProduct())

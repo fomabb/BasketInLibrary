@@ -1,27 +1,21 @@
 package com.iase24.springjunit.service;
 
-import com.iase24.springjunit.dto.BookUpdateDTO;
-import com.iase24.springjunit.entities.Order;
+import com.iase24.springjunit.dto.ProductInCartDataDTO;
+import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
+import com.iase24.springjunit.entities.Cart;
 
 import java.util.List;
 
 public interface CartService {
+    Cart findCartById(Long id);
 
-    /**
-     *Необходимо создать DTO для всех методв
-     */
+    List<ProductInCartDataDTO> findProductInCartById(Long cartId);
 
-    Order addCart(Order order);
+    Cart addProductInCart(Long basketId, Long productId);
 
-    List<Order> getCarts();
+    UpdateBookQuantityInBasket updateQuantityInCart(Long cartId, Long productId, UpdateBookQuantityInBasket updateQuantity);
 
-    Order getCartById(Long cartId);
+    void removeProductInCart(Long cartId, Long productId);
 
-    Order addBookInCart(Long cartId, Long bookId);
-
-    void updateBookInCart(Long bookId, BookUpdateDTO bookUpdateDTO);
-
-    void removeFromCart(Long cartId, Long bookId);
-
-    Order getCartByLogin(String username);
+    void toDoOrdersInCartByQuantity(Long cartId, Long productId);
 }

@@ -14,32 +14,32 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface BookRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
 
     @Query(value =
-            "select * from book b where make_tsvector(b.title, b.genre, b.author) @@ plainto_tsquery(?1)" +
+            "select * from products b where make_tsvector_book_product(b.title, b.genre, b.author) @@ plainto_tsquery(?1)" +
                     "or similarity(b.title, ?1) > 0.3 " +
                     "or similarity(b.genre, ?1) > 0.1 " +
                     "or similarity(b.author, ?1) > 0.6 " +
-                    "order by ts_rank(make_tsvector(b.title, b.genre, b.author), plainto_tsquery(?1)) " +
+                    "order by ts_rank(make_tsvector_book_product(b.title, b.genre, b.author), plainto_tsquery(?1)) " +
                     "desc",
             nativeQuery = true)
     List<Product> search(String text);
 
     @Query(value =
-            "select b.* from book b join tree t on t.id = b.node_id where t.id=:categoryId"
+            "select b.* from products b join tree t on t.id = b.node_id where t.id=:categoryId"
             , nativeQuery = true)
     List<Product> findBooksChildCategoryId(@Param("categoryId") Long categoryId, PageRequest pageRequest);
 
     @Query(value =
-            "select b.* from book b join tree t on t.id = b.node_id where parent_id=:categoryId"
+            "select b.* from products b join tree t on t.id = b.node_id where parent_id=:categoryId"
             , nativeQuery = true)
     List<Product> findBooksParentCategoryId(@Param("categoryId") Long categoryId, PageRequest pageRequest);
 
     @Query("select dc from DescriptionCategory dc where dc.id=:categoryId")
     List<DescriptionCategory> findDescriptionCategory(Long categoryId);
 
-    List<Product> findBooksByBookBasketsId(Long basketId);
+    List<Product> findBooksByProductCartsId(Long basketId);
 
     @Query("select b from Product b where b.genre=:category")
     List<Product> findBooksByCategoryName(String category);

@@ -10,12 +10,12 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface BookCartRepository extends JpaRepository<ProductOrder, Long> {
+public interface ProductOrderRepository extends JpaRepository<ProductOrder, Long> {
 
-    List<ProductOrder> findAllByCart_Id(Long cartId);
+    List<ProductOrder> findAllByOrder_Id(Long cartId);
 
     @Query(value =
-            "select * from book_cart bc join book b on bc.book_id = b.id where cart_id=:cartId"
+            "select * from products_carts pc join products p on pc.product_id = p.id where cart_id=:cartId"
             , nativeQuery = true)
     List<ProductOrder> findAllByCart_IdaAndAndBook(Long cartId);
 }

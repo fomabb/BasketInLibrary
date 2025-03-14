@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface BookBasketRepository extends JpaRepository<ProductCart, Long> {
+public interface ProductCartRepository extends JpaRepository<ProductCart, Long> {
 
     Optional<ProductCart> findByCartAndProduct(Cart cart, Product product);
 
@@ -19,6 +19,6 @@ public interface BookBasketRepository extends JpaRepository<ProductCart, Long> {
      *
      * @return float count price by all products
      */
-    @Query("select sum(bb.priceQuantity) from ProductCart bb where bb.cart=:cart")
+    @Query("select sum(pc.priceQuantity) from ProductCart pc where pc.cart=:cart")
     float findBooksByBasket(Cart cart);
 }

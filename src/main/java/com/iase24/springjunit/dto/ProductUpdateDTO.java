@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BookUpdateDTO {
+public class ProductUpdateDTO {
     private int count;
     private Status status;
 }

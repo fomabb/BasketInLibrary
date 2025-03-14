@@ -5,11 +5,10 @@ import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.Status;
-import com.iase24.springjunit.facade.BookFacade;
+import com.iase24.springjunit.facade.ProductFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,13 +21,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(value = "/api/book")
+@RequestMapping(value = "/api/v1/products")
 @RequiredArgsConstructor
 @Transactional
-public class BookController {
+public class ProductController {
 
-    private final BookFacade bookFacade;
+    private final ProductFacade productFacade;
 
     /**
      * Найти все книги
@@ -40,7 +38,7 @@ public class BookController {
             @RequestParam int page,
             @RequestParam int size
     ) {
-        return bookFacade.getAllBooks(page, size);
+        return productFacade.getAllBooks(page, size);
     }
 
     /**
@@ -50,7 +48,7 @@ public class BookController {
      */
     @GetMapping("/{id}")
     public Product getBookById(@PathVariable("id") Long id) {
-        return bookFacade.getBookById(id);
+        return productFacade.getBookById(id);
     }
 
     @GetMapping("/active/{id}")
@@ -58,7 +56,7 @@ public class BookController {
             @PathVariable("id") Long id,
             @RequestParam("status") Status status
     ) {
-        return bookFacade.getBookByIdStatusActive(id, status);
+        return productFacade.getBookByIdStatusActive(id, status);
     }
 
     /**
@@ -69,14 +67,14 @@ public class BookController {
             @PathVariable("cartId") Long cartId,
             @PathVariable("bookId") Long bookId
     ) {
-        return bookFacade.deleteBookFromCart(cartId, bookId);
+        return productFacade.deleteBookFromCart(cartId, bookId);
     }
 
     @PutMapping("/update/counter")
     public void updateBookCounter(
             @RequestParam Long id, @RequestParam int count
     ) {
-        bookFacade.updateBookCounter(id, count);
+        productFacade.updateBookCounter(id, count);
     }
 
     /**
@@ -86,7 +84,7 @@ public class BookController {
      */
     @GetMapping("/search")
     public List<BookDataDTO> findSearchBook(@RequestParam String text) {
-        return bookFacade.findSearchBook(text);
+        return productFacade.findSearchBook(text);
     }
 
     /**
@@ -96,7 +94,7 @@ public class BookController {
      */
     @GetMapping("/node/{nodeId}")
     public Node findNodeById(@PathVariable("nodeId") Long nodeId) {
-        return bookFacade.findNodeById(nodeId);
+        return productFacade.findNodeById(nodeId);
     }
 
     /**
@@ -111,6 +109,6 @@ public class BookController {
             @RequestParam int page,
             @RequestParam int size
     ) {
-        return bookFacade.getBooksByCategoryId(categoryId, parent, page, size);
+        return productFacade.getBooksByCategoryId(categoryId, parent, page, size);
     }
 }

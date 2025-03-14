@@ -1,16 +1,16 @@
 package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookDataDTO;
-import com.iase24.springjunit.dto.BookUpdateDTO;
+import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.mapper.book.BookMapper;
-import com.iase24.springjunit.repository.BookRepository;
-import com.iase24.springjunit.repository.CartRepository;
+import com.iase24.springjunit.repository.ProductRepository;
+import com.iase24.springjunit.repository.OrderRepository;
 import com.iase24.springjunit.repository.NodeRepository;
-import com.iase24.springjunit.service.BookService;
+import com.iase24.springjunit.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BookServiceImpl implements BookService {
+public class ProductServiceImpl implements ProductService {
 
-    private final BookRepository bookRepository;
-    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
     private final NodeRepository nodeRepository;
     private final BookMapper bookMapper;
 
@@ -35,7 +35,7 @@ public class BookServiceImpl implements BookService {
     public Optional<Product> getBookByIdStatusActive(Long id, Status status) {
 
         if (status == Status.ACTIVE) {
-            return bookRepository.findById(id);
+            return productRepository.findById(id);
         }
         return Optional.empty();
     }
@@ -45,34 +45,34 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void deleteBookFromCart(Long cartId, Long bookId) {
-        cartRepository.findById(cartId);
-        bookRepository.deleteById(bookId);
+        orderRepository.findById(cartId);
+        productRepository.deleteById(bookId);
     }
 
     @Override
     public List<Product> getAll(PageRequest pageRequest) {
-        return bookRepository.findAll(pageRequest).toList();
+        return productRepository.findAll(pageRequest).toList();
     }
 
     @Override
     @Transactional
     public void createNewBook(List<Product> product) {
         if (product != null) {
-            bookRepository.saveAllAndFlush(product);
+            productRepository.saveAllAndFlush(product);
         }
     }
 
     @Override
     public Product getBookById(Long id) {
-        return bookRepository.findById(id)
+        return productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Product with id " + id + " not found"));
     }
 
     @Override
     @Transactional
-    public void updateBookCount(Long id, BookUpdateDTO bookUpdateDTO) {
+    public void updateBookCount(Long id, ProductUpdateDTO productUpdateDTO) {
         Product product = getBookById(id);
-        product.setCount(bookUpdateDTO.getCount());
+        product.setCount(productUpdateDTO.getCount());
         if (product.getCount() > 0) {
             product.setStatus(Status.ACTIVE);
         } else if (product.getCount() == 0) {
@@ -80,8 +80,8 @@ public class BookServiceImpl implements BookService {
         } else {
             throw new IllegalArgumentException("IllegalAccessException");
         }
-        Product updateProduct = bookRepository.save(product);
-        new BookUpdateDTO(updateProduct.getCount(), updateProduct.getStatus());
+        Product updateProduct = productRepository.save(product);
+        new ProductUpdateDTO(updateProduct.getCount(), updateProduct.getStatus());
     }
 
     //TODO
@@ -95,13 +95,13 @@ public class BookServiceImpl implements BookService {
             } else {
                 product.setStatus(Status.ACTIVE);
             }
-            bookRepository.saveAndFlush(product);
+            productRepository.saveAndFlush(product);
         }
     }
 
     @Override
     public List<BookDataDTO> search(String text) {
-        return bookRepository.search(text)
+        return productRepository.search(text)
                 .stream()
                 .map(bookMapper::map)
                 .collect(Collectors.toList());
@@ -128,18 +128,18 @@ public class BookServiceImpl implements BookService {
     public void addBookInCategory(Long bookId, Node categoryId) {
         Product product = getBookById(bookId);
         product.setNode(categoryId);
-        bookRepository.saveAndFlush(product);
+        productRepository.saveAndFlush(product);
     }
 
     @Override
     @Transactional
     public void addBooksInCategoryByName(String categoryName) {
-        List<Product> products = bookRepository.findBooksByCategoryName(categoryName);
+        List<Product> products = productRepository.findBooksByCategoryName(categoryName);
         Node node = nodeRepository.findByCategory(categoryName);
         products.forEach(book -> {
             book.setNode(node);
         });
-        bookRepository.saveAllAndFlush(products);
+        productRepository.saveAllAndFlush(products);
     }
 
     @Override
@@ -151,11 +151,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Product> findBooksChildCategoryId(Long categoryId, boolean parent, PageRequest pageRequest) {
         if (parent) {
-            return bookRepository.findBooksParentCategoryId(categoryId, pageRequest).stream()
+            return productRepository.findBooksParentCategoryId(categoryId, pageRequest).stream()
                     .sorted(Comparator.comparing(Product::getGenre))
                     .collect(Collectors.toList());
         } else {
-            return bookRepository.findBooksChildCategoryId(categoryId, pageRequest).stream()
+            return productRepository.findBooksChildCategoryId(categoryId, pageRequest).stream()
                     .sorted(Comparator.comparing(Product::getAuthor))
                     .collect(Collectors.toList());
         }
@@ -163,6 +163,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<DescriptionCategory> findDescriptionCategory(Long category) {
-        return bookRepository.findDescriptionCategory(category);
+        return productRepository.findDescriptionCategory(category);
     }
 }
