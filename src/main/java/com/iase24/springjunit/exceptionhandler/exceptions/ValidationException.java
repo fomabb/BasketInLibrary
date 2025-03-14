@@ -1,10 +1,10 @@
 package com.iase24.springjunit.exceptionhandler.exceptions;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@Builder
+@AllArgsConstructor
 public class ValidationException extends RuntimeException {
 
     public ValidationException(String message) {

@@ -1,13 +1,11 @@
 package com.iase24.springjunit.exceptionhandler.exceptions;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@Builder
+@AllArgsConstructor
 public class BusinessException extends RuntimeException {
 
-    public BusinessException(String message) {
-        super(message);
-    }
+    private final String message;
 }

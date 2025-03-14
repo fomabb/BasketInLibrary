@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -39,10 +37,7 @@ public class ProductController {
      * @return List<Books>
      */
     @GetMapping
-    public BookResponse getAllBooks(
-            @RequestParam int page,
-            @RequestParam int size
-    ) {
+    public BookResponse getAllBooks(@RequestParam int page, @RequestParam int size) {
         return productFacade.getAllBooks(page, size);
     }
 
@@ -57,7 +52,7 @@ public class ProductController {
     }
 
     @GetMapping("/active/{id}")
-    public Optional<Product> getBookByIdStatusActive(
+    public Product getBookByIdStatusActive(
             @PathVariable("id") Long id,
             @RequestParam("status") Status status
     ) {

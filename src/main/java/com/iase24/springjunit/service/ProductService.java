@@ -24,7 +24,7 @@ public interface ProductService {
     //TODO
     void updateBookCounter(Long id, int count);
 
-    Optional<Product> getBookByIdStatusActive(Long id, Status status);
+    Product getBookByIdStatusActive(Long id, Status status);
 
 
     void deleteBookFromCart(Long cartId, Long bookId);

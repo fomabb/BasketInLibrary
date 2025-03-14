@@ -38,7 +38,7 @@ public class ProductFacade {
     }
 
 
-    public Optional<Product> getBookByIdStatusActive(Long id, Status status) {
+    public Product getBookByIdStatusActive(Long id, Status status) {
         return productService.getBookByIdStatusActive(id, status);
     }
 
