@@ -7,7 +7,7 @@ import com.iase24.springjunit.entities.Faq;
 import java.util.List;
 
 public interface AdminService {
-    void answerForFaq(Long faqId, FaqAnswerDTO answer);
+    void answerForFaq(FaqAnswerDTO answer);
 
     void deleteFaq(Long categoryId, Long faqId);
 
@@ -15,5 +15,5 @@ public interface AdminService {
 
     void updateUserRolesByUsername(Long userId);
 
-    void createDescriptionByCategoryName(String categoryName, DescriptionDataDTO descriptionCategory);
+    void createDescriptionByCategoryName(DescriptionDataDTO descriptionCategory);
 }

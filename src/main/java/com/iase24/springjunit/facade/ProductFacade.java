@@ -38,8 +38,8 @@ public class ProductFacade {
     }
 
 
-    public Product getBookByIdStatusActive(Long id, Status status) {
-        return productService.getBookByIdStatusActive(id, status);
+    public Product getBookByIdStatusActive(Long id) {
+        return productService.getBookByIdStatusActive(id);
     }
 
     public ResponseEntity<?> deleteBookFromCart(Long cartId, Long bookId) {

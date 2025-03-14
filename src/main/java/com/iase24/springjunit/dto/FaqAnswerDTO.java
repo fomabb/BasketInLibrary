@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FaqAnswerDTO {
 
+    private Long id;
     private String answer;
 }

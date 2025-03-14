@@ -4,7 +4,6 @@ import com.iase24.springjunit.component.BookResponse;
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
-import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.facade.ProductFacade;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,11 +51,8 @@ public class ProductController {
     }
 
     @GetMapping("/active/{id}")
-    public Product getBookByIdStatusActive(
-            @PathVariable("id") Long id,
-            @RequestParam("status") Status status
-    ) {
-        return productFacade.getBookByIdStatusActive(id, status);
+    public Product getBookByIdStatusActive(@PathVariable("id") Long id) {
+        return productFacade.getBookByIdStatusActive(id);
     }
 
     /**

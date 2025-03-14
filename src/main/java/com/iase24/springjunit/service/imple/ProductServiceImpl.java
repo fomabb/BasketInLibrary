@@ -2,6 +2,7 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
+import com.iase24.springjunit.dto.request.NodeDataDtoRequest;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
@@ -35,11 +36,13 @@ public class ProductServiceImpl implements ProductService {
     private final BookMapper bookMapper;
 
     @Override
-    public Product getBookByIdStatusActive(Long id, Status status) {
+    public Product getBookByIdStatusActive(Long id) {
 
-        if (status == Status.ACTIVE) {
-            return productRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException(String.format("Book with ID %s not found", id)));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Book with ID %s not found", id)));
+
+        if (product.getStatus().equals(Status.ACTIVE)) {
+            return product;
         } else {
             throw new BusinessException(String.format("Book with ID %s is not active", id));
         }
@@ -77,8 +80,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void updateBookCount(Long id, ProductUpdateDTO productUpdateDTO) {
-        Product product = getBookById(id);
+    public ProductUpdateDTO updateBookCount(ProductUpdateDTO productUpdateDTO) {
+        Product product = getBookById(productUpdateDTO.getId());
         product.setCount(productUpdateDTO.getCount());
         if (product.getCount() > 0) {
             product.setStatus(Status.ACTIVE);
@@ -88,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
             throw new BusinessException("Bad request");
         }
         Product updateProduct = productRepository.save(product);
-        new ProductUpdateDTO(updateProduct.getCount(), updateProduct.getStatus());
+        return new ProductUpdateDTO(productUpdateDTO.getId(), updateProduct.getCount(), updateProduct.getStatus());
     }
 
     //TODO
@@ -125,9 +128,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void addChildrenIdInParentId(Long childrenId, Node parentNode) {
-        Node node = findNodeById(childrenId);
-        node.setParent(parentNode);
+    public void addChildNodeToParent(NodeDataDtoRequest dtoRequest) {
+        Node node = findNodeById(dtoRequest.getChildrenId());
+        node.setParent(dtoRequest.getParentNode());
+
+        NodeDataDtoRequest.builder()
+                .childrenId(node.getId())
+                .parentNode(dtoRequest.getParentNode().getParent())
+                .build();
+
+        nodeRepository.save(node);
     }
 
     @Override
@@ -152,7 +162,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Node findNodeById(Long nodeId) {
         return nodeRepository.findById(nodeId)
-                .orElseThrow(() -> new IllegalArgumentException("Node with id " + nodeId + "not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Node with id " + nodeId + "not found"));
     }
 
     @Override

@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
                 product.setCount(productUpdateDTO.getCount());
             }
             Product updateCount = productRepository.save(product);
-            new ProductUpdateDTO(updateCount.getCount(), updateCount.getStatus());
+            new ProductUpdateDTO(bookId, updateCount.getCount(), updateCount.getStatus());
         } else {
             throw new IllegalArgumentException("Product with id " + bookId + " not found");
         }

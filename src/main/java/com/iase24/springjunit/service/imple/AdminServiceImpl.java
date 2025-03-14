@@ -33,11 +33,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public void answerForFaq(Long faqId, FaqAnswerDTO answer) {
+    public void answerForFaq(FaqAnswerDTO answer) {
 
         // находим коментарий по ID проверяем или есть такой, если нет выводим exception
-        Faq faq = faqRepository.findById(faqId)
-                .orElseThrow(() -> new IllegalArgumentException("Faq id: " + faqId + " not found"));
+        Faq faq = faqRepository.findById(answer.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Faq id: " + answer.getId() + " not found"));
 
         // сохранение в базу данных
         faq.setAnswer(answer.getAnswer());
@@ -86,15 +86,15 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public void createDescriptionByCategoryName(String categoryName, DescriptionDataDTO descriptionDataDTO) {
+    public void createDescriptionByCategoryName(DescriptionDataDTO descriptionDataDTO) {
 
         // находим категорию по названию
-        Node node = nodeRepository.findByCategory(categoryName);
+        Node node = nodeRepository.findByCategory(descriptionDataDTO.getCategoryRequestName());
 
         // создаем новый объект описания категории в котрый устанавливаем ID и название категории из node
         DescriptionCategory descriptionCategory = new DescriptionCategory();
         descriptionCategory.setId(node.getId());
-        descriptionCategory.setCategory(categoryName);
+        descriptionCategory.setCategory(descriptionDataDTO.getCategoryRequestName());
 
         // создаем тело JSON {"title":", "description":" "}
         descriptionCategory.setTitle(descriptionDataDTO.getTitle());
@@ -105,7 +105,7 @@ public class AdminServiceImpl implements AdminService {
 
         // создаем новый объект DTO и выводим все поля
         new DescriptionDataDTO(descriptionCreate.getId(), descriptionCreate.getCategory(), descriptionCreate.getTitle(),
-                descriptionCreate.getCategory());
+                descriptionCreate.getCategory(), descriptionDataDTO.getCategoryRequestName());
     }
 }
 

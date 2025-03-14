@@ -1,10 +1,11 @@
 package com.iase24.springjunit.facade;
 
-import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.DescriptionDataDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
+import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.UpdateDeliveryDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.request.NodeDataDtoRequest;
 import com.iase24.springjunit.entities.Faq;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Order;
@@ -12,9 +13,9 @@ import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.repository.ProductOrderRepository;
 import com.iase24.springjunit.repository.ProductRepository;
 import com.iase24.springjunit.service.AdminService;
+import com.iase24.springjunit.service.OrderService;
 import com.iase24.springjunit.service.ProductOrderService;
 import com.iase24.springjunit.service.ProductService;
-import com.iase24.springjunit.service.OrderService;
 import com.iase24.springjunit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,8 +37,8 @@ public class AdminFacade {
     private final ProductRepository productRepository;
     private final ProductOrderRepository productOrderRepository;
 
-    public FaqAnswerDTO answerForFaq(Long faqId, FaqAnswerDTO answer) {
-        adminService.answerForFaq(faqId, answer);
+    public FaqAnswerDTO answerForFaq(FaqAnswerDTO answer) {
+        adminService.answerForFaq(answer);
         return answer;
     }
 
@@ -52,11 +53,11 @@ public class AdminFacade {
                 .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
     }
 
-    public ResponseEntity<String> createDescriptionByCategoryName(String categoryName, DescriptionDataDTO descriptionCategory) {
-        adminService.createDescriptionByCategoryName(categoryName, descriptionCategory);
+    public ResponseEntity<String> createDescriptionByCategoryName(DescriptionDataDTO descriptionCategory) {
+        adminService.createDescriptionByCategoryName(descriptionCategory);
         return ResponseEntity
                 .status(HttpStatus.ACCEPTED)
-                .body(String.format("Category with name %s successfully created", categoryName));
+                .body(String.format("Category with name %s successfully created", descriptionCategory.getCategoryRequestName()));
     }
 
 //=======================================================Product===========================================================
@@ -66,11 +67,8 @@ public class AdminFacade {
         return product;
     }
 
-    public ProductUpdateDTO updateBookCount(Long id, ProductUpdateDTO productUpdateDTO) {
-        if (id != null) {
-            productService.updateBookCount(id, productUpdateDTO);
-        }
-        return productUpdateDTO;
+    public ProductUpdateDTO updateBookCount(ProductUpdateDTO dto) {
+        return productService.updateBookCount(dto);
     }
 
 //=======================================================User===========================================================
@@ -104,9 +102,8 @@ public class AdminFacade {
         return node;
     }
 
-    public Node addChildrenIdInParentId(Long childrenId, Node parentNode) {
-        productService.addChildrenIdInParentId(childrenId, parentNode);
-        return parentNode;
+    public void addChildNodeToParent(NodeDataDtoRequest request) {
+        productService.addChildNodeToParent(request);
     }
 
     public Node addBookInCategory(Long bookId, Node categoryId) {

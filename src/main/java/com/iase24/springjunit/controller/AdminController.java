@@ -5,11 +5,12 @@ import com.iase24.springjunit.dto.FaqAnswerDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.UpdateDeliveryDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.request.NodeDataDtoRequest;
+import com.iase24.springjunit.dto.response.CommonExceptionResponse;
 import com.iase24.springjunit.entities.Faq;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.entities.Product;
-import com.iase24.springjunit.dto.response.CommonExceptionResponse;
 import com.iase24.springjunit.facade.AdminFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -63,12 +64,9 @@ public class AdminController {
                                     schema = @Schema(implementation = CommonExceptionResponse.class))
                             })
             })
-    @PutMapping("/answer/faqId/{faqId}")
-    public FaqAnswerDTO answerForFaq(
-            @PathVariable("faqId") Long faqId,
-            @RequestBody FaqAnswerDTO answer
-    ) {
-        return adminFacade.answerForFaq(faqId, answer);
+    @PutMapping("/answer/faqId")
+    public FaqAnswerDTO answerForFaq(@RequestBody FaqAnswerDTO answer) {
+        return adminFacade.answerForFaq(answer);
     }
 
     /**
@@ -115,10 +113,10 @@ public class AdminController {
      */
     @PostMapping("/create/descriptionByName")
     public ResponseEntity<String> createDescriptionByCategoryName(
-            @RequestParam("categoryName") String categoryName,
+//            @RequestParam("categoryName") String categoryName,
             @RequestBody DescriptionDataDTO descriptionCategory
     ) {
-        return adminFacade.createDescriptionByCategoryName(categoryName, descriptionCategory);
+        return adminFacade.createDescriptionByCategoryName(descriptionCategory);
     }
 
 //=======================================================Product===========================================================
@@ -138,12 +136,9 @@ public class AdminController {
      *
      * @return productUpdateDTO
      */
-    @PutMapping("/bookCount/{id}")
-    public ProductUpdateDTO updateBookCount(
-            @PathVariable("id") Long id,
-            @RequestBody ProductUpdateDTO productUpdateDTO
-    ) {
-        return adminFacade.updateBookCount(id, productUpdateDTO);
+    @PutMapping("/bookCount")
+    public ProductUpdateDTO updateBookCount(@RequestBody ProductUpdateDTO productUpdateDTO) {
+        return adminFacade.updateBookCount(productUpdateDTO);
     }
 
 //=======================================================User===========================================================
@@ -211,14 +206,10 @@ public class AdminController {
     /**
      * Добавление дочерней категории в родительскую
      *
-     * @return JSON
      */
-    @PutMapping("/addChildrenId/{childrenId}")
-    public Node addChildrenIdInParentId(
-            @PathVariable("childrenId") Long childrenId,
-            @RequestParam Node parentNode
-    ) {
-        return adminFacade.addChildrenIdInParentId(childrenId, parentNode);
+    @PutMapping("/add-child-node/to/parent-node")
+    public void addChildNodeToParent(@RequestBody NodeDataDtoRequest request) {
+        adminFacade.addChildNodeToParent(request);
     }
 
     /**
