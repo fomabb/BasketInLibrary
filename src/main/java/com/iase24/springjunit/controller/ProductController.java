@@ -6,10 +6,12 @@ import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.facade.ProductFacade;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +26,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
-@Transactional
 @Tag(name = "Склад продуктов", description = "API для управления продуктами")
+@SecurityRequirement(name = "bearerAuth")
+@Validated
 public class ProductController {
 
     private final ProductFacade productFacade;

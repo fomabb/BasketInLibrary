@@ -1,8 +1,8 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.ProductInCartDataDTO;
 import com.iase24.springjunit.dto.CreateUserDTO;
 import com.iase24.springjunit.dto.FaqQuestionDTO;
+import com.iase24.springjunit.dto.ProductInCartDataDTO;
 import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.Cart;
@@ -11,10 +11,11 @@ import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.facade.CartFacade;
 import com.iase24.springjunit.facade.UserFacade;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,8 +31,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-@Valid
 @Tag(name = "Пользователи", description = "API для управления пользователями")
+@SecurityRequirement(name = "bearerAuth")
+@Validated
 public class UserController {
 
     private final UserFacade userFacade;

@@ -1,25 +1,26 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.DescriptionDataDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
+import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.UpdateDeliveryDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.Faq;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.entities.Product;
-import com.iase24.springjunit.exceptionhandler.CommonExceptionResponse;
+import com.iase24.springjunit.dto.response.CommonExceptionResponse;
 import com.iase24.springjunit.facade.AdminFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,8 +37,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
-@Valid
 @Tag(name = "Админка", description = "API для управления приложением")
+@SecurityRequirement(name = "bearerAuth")
+@Validated
 public class AdminController {
 
     private final AdminFacade adminFacade;
