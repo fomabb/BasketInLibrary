@@ -14,5 +14,5 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM Order o JOIN FETCH o.user u WHERE u.username =:username")
-    Optional<Order> findCartByUser_Username(@Param("username") String username);
+    Optional<Order> findOrderByUser_Username(@Param("username") String username);
 }

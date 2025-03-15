@@ -2,6 +2,7 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.request.MakingAnOrderDataDtoRequest;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.ProductOrder;
@@ -53,9 +54,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderById(Long cartId) {
-        return orderRepository.findById(cartId)
-                .orElseThrow(() -> new IllegalArgumentException("Order with id " + cartId + " not found"));
+    public Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order with id " + orderId + " not found"));
     }
 
     @Override
@@ -69,18 +70,18 @@ public class OrderServiceImpl implements OrderService {
             Product updateCount = productRepository.save(product);
             new ProductUpdateDTO(bookId, updateCount.getCount(), updateCount.getStatus());
         } else {
-            throw new IllegalArgumentException("Product with id " + bookId + " not found");
+            throw new EntityNotFoundException("Product with id " + bookId + " not found");
         }
     }
 
     /**
-     * Метод добавляющий книгу в картачку заказов пользователя
+     * Метод добавляющий книгу в карточку заказов пользователя
      */
     @Override
     @Transactional
-    public Order addProductInOrder(Long cartId, Long bookId) {
-        Order order = getOrderById(cartId);
-        Product product = productService.getBookById(bookId);
+    public Order addProductInOrder(MakingAnOrderDataDtoRequest dataDtoRequest) {
+        Order order = getOrderById(dataDtoRequest.getOrderId());
+        Product product = productService.getBookById(dataDtoRequest.getProductId());
         if (product.getCount() > 0) {
 
             // Уменьшаем количество книги на складе
@@ -102,15 +103,15 @@ public class OrderServiceImpl implements OrderService {
             productOrderRepository.saveAndFlush(productOrder);
             return order;
         } else {
-            throw new EntityNotFoundException(String.format("Product with ID %s not found", bookId));
+            throw new EntityNotFoundException(String.format("Product with ID %s not found", dataDtoRequest.getProductId()));
         }
     }
 
     //TODO: необходимо изменить логику, для того, чтобы не изменялся ID и LocalDateTime
     @Override
     @Transactional
-    public void removeFromOrder(Long cartId, Long bookId) {
-        Order order = getOrderById(cartId);
+    public void removeFromOrder(Long orderId, Long bookId) {
+        Order order = getOrderById(orderId);
 
         //TODO: в процессе изменения
         // сохранение изначального ID и даты====================
@@ -161,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderByLogin(String username) {
-        return orderRepository.findCartByUser_Username(username)
+        return orderRepository.findOrderByUser_Username(username)
                 .orElseThrow(() -> new EntityNotFoundException("User with name: " + username + " not found"));
     }
 }

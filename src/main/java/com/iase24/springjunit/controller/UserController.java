@@ -1,19 +1,32 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.*;
+import com.iase24.springjunit.dto.CreateUserDTO;
+import com.iase24.springjunit.dto.FaqQuestionDTO;
+import com.iase24.springjunit.dto.ProductInCartDataDTO;
+import com.iase24.springjunit.dto.UpdateBookQuantityInBasketRequest;
+import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.request.CartProductDataDtoRequest;
 import com.iase24.springjunit.entities.Cart;
-import com.iase24.springjunit.entities.Order;
-import com.iase24.springjunit.entities.Product;
-import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.facade.CartFacade;
 import com.iase24.springjunit.facade.UserFacade;
-import com.iase24.springjunit.service.OrderService;
+import com.iase24.springjunit.service.CartService;
+import com.iase24.springjunit.service.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,23 +34,30 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-@Tag(name = "Пользователи", description = "API для управления пользователями")
+@Tag(name = "Пользователи с корзиной", description = "API для управления пользователями и их корзиной")
 @SecurityRequirement(name = "bearerAuth")
 @Validated
 public class UserController {
 
     private final UserFacade userFacade;
     private final CartFacade cartFacade;
-    private final OrderService orderService;
+    private final CartService cartService;
+    private final UserService userService;
 
     /**
      * Регистрация нового пользователя
      *
      * @return user
      */
+    @Operation(
+            summary = "Регистрация нового пользователя.",
+            description = """
+                    ```В теле запроса ввести необходимые данные.```
+                    """
+    )
     @PostMapping
-    public CreateUserDTO createNewUser(@RequestBody CreateUserDTO createUserDTO) {
-        return userFacade.createNewUser(createUserDTO);
+    public ResponseEntity<UserDataDTO> createNewUser(@RequestBody CreateUserDTO createUserDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createNewUser(createUserDTO));
     }
 
     /**
@@ -45,52 +65,24 @@ public class UserController {
      *
      * @return userDTO
      */
+    @Operation(
+            summary = "Найти пользователя по ID.",
+            description = """
+                    ```В путь добавить ID пользователя.```
+                    """
+    )
     @GetMapping("/{id}")
-    public Optional<UserDataDTO> getUserById(@PathVariable("id") Long id) {
-        return userFacade.getUserById(id);
+    public UserDataDTO getUserById(@PathVariable("id") Long id) {
+        return userService.getUserById(id);
     }
 
     //TODO
+    @Hidden
     @GetMapping("/cart/userId/{userId}")
     public Optional<UserDataDTO> getCartByUserId(
             @PathVariable("userId") Long userId
     ) {
         return userFacade.getCartByUserId(userId);
-    }
-
-//===========================================Order=======================================================================
-
-    /**
-     * Оформление заказа по ID товара
-     */
-    @PutMapping("/cartId/{cartId}/bookId/{bookId}")
-    public Order addBookInCart(
-            @PathVariable("cartId") Long cartId,
-            @PathVariable("bookId") Long bookId
-    ) {
-        return orderService.addProductInOrder(cartId, bookId);
-    }
-
-    /**
-     * Найти заказ по ID
-     *
-     * @return order
-     */
-    @GetMapping("/cartId/{cartId}")
-    public Order getCartById(@PathVariable("cartId") Long cartId) {
-
-        return userFacade.getCartById(cartId);
-    }
-
-    /**
-     * Отменить сформированный заказ
-     */
-    @DeleteMapping("cartId/{cartId}/bookId/{bookId}")
-    public ResponseEntity<?> removeFromCart(
-            @PathVariable Long cartId,
-            @PathVariable Long bookId
-    ) {
-        return userFacade.removeFromCart(cartId, bookId);
     }
 
 //===========================================FAQ========================================================================
@@ -100,30 +92,50 @@ public class UserController {
      *
      * @return question {DateTime/question}
      */
+    @Operation(
+            summary = "Написать вопрос внутри категории.",
+            description = """
+                    ```Добавить в путь ID категории, в теле запроса написать вопрос.```
+                    """
+    )
     @PostMapping("/faq/question/categoryId/{categoryId}")
-    public FaqQuestionDTO questionCategory(
+    public ResponseEntity<Void> questionCategory(
             @PathVariable("categoryId") Long categoryId,
             @RequestBody FaqQuestionDTO question
     ) {
-        return userFacade.questionCategory(categoryId, question);
+        userService.questionCategory(categoryId, question);
+        return ResponseEntity.accepted().build();
     }
 
     /**
-     * Обновление тексте вопроса
+     * Обновление текста вопроса
      *
      * @return question
      */
+    @Operation(
+            summary = "Обновление текста вопроса.",
+            description = """
+                    ```Добавить в путь ID FAQ, в теле запроса обновить текст.```
+                    """
+    )
     @PutMapping("/faq/update/faqId/{faqId}")
-    public FaqQuestionDTO updateQuestion(
+    public ResponseEntity<Void> updateQuestion(
             @PathVariable("faqId") Long faqId,
             @RequestBody FaqQuestionDTO question
     ) {
-        return userFacade.updateQuestion(faqId, question);
+        userService.updateQuestion(faqId, question);
+        return ResponseEntity.accepted().build();
     }
 
     /**
-     * Удаление из категории коментария
+     * Удаление из категории комментария
      */
+    @Operation(
+            summary = "Удаление комментария в категории.",
+            description = """
+                    ```Добавить в путь IDs категории и FAQ.```
+                    """
+    )
     @DeleteMapping("/faq/categoryId/{categoryId}/faqId/{faqId}")
     public ResponseEntity<String> removeFaqFromCategory(
             @PathVariable("categoryId") Long categoryId,
@@ -139,9 +151,15 @@ public class UserController {
      *
      * @return cart with things
      */
-    @GetMapping("/basketId/{id}")
-    public Cart getBasketById(@PathVariable("id") Long id) {
-        return cartFacade.getCartById(id);
+    @Operation(
+            summary = "Найти корзину по ID пользователя.",
+            description = """
+                    ```В путь добавит ID корзины.```
+                    """
+    )
+    @GetMapping("/cartId/{id}")
+    public ResponseEntity<Cart> getCartById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(cartFacade.getCartById(id));
     }
 
     /**
@@ -149,9 +167,15 @@ public class UserController {
      *
      * @return products
      */
-    @GetMapping("/basket/allBooksInBasket/basketId/{basketId}")
-    public List<ProductInCartDataDTO> getBooksInBasketById(@PathVariable("basketId") Long basketId) {
-        return cartFacade.getProductsInCartById(basketId);
+    @Operation(
+            summary = "Вывести все товары из корзины по ее ID.",
+            description = """
+                    ```В путь добавить ID категории.```
+                    """
+    )
+    @GetMapping("/cart/allBooksInCart/cartId/{cartId}")
+    public List<ProductInCartDataDTO> getProductsInCartById(@PathVariable("cartId") Long cartId) {
+        return cartService.findProductInCartById(cartId);
     }
 
     /**
@@ -159,9 +183,15 @@ public class UserController {
      *
      * @return cart with things
      */
-    @PostMapping("/addBookInBasket/basketId/{basketId}/bookId/{bookId}")
-    public Cart createBasket(@PathVariable("basketId") Long basketId, @PathVariable("bookId") Long bookId) {
-        return cartFacade.createCart(basketId, bookId);
+    @Operation(
+            summary = "Добавление продукта в корзину.",
+            description = """
+                    ```В теле запроса добавить IDs продукта и корзины.```
+                    """
+    )
+    @PostMapping("/addBookInCart")
+    public ResponseEntity<Cart> addProductInCart(@RequestBody CartProductDataDtoRequest request) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(cartService.addProductInCart(request));
     }
 
     /**
@@ -169,48 +199,33 @@ public class UserController {
      *
      * @return quantity
      */
-    @PutMapping("/updateBookQuantityInBasket/basketId/{basketId}/bookId/{bookId}")
-    public UpdateBookQuantityInBasket updateQuantity(
-            @PathVariable("basketId") Long basketId,
-            @PathVariable("bookId") Long bookId,
-            @RequestBody UpdateBookQuantityInBasket updateBookQuantity
+    @Operation(
+            summary = "Добавление/уменьшение заказов в корзине.",
+            description = """
+                    ```В теле запроса указать IDs корзины, продукта и в написать количество.```
+                    """
+    )
+    @PutMapping("/updateBookQuantityInCart")
+    public UpdateBookQuantityInBasketRequest updateQuantity(
+            @RequestBody UpdateBookQuantityInBasketRequest request
     ) {
-        return cartFacade.updateQuantity(basketId, bookId, updateBookQuantity);
+        return cartService.updateQuantityInCart(request);
     }
 
     /**
      * Удаление товара из корзины
      */
-    @DeleteMapping("/removeBookInBasket/basketId/{basketId}/bookId/{bookId}")
-    public ResponseEntity<?> removeBookInBasket(
-            @PathVariable("basketId") Long basketId,
-            @PathVariable("bookId") Long bookId
+    @Operation(
+            summary = "Удаление товара из корзины.",
+            description = """
+                    ```В пути добавить IDs корзины и продукта.```
+                    """
+    )
+    @DeleteMapping("/removeBookInCart/cartId/{cartId}/bookId/{bookId}")
+    public void removeBookInBasket(
+            @PathVariable("cartId") Long cartId,
+            @PathVariable("bookId") Long productId
     ) {
-        return cartFacade.removeProductInCart(basketId, bookId);
-    }
-
-    /**
-     * Сформировать заказ по колличеству товара
-     *
-     * @return order
-     */
-    @PostMapping("/createOrdersByQuantityInBasket/basketId/{basketId}/bookId/{bookId}")
-    public ResponseEntity<Product> toDoOrdersInBasketByQuantity(
-            @PathVariable("basketId") Long basketId,
-            @PathVariable("bookId") Long bookId
-    ) {
-        return cartFacade.toDoOrdersInCartByQuantity(basketId, bookId);
-    }
-
-//===========================================Cart=====================================================================
-
-    @GetMapping("/show/report/cartId/{cartId}")
-    public List<ProductOrder> findDeliveryReportByCartId(@PathVariable("cartId") Long cartId) {
-        return userFacade.findDeliveryReportByCartId(cartId);
-    }
-
-    @GetMapping("/show/archive/orders/cartId/{cartId}")
-    public List<ProductOrder> findArchiveOrdersByCartId(@PathVariable("cartId") Long cartId) {
-        return userFacade.findArchiveOrdersByCartId(cartId);
+        cartService.removeProductInCart(cartId, productId);
     }
 }

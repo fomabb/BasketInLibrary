@@ -1,82 +1,30 @@
 package com.iase24.springjunit.facade;
 
-import com.iase24.springjunit.dto.CreateUserDTO;
-import com.iase24.springjunit.dto.FaqQuestionDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
-import com.iase24.springjunit.entities.Order;
-import com.iase24.springjunit.entities.ProductOrder;
-import com.iase24.springjunit.service.ProductOrderService;
-import com.iase24.springjunit.service.imple.OrderServiceImpl;
-import com.iase24.springjunit.service.imple.UserServiceImpl;
+import com.iase24.springjunit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserFacade {
 
-    private final UserServiceImpl userService;
-    private final OrderServiceImpl orderService;
-    private final ProductOrderService productOrderService;
-
-    public CreateUserDTO createNewUser(CreateUserDTO createUserDTO) {
-        userService.createNewUser(createUserDTO);
-        return createUserDTO;
-    }
-
-    public Optional<UserDataDTO> getUserById(Long id) {
-        return userService.getUserById(id);
-    }
+    private final UserService userService;
 
     //TODO
     public Optional<UserDataDTO> getCartByUserId(Long userId) {
         return userService.getCartByUserId(userId);
     }
 
-//===========================================Order======================================================================
-
-    public Order getCartById(Long cartId) {
-        return orderService.getOrderById(cartId);
-    }
-
-    public ResponseEntity<?> removeFromCart(Long cartId, Long bookId) {
-        orderService.removeFromOrder(cartId, bookId);
-        return new ResponseEntity<>(
-                "Product with id " + bookId + " remove in order with id " + cartId
-                , HttpStatus.OK
-        );
-    }
-
 //===========================================FAQ========================================================================
-
-    public FaqQuestionDTO questionCategory(Long categoryId, FaqQuestionDTO question) {
-        userService.questionCategory(categoryId, question);
-        return question;
-    }
-
-    public FaqQuestionDTO updateQuestion(Long faqId, FaqQuestionDTO question) {
-        userService.updateQuestion(faqId, question);
-        return question;
-    }
 
     public ResponseEntity<String> removeFaqFromCategory(Long categoryId, Long faqId) {
         userService.removeFaqFromCategory(categoryId, faqId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Faq with ID " + faqId + " successfully deleted from category with ID " + categoryId);
-    }
-
-//===========================================Cart=====================================================================
-
-    public List<ProductOrder> findDeliveryReportByCartId(Long cartId) {
-        return productOrderService.findDeliveryReportByOrderId(cartId);
-    }
-
-    public List<ProductOrder> findArchiveOrdersByCartId(Long cartId) {
-        return productOrderService.findArchiveOrdersByCartId(cartId);
     }
 }

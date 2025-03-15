@@ -4,6 +4,7 @@ import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
 import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
+import com.iase24.springjunit.dto.request.ProductQuantityDataDtoRequest;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
@@ -22,7 +23,7 @@ public interface ProductService {
     ProductUpdateDTO updateBookCount(ProductUpdateDTO dto);
 
     //TODO
-    void updateBookCounter(Long id, int count);
+    void updateBookCounter(ProductQuantityDataDtoRequest dataDtoRequest);
 
     Product getBookByIdStatusActive(Long id);
 

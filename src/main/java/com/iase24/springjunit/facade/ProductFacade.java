@@ -4,13 +4,10 @@ import com.iase24.springjunit.component.BookResponse;
 import com.iase24.springjunit.component.PaginationInfo;
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.entities.DescriptionCategory;
-import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,30 +28,8 @@ public class ProductFacade {
         return response;
     }
 
-    public Product getBookById(Long id) {
-        return productService.getBookById(id);
-    }
-
-
-    public Product getBookByIdStatusActive(Long id) {
-        return productService.getBookByIdStatusActive(id);
-    }
-
-    public ResponseEntity<?> deleteBookFromCart(Long cartId, Long bookId) {
-        productService.deleteBookFromCart(cartId, bookId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public void updateBookCounter(Long id, int count) {
-        productService.updateBookCounter(id, count);
-    }
-
     public List<BookDataDTO> findSearchBook(String text) {
         return productService.search(text);
-    }
-
-    public Node findNodeById(Long nodeId) {
-        return productService.findNodeById(nodeId);
     }
 
     public BookResponse getBooksByCategoryId(Long categoryId, Boolean parent, int page, int size

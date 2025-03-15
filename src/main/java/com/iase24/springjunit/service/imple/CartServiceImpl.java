@@ -1,9 +1,17 @@
 package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.ProductInCartDataDTO;
-import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
-import com.iase24.springjunit.entities.*;
+import com.iase24.springjunit.dto.UpdateBookQuantityInBasketRequest;
+import com.iase24.springjunit.dto.request.CartProductDataDtoRequest;
+import com.iase24.springjunit.dto.request.OrdersInTheCartByQuantityDataDtoRequest;
+import com.iase24.springjunit.entities.Cart;
+import com.iase24.springjunit.entities.Order;
+import com.iase24.springjunit.entities.Product;
+import com.iase24.springjunit.entities.ProductCart;
+import com.iase24.springjunit.entities.ProductOrder;
+import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.entities.enumerated.DeliveryReport;
+import com.iase24.springjunit.exceptionhandler.exceptions.BusinessException;
 import com.iase24.springjunit.repository.CartRepository;
 import com.iase24.springjunit.repository.ProductCartRepository;
 import com.iase24.springjunit.repository.ProductOrderRepository;
@@ -11,6 +19,7 @@ import com.iase24.springjunit.repository.ProductRepository;
 import com.iase24.springjunit.service.CartService;
 import com.iase24.springjunit.service.OrderService;
 import com.iase24.springjunit.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +46,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart findCartById(Long id) {
         return cartRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Cart with id: %s not found", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Cart with id: %s not found", id)));
     }
 
     @Override
@@ -50,14 +59,14 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     @Override
-    public Cart addProductInCart(Long basketId, Long productId) {
-        Cart cart = findCartById(basketId);
-        Product product = productService.getBookById(productId);
+    public Cart addProductInCart(CartProductDataDtoRequest dataDtoRequest) {
+        Cart cart = findCartById(dataDtoRequest.getCartId());
+        Product product = productService.getBookById(dataDtoRequest.getProductId());
 
         // Проверяем, есть ли уже книга в корзине
         Optional<ProductCart> existingBookBasket = productCartRepository.findByCartAndProduct(cart, product);
         if (existingBookBasket.isPresent()) {
-            throw new IllegalArgumentException("Product is already in the cart");
+            throw new EntityNotFoundException("Product is already in the cart");
         }
         if (product.getCount() > 0) {
             productRepository.save(product);
@@ -73,21 +82,19 @@ public class CartServiceImpl implements CartService {
             cart.setAllPrice(BigDecimal.valueOf(productCartRepository.findBooksByBasket(cart)));
             return cart;
         } else {
-            throw new IllegalArgumentException("Cart count exceeded");
+            throw new EntityNotFoundException("Cart count exceeded");
         }
     }
 
     @Transactional
     @Override
-    public UpdateBookQuantityInBasket updateQuantityInCart(
-            Long basketId, Long productId, UpdateBookQuantityInBasket updateBookQuantity
-    ) {
-        Cart cart = findCartById(basketId);
-        Product product = productService.getBookById(productId);
+    public UpdateBookQuantityInBasketRequest updateQuantityInCart(UpdateBookQuantityInBasketRequest updateBookQuantity) {
+        Cart cart = findCartById(updateBookQuantity.getCartId());
+        Product product = productService.getBookById(updateBookQuantity.getProductId());
 
         // Найти существующий ProductCart для данной корзины и книги
         ProductCart productCart = productCartRepository.findByCartAndProduct(cart, product)
-                .orElseThrow(() -> new RuntimeException("ProductCart not found"));
+                .orElseThrow(() -> new EntityNotFoundException("ProductCart not found"));
 
         // Проверить, не превышает ли новое количество доступное количество книги ии проверяем не меньше ли доступного
         if (updateBookQuantity.getQuantity() <= product.getCount() && updateBookQuantity.getQuantity() > 0) {
@@ -95,7 +102,7 @@ public class CartServiceImpl implements CartService {
             // обновить количество в существующем ProductCart
             productCart.setQuantity(updateBookQuantity.getQuantity());
 
-            // увеличиваем price в самой корзине по колличеству товара
+            // увеличиваем price в самой корзине по количеству товара
             productCart.setPriceQuantity(BigDecimal.valueOf(productCart.getProduct().getPrice() * productCart.getQuantity()));
 
             productCartRepository.findBooksByBasket(cart);
@@ -105,9 +112,11 @@ public class CartServiceImpl implements CartService {
 
             // сохраняем изменения в базе данных
             productCartRepository.save(productCart);
-            return new UpdateBookQuantityInBasket(productCart.getQuantity());
+            return new UpdateBookQuantityInBasketRequest(
+                    updateBookQuantity.getCartId(), updateBookQuantity.getProductId(), productCart.getQuantity()
+            );
         } else {
-            throw new IllegalArgumentException("Product count exceeded");
+            throw new BusinessException("Product count exceeded");
         }
     }
 
@@ -117,7 +126,7 @@ public class CartServiceImpl implements CartService {
         Product product = productService.getBookById(productId);
         Cart cart = findCartById(cartId);
         ProductCart productCart = productCartRepository.findByCartAndProduct(cart, product)
-                .orElseThrow(() -> new RuntimeException("ProductCart not found"));
+                .orElseThrow(() -> new EntityNotFoundException("ProductCart not found"));
 
         cart.getProductsCarts().remove(productCart);
 
@@ -130,18 +139,18 @@ public class CartServiceImpl implements CartService {
                 cart.setAllPrice(BigDecimal.valueOf(productCartRepository.findBooksByBasket(cart)));
             }
         } else {
-            throw new IllegalArgumentException("Delete product failed");
+            throw new BusinessException("Delete product failed");
         }
     }
 
     @Transactional
     @Override
-    public void toDoOrdersInCartByQuantity(Long cartId, Long productId) {
-        Cart cart = findCartById(cartId);
-        Order order = orderService.getOrderById(cartId);
-        Product product = productService.getBookById(productId);
+    public Product toDoOrdersInCartByQuantity(OrdersInTheCartByQuantityDataDtoRequest dataDtoRequest) {
+        Cart cart = findCartById(dataDtoRequest.getCartId());
+        Order order = orderService.getOrderById(dataDtoRequest.getCartId());
+        Product product = productService.getBookById(dataDtoRequest.getProductId());
         ProductCart productCart = productCartRepository.findByCartAndProduct(cart, product)
-                .orElseThrow(() -> new RuntimeException("ProductCart not found")
+                .orElseThrow(() -> new EntityNotFoundException("ProductCart not found")
                 );
 
         // список всех заказов для сохранения в базу данных
@@ -163,10 +172,11 @@ public class CartServiceImpl implements CartService {
             cart.setAllPrice(BigDecimal.valueOf(productCartRepository.findBooksByBasket(cart)));
         }
 
-        // проверяет, если колличество книг менше 1-го, тогда делается статус неактивным
+        // проверяет, если количество книг меньше 1-го, тогда делается статус неактивным
         if (product.getCount() <= 0) {
             product.setStatus(Status.INACTIVE);
         }
-        removeProductInCart(cartId, product.getId());
+        removeProductInCart(dataDtoRequest.getCartId(), product.getId());
+        return product;
     }
 }

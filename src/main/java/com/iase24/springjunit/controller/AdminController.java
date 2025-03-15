@@ -1,6 +1,10 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.*;
+import com.iase24.springjunit.dto.DescriptionDataDTO;
+import com.iase24.springjunit.dto.FaqAnswerDTO;
+import com.iase24.springjunit.dto.ProductUpdateDTO;
+import com.iase24.springjunit.dto.UpdateDeliveryDTO;
+import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
 import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
 import com.iase24.springjunit.dto.response.CommonExceptionResponse;
@@ -9,6 +13,11 @@ import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.facade.AdminFacade;
+import com.iase24.springjunit.service.AdminService;
+import com.iase24.springjunit.service.OrderService;
+import com.iase24.springjunit.service.ProductService;
+import com.iase24.springjunit.service.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,12 +26,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -33,15 +50,19 @@ import java.util.Optional;
 public class AdminController {
 
     private final AdminFacade adminFacade;
+    private final AdminService adminService;
+    private final ProductService productService;
+    private final UserService userService;
+    private final OrderService orderService;
 
     /**
-     * Добавление коментария на заданный пользователем вопрос
+     * Добавление комментария на заданный пользователем вопрос
      *
      * @return JSON answer
      */
     @Operation(summary = "Задать вопрос",
             description = """
-                    По ID FAQ написать вопрос.
+                    ```По ID FAQ написать вопрос.```
                     """,
             responses = {
                     @ApiResponse(responseCode = "200", description = "ОК",
@@ -54,8 +75,8 @@ public class AdminController {
                             })
             })
     @PutMapping("/answer/faqId")
-    public FaqAnswerDTO answerForFaq(@RequestBody FaqAnswerDTO answer) {
-        return adminFacade.answerForFaq(answer);
+    public ResponseEntity<FaqAnswerDTO> answerForFaq(@RequestBody FaqAnswerDTO answer) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(adminFacade.answerForFaq(answer));
     }
 
     /**
@@ -65,7 +86,7 @@ public class AdminController {
      */
     @Operation(summary = "Удаление FAQ",
             description = """
-                    По ID FAQ и category ID удалить FAQ.
+                    ```По ID FAQ и category ID удалить FAQ.```
                     """,
             responses = {
                     @ApiResponse(responseCode = "200", description = "ОК",
@@ -78,11 +99,12 @@ public class AdminController {
                             })
             })
     @DeleteMapping("/categoryId/{categoryId}/faqId/{faqId}")
-    public ResponseEntity<String> deleteFaq(
+    public ResponseEntity<?> deleteFaq(
             @PathVariable("categoryId") Long categoryId,
             @PathVariable("faqId") Long faqId
     ) {
-        return adminFacade.deleteFaq(categoryId, faqId);
+        adminService.deleteFaq(categoryId, faqId);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -91,18 +113,18 @@ public class AdminController {
      * @return JSON questions
      */
     @GetMapping("/faq/NotRead")
-    public List<Faq> getFaqQuestionNotRead() {
-        return adminFacade.getFaqQuestionNotRead();
+    public ResponseEntity<List<Faq>> getFaqQuestionNotRead() {
+        return ResponseEntity.ok(adminFacade.getFaqQuestionNotRead());
     }
 
     /**
-     * Добавление админом описания категориипо названию категории
+     * Добавление админом описания категории по названию категории
      *
      * @return JSON description
      */
     @Operation(summary = "Добавление описания категории.",
             description = """
-                    В теле запроса необходимо указать название категории.
+                    ```В теле запроса необходимо указать название категории.```
                     """,
             responses = {
                     @ApiResponse(responseCode = "200", description = "ОК",
@@ -126,19 +148,32 @@ public class AdminController {
      *
      * @return JSON created products
      */
+    @Operation(
+            summary = "Добавление новых книг на склад.",
+            description = """
+                    ```В теле запроса необходимо в список добавить книгу(и).```
+                    """
+    )
     @PostMapping("/newBooks")
-    public List<Product> createNewBook(@RequestBody List<Product> product) {
-        return adminFacade.createNewBook(product);
+    public ResponseEntity<List<Product>> createNewBook(@RequestBody List<Product> product) {
+        productService.createNewBook(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
     /**
-     * Добавление колличества книги на складе
+     * Добавление количества книги на складе
      *
      * @return productUpdateDTO
      */
+    @Operation(
+            summary = "Добавление(уменьшение) количества книги на складе.",
+            description = """
+                    ```В теле запроса необходимо прописать обновить count книг.```
+                    """
+    )
     @PutMapping("/bookCount")
-    public ProductUpdateDTO updateBookCount(@RequestBody ProductUpdateDTO productUpdateDTO) {
-        return adminFacade.updateBookCount(productUpdateDTO);
+    public ResponseEntity<ProductUpdateDTO> updateBookCount(@RequestBody ProductUpdateDTO productUpdateDTO) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(productService.updateBookCount(productUpdateDTO));
     }
 
 //=======================================================User===========================================================
@@ -148,9 +183,15 @@ public class AdminController {
      *
      * @return JSON all user
      */
+    @Operation(
+            summary = "Выводит всех зарегистрированных пользователей.",
+            description = """
+                    ```Показывает всех зарегистрированных пользователей.```
+                    """
+    )
     @GetMapping("/allUsers")
-    public List<UserDataDTO> getAllUsers() {
-        return adminFacade.getAllUsers();
+    public ResponseEntity<List<UserDataDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     /**
@@ -158,9 +199,15 @@ public class AdminController {
      *
      * @return user with order
      */
+    @Operation(
+            summary = "Вывод пользователя с заказами по имени.",
+            description = """
+                    ```В параметре необходимо указать имя пользователя.```
+                    """
+    )
     @GetMapping("/cartByUser")
-    public Order getCartByUser(@RequestParam("username") String username) {
-        return adminFacade.getCartByUser(username);
+    public ResponseEntity<Order> getCartByUser(@RequestParam("username") String username) {
+        return ResponseEntity.ok(orderService.getOrderByLogin(username));
     }
 
     /**
@@ -168,14 +215,21 @@ public class AdminController {
      *
      * @return user by id
      */
+    @Operation(
+            summary = "Найти пользователя по ID.",
+            description = """
+                    ```В путь необходимо ввести ID пользователя.```
+                    """
+    )
     @GetMapping("/user/{id}")
-    public Optional<UserDataDTO> getUserById(@PathVariable("id") Long id) {
-        return adminFacade.getUserById(id);
+    public ResponseEntity<UserDataDTO> getUserById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
+    @Hidden
     @PutMapping("/updateRole/{userId}")
     public void updateUserRole(@PathVariable("userId") Long userId) {
-        adminFacade.updateUserRole(userId);
+        adminService.updateUserRolesByUsername(userId);
     }
 
 //=======================================================Order===========================================================
@@ -185,9 +239,15 @@ public class AdminController {
      *
      * @return all orders
      */
+    @Operation(
+            summary = "Показать все зарегистрированные заказы.",
+            description = """
+                    ```Показать все зарегистрированные заказы.```
+                    """
+    )
     @GetMapping("/allCarts")
-    public List<Order> getCarts() {
-        return adminFacade.getCarts();
+    public ResponseEntity<List<Order>> getCarts() {
+        return ResponseEntity.ok(orderService.getOrders());
     }
 
 //=======================================================Tree===========================================================
@@ -197,10 +257,16 @@ public class AdminController {
      *
      * @return JSON
      */
+    @Operation(
+            summary = "Создание списка категорий.",
+            description = """
+                    ```В теле запроса необходимо внести в список категорию(и).```
+                    """
+    )
     @PostMapping("/createCategory")
-    public List<Node> createNewCategory(@RequestBody List<Node> node) {
-
-        return adminFacade.createNewCategory(node);
+    public ResponseEntity<List<Node>> createNewCategory(@RequestBody List<Node> node) {
+        productService.createNewCategory(node);
+        return ResponseEntity.status(HttpStatus.CREATED).body(node);
     }
 
     /**
@@ -208,7 +274,7 @@ public class AdminController {
      */
     @Operation(summary = "Добавление дочерней категории в родительскую.",
             description = """
-                    В теле запроса необходимо указать ID дочерней категории и родительской.
+                    ```В теле запроса необходимо указать ID дочерней категории и родительской.```
                     """,
             responses = {
                     @ApiResponse(responseCode = "200", description = "ОК",
@@ -221,8 +287,9 @@ public class AdminController {
                             })
             })
     @PutMapping("/add-child-node/to/parent-node")
-    public void addChildNodeToParent(@RequestBody ChildrenCategoryToParentDataDtoRequest request) {
-        adminFacade.addChildNodeToParent(request);
+    public ResponseEntity<Void> addChildNodeToParent(@RequestBody ChildrenCategoryToParentDataDtoRequest request) {
+        productService.addChildNodeToParent(request);
+        return ResponseEntity.accepted().build();
     }
 
     /**
@@ -230,7 +297,7 @@ public class AdminController {
      */
     @Operation(summary = "Добавление продукта в категорию.",
             description = """
-                    В теле запроса необходимо указать IDs продукта и категории.
+                    ```В теле запроса необходимо указать IDs продукта и категории.```
                     """,
             responses = {
                     @ApiResponse(responseCode = "200", description = "ОК",
@@ -243,15 +310,22 @@ public class AdminController {
                             })
             })
     @PutMapping("/add-book-to-category")
-    public void addBookInCategory(@RequestBody BookToCategoryDataDtoRequest request) {
-        adminFacade.addBookInCategory(request);
+    public ResponseEntity<Void> addBookInCategory(@RequestBody BookToCategoryDataDtoRequest request) {
+        productService.addBookInCategory(request);
+        return ResponseEntity.accepted().build();
     }
 
     /**
-     * Добавление продуктов в каатегорию по названию категории
+     * Добавление продуктов в категорию по названию категории
      *
      * @return ResponseEntity
      */
+    @Operation(
+            summary = "Добавление продуктов в категорию по имени категории.",
+            description = """
+                    ```Необходимо в теле запроса написать имя категории.```
+                    """
+    )
     @PutMapping("/addBooks/inCategory/name")
     public ResponseEntity<?> addBooksInCategoryByName(@RequestParam("categoryName") String categoryName) {
         return adminFacade.addBooksInCategoryByName(categoryName);
@@ -262,16 +336,28 @@ public class AdminController {
     /**
      * Обновление отчета о доставке (1,2,3)
      * 1. Отчет о доставке на пункт пропуска
-     * 2. Еслии пользователь забрал продукт
+     * 2. Если пользователь забрал продукт
      * 3. Отмена заказа
      *
      * @return ResponseEntity
      */
+    @Operation(
+            summary = "Обновление отчета о доставке.",
+            description = """
+                    ```
+                    Обновление отчета о доставке (1,2,3)
+                            * 1. Отчет о доставке на пункт пропуска
+                            * 2. Если пользователь забрал продукт
+                            * 3. Отмена заказа
+                    ```
+                    """
+    )
     @PutMapping("/downloadStatusDelivery/cartId/{cartId}")
-    public ResponseEntity<?> deliveryReportController(
+    public ResponseEntity<Void> deliveryReportController(
             @PathVariable("cartId") Long cartId,
             @RequestBody UpdateDeliveryDTO updateDeliveryDTO
     ) {
-        return adminFacade.deliveryReportController(cartId, updateDeliveryDTO);
+        adminFacade.deliveryReportController(cartId, updateDeliveryDTO);
+        return ResponseEntity.accepted().build();
     }
 }
