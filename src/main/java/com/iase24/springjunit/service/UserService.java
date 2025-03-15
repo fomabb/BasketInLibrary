@@ -11,7 +11,7 @@ public interface UserService {
 
     Optional<UserDataDTO> login(String email, String password);
 
-    Optional<UserDataDTO> getUserById(Long id);
+    UserDataDTO getUserById(Long id);
 
     UserDataDTO createNewUser(CreateUserDTO createUserDTO);
 

@@ -10,6 +10,7 @@ import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.facade.CartFacade;
 import com.iase24.springjunit.facade.UserFacade;
 import com.iase24.springjunit.service.CartService;
+import com.iase24.springjunit.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,7 @@ public class UserController {
     private final UserFacade userFacade;
     private final CartFacade cartFacade;
     private final CartService cartService;
+    private final UserService userService;
 
     /**
      * Регистрация нового пользователя
@@ -55,8 +57,8 @@ public class UserController {
      * @return userDTO
      */
     @GetMapping("/{id}")
-    public Optional<UserDataDTO> getUserById(@PathVariable("id") Long id) {
-        return userFacade.getUserById(id);
+    public UserDataDTO getUserById(@PathVariable("id") Long id) {
+        return userService.getUserById(id);
     }
 
     //TODO

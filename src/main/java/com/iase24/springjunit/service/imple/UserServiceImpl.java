@@ -6,6 +6,7 @@ import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Faq;
 import com.iase24.springjunit.exception.ValidationException;
+import com.iase24.springjunit.exceptionhandler.exceptions.BusinessException;
 import com.iase24.springjunit.mapper.user.CreateUserMapper;
 import com.iase24.springjunit.mapper.user.UserMapper;
 import com.iase24.springjunit.repository.DescriptionCategoryRepository;
@@ -15,6 +16,7 @@ import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.service.UserService;
 import com.iase24.springjunit.validator.CreateUserValidator;
 import com.iase24.springjunit.validator.ValidationResult;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
@@ -53,16 +55,17 @@ public class UserServiceImpl implements UserService {
         }
         var userEntity = createUserMapper.map(createUserDTO);
         userEntity.setPassword(userEntity.getPassword());
-        userEntity.setRoles(List.of(roleRepository.findByName("ROLE_USER").get()));
+        userEntity.setRoles(List.of(roleRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new BusinessException("Not found"))));
         userRepository.save(userEntity);
         return userMapper.map(userEntity);
     }
 
     @Override
-    public Optional<UserDataDTO> getUserById(Long id) {
-        return Optional.ofNullable(userRepository.findById(id)
+    public UserDataDTO getUserById(Long id) {
+        return userRepository.findById(id)
                 .map(userMapper::map)
-                .orElseThrow(() -> new IllegalArgumentException("User with id: " + id + " not found")));
+                .orElseThrow(() -> new EntityNotFoundException("User with id: " + id + " not found"));
     }
 
     @Override

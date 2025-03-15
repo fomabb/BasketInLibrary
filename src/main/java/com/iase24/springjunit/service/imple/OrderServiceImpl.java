@@ -162,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderByLogin(String username) {
-        return orderRepository.findCartByUser_Username(username)
+        return orderRepository.findOrderByUser_Username(username)
                 .orElseThrow(() -> new EntityNotFoundException("User with name: " + username + " not found"));
     }
 }

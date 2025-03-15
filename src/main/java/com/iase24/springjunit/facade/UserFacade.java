@@ -22,10 +22,6 @@ public class UserFacade {
         return createUserDTO;
     }
 
-    public Optional<UserDataDTO> getUserById(Long id) {
-        return userService.getUserById(id);
-    }
-
     //TODO
     public Optional<UserDataDTO> getCartByUserId(Long userId) {
         return userService.getCartByUserId(userId);

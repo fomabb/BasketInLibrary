@@ -13,6 +13,7 @@ import com.iase24.springjunit.repository.NodeRepository;
 import com.iase24.springjunit.repository.UserRepository;
 import com.iase24.springjunit.security.service.RoleService;
 import com.iase24.springjunit.service.AdminService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,7 +78,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void updateUserRolesByUsername(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User id: " + userId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User id: " + userId + " not found"));
         Role roleAdmin = roleService.getAdminRole();
         user.getRoles().add(roleAdmin);
         userRepository.save(user);
