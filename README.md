@@ -1,5 +1,28 @@
 # Shop Book
 
+# Запуск приложения с помощью Docker
+
+Эта инструкция поможет вам запустить приложение в контейнере Docker.
+
+## Предварительные требования
+
+1. **Docker**: Убедитесь, что Docker установлен на вашем компьютере. Вы можете скачать и установить его с [официального сайта Docker].
+
+## Скачивание файла `docker-compose.yml`
+
+Для удобства вы можете скачать файл `docker-compose.yml`, который содержит необходимые настройки для запуска приложения.
+
+[Скачать docker-compose.yml](https://raw.githubusercontent.com/fomabb/BasketInLibrary/main/docker-compose.yml)
+
+## Шаги для запуска приложения
+
+### 1. Запуск приложения с помощью Docker Compose
+
+После скачивания файла `docker-compose.yml`, запустите приложение с помощью следующей команды:
+
+```bash
+docker-compose up
+
 # RESTful Web-application is written using the following technologies:
 
 - Maven
