@@ -1,5 +1,23 @@
 # Shop Book
 
+# RESTful Web-application is written using the following technologies:
+
+- Maven
+- Hibernate
+- JPA
+- PostgresSQL DB
+- Spring Boot
+- Spring security
+
+### Short description of the project
+
+- Standalone application providing REST API
+
+### Prerequisites:
+
+- Java 21
+- PostgresSQL
+
 # Запуск приложения с помощью Docker
 
 Эта инструкция поможет вам запустить приложение в контейнере Docker.
@@ -22,24 +40,6 @@
 
 ```bash
 docker-compose up
-
-# RESTful Web-application is written using the following technologies:
-
-- Maven
-- Hibernate
-- JPA
-- PostgresSQL DB
-- Spring Boot
-- Spring security
-
-### Short description of the project
-
-- Standalone application providing REST API
-
-### Prerequisites:
-
-- Java 21
-- PostgresSQL
 
 # Data model
 
