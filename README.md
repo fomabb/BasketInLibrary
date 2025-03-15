@@ -30,7 +30,7 @@
 
 Для удобства вы можете скачать файл `docker-compose.yml`, который содержит необходимые настройки для запуска приложения.
 
-[![Скачать docker-compose.yml](https://img.shields.io/badge/Скачать%20docker--compose.yml-blue)](https://raw.githubusercontent.com/fomabb/BasketInLibrary/main/docker-compose.yml)
+[![Скачать docker-compose.yml](https://img.shields.io/badge/Скачать%20docker--compose.yml-blue)]([https://raw.githubusercontent.com/fomabb/BasketInLibrary/main/docker-compose.yml](https://github.com/fomabb/BasketInLibrary/blob/dev/docker-compose.yml))
 
 ## Шаги для запуска приложения
 
