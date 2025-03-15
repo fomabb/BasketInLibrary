@@ -1,29 +1,19 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.CreateUserDTO;
-import com.iase24.springjunit.dto.FaqQuestionDTO;
-import com.iase24.springjunit.dto.ProductInCartDataDTO;
-import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
-import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.*;
 import com.iase24.springjunit.entities.Cart;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.facade.CartFacade;
 import com.iase24.springjunit.facade.UserFacade;
+import com.iase24.springjunit.service.OrderService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +28,7 @@ public class UserController {
 
     private final UserFacade userFacade;
     private final CartFacade cartFacade;
+    private final OrderService orderService;
 
     /**
      * Регистрация нового пользователя
@@ -77,7 +68,7 @@ public class UserController {
             @PathVariable("cartId") Long cartId,
             @PathVariable("bookId") Long bookId
     ) {
-        return userFacade.addBookInCart(cartId, bookId);
+        return orderService.addProductInOrder(cartId, bookId);
     }
 
     /**

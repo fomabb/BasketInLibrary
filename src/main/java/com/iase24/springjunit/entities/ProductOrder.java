@@ -3,16 +3,7 @@ package com.iase24.springjunit.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iase24.springjunit.entities.enumerated.DeliveryReport;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -45,7 +36,7 @@ public class ProductOrder {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "delivery_report")
-    DeliveryReport deliveryReport;
+    private DeliveryReport deliveryReport;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     @Column(name = "creation_time")

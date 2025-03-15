@@ -1,10 +1,6 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.DescriptionDataDTO;
-import com.iase24.springjunit.dto.FaqAnswerDTO;
-import com.iase24.springjunit.dto.ProductUpdateDTO;
-import com.iase24.springjunit.dto.UpdateDeliveryDTO;
-import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.*;
 import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
 import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
 import com.iase24.springjunit.dto.response.CommonExceptionResponse;
@@ -23,15 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -217,7 +205,6 @@ public class AdminController {
 
     /**
      * Добавление дочерней категории в родительскую
-     *
      */
     @Operation(summary = "Добавление дочерней категории в родительскую.",
             description = """
@@ -240,7 +227,6 @@ public class AdminController {
 
     /**
      * Добавление книг в категорию
-     *
      */
     @Operation(summary = "Добавление продукта в категорию.",
             description = """

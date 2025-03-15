@@ -21,7 +21,7 @@ import java.util.Optional;
 public class UserFacade {
 
     private final UserServiceImpl userService;
-    private final OrderServiceImpl cartService;
+    private final OrderServiceImpl orderService;
     private final ProductOrderService productOrderService;
 
     public CreateUserDTO createNewUser(CreateUserDTO createUserDTO) {
@@ -38,18 +38,14 @@ public class UserFacade {
         return userService.getCartByUserId(userId);
     }
 
-//===========================================Order=======================================================================
-
-    public Order addBookInCart(Long cartId, Long bookId) {
-        return cartService.addProductInOrder(cartId, bookId);
-    }
+//===========================================Order======================================================================
 
     public Order getCartById(Long cartId) {
-        return cartService.getOrderById(cartId);
+        return orderService.getOrderById(cartId);
     }
 
     public ResponseEntity<?> removeFromCart(Long cartId, Long bookId) {
-        cartService.removeFromOrder(cartId, bookId);
+        orderService.removeFromOrder(cartId, bookId);
         return new ResponseEntity<>(
                 "Product with id " + bookId + " remove in order with id " + cartId
                 , HttpStatus.OK

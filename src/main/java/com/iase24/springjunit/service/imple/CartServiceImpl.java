@@ -2,12 +2,7 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.ProductInCartDataDTO;
 import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
-import com.iase24.springjunit.entities.Cart;
-import com.iase24.springjunit.entities.Order;
-import com.iase24.springjunit.entities.Product;
-import com.iase24.springjunit.entities.ProductCart;
-import com.iase24.springjunit.entities.ProductOrder;
-import com.iase24.springjunit.entities.Status;
+import com.iase24.springjunit.entities.*;
 import com.iase24.springjunit.entities.enumerated.DeliveryReport;
 import com.iase24.springjunit.repository.CartRepository;
 import com.iase24.springjunit.repository.ProductCartRepository;
