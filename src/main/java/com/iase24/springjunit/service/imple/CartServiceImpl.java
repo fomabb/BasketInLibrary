@@ -1,7 +1,7 @@
 package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.ProductInCartDataDTO;
-import com.iase24.springjunit.dto.UpdateBookQuantityInBasket;
+import com.iase24.springjunit.dto.UpdateBookQuantityInBasketRequest;
 import com.iase24.springjunit.dto.request.CartProductDataDtoRequest;
 import com.iase24.springjunit.dto.request.OrdersInTheCartByQuantityDataDtoRequest;
 import com.iase24.springjunit.entities.Cart;
@@ -88,11 +88,9 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     @Override
-    public UpdateBookQuantityInBasket updateQuantityInCart(
-            Long basketId, Long productId, UpdateBookQuantityInBasket updateBookQuantity
-    ) {
-        Cart cart = findCartById(basketId);
-        Product product = productService.getBookById(productId);
+    public UpdateBookQuantityInBasketRequest updateQuantityInCart(UpdateBookQuantityInBasketRequest updateBookQuantity) {
+        Cart cart = findCartById(updateBookQuantity.getCartId());
+        Product product = productService.getBookById(updateBookQuantity.getProductId());
 
         // Найти существующий ProductCart для данной корзины и книги
         ProductCart productCart = productCartRepository.findByCartAndProduct(cart, product)
@@ -114,7 +112,9 @@ public class CartServiceImpl implements CartService {
 
             // сохраняем изменения в базе данных
             productCartRepository.save(productCart);
-            return new UpdateBookQuantityInBasket(productCart.getQuantity());
+            return new UpdateBookQuantityInBasketRequest(
+                    updateBookQuantity.getCartId(), updateBookQuantity.getProductId(), productCart.getQuantity()
+            );
         } else {
             throw new BusinessException("Product count exceeded");
         }

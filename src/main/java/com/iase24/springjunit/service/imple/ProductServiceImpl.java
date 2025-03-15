@@ -4,6 +4,7 @@ import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
 import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
+import com.iase24.springjunit.dto.request.ProductQuantityDataDtoRequest;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
@@ -98,10 +99,10 @@ public class ProductServiceImpl implements ProductService {
     //TODO
     @Override
     @Transactional
-    public void updateBookCounter(Long id, int count) {
-        Product product = getBookById(id);
+    public void updateBookCounter(ProductQuantityDataDtoRequest dataDtoRequest) {
+        Product product = getBookById(dataDtoRequest.getProductId());
         if (product != null) {
-            if (count <= 0) {
+            if (dataDtoRequest.getQuantity() <= 0) {
                 product.setStatus(Status.INACTIVE);
             } else {
                 product.setStatus(Status.ACTIVE);
@@ -153,9 +154,7 @@ public class ProductServiceImpl implements ProductService {
     public void addBooksInCategoryByName(String categoryName) {
         List<Product> products = productRepository.findBooksByCategoryName(categoryName);
         Node node = nodeRepository.findByCategory(categoryName);
-        products.forEach(book -> {
-            book.setNode(node);
-        });
+        products.forEach(book -> book.setNode(node));
         productRepository.saveAllAndFlush(products);
     }
 
