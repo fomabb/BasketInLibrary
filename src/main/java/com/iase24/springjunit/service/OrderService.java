@@ -8,7 +8,7 @@ import java.util.List;
 public interface OrderService {
 
     /**
-     *Необходимо создать DTO для всех методв
+     * Необходимо создать DTO для всех методв
      */
 
     Order addOrder(Order order);

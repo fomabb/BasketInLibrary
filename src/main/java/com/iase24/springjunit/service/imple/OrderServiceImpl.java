@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.time.LocalDateTime.now;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -89,15 +91,18 @@ public class OrderServiceImpl implements OrderService {
             if (product.getCount() <= 0) {
                 product.setStatus(Status.INACTIVE);
             }
-            ProductOrder productOrder = new ProductOrder();
-            productOrder.setProduct(product);
-            productOrder.setOrder(order);
-            productOrder.setCreationTime(LocalDateTime.now());
-            productOrder.setDeliveryReport(DeliveryReport.HALFWAY_THROUGH);
+
+            ProductOrder productOrder = ProductOrder.builder()
+                    .product(product)
+                    .order(order)
+                    .creationTime(now())
+                    .deliveryReport(DeliveryReport.HALFWAY_THROUGH)
+                    .build();
+
             productOrderRepository.saveAndFlush(productOrder);
             return order;
         } else {
-            throw new IllegalArgumentException("Product with id " + bookId + " not found");
+            throw new EntityNotFoundException(String.format("Product with ID %s not found", bookId));
         }
     }
 

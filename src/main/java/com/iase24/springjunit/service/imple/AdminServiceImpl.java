@@ -2,11 +2,7 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.DescriptionDataDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
-import com.iase24.springjunit.entities.DescriptionCategory;
-import com.iase24.springjunit.entities.Faq;
-import com.iase24.springjunit.entities.Node;
-import com.iase24.springjunit.entities.Role;
-import com.iase24.springjunit.entities.User;
+import com.iase24.springjunit.entities.*;
 import com.iase24.springjunit.repository.DescriptionCategoryRepository;
 import com.iase24.springjunit.repository.FaqRepository;
 import com.iase24.springjunit.repository.NodeRepository;
