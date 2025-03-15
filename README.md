@@ -42,7 +42,7 @@
 docker-compose up
 ```
 
-### После запуска проекта, можно открыть Swagger
+### После запуска приложения, можно запустить Swagger
 
 [![Запустить swagger](https://img.shields.io/badge/open--swagger-ui-green)](http://localhost:8084/swagger-ui/index.html)
 
