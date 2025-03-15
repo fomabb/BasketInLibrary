@@ -91,7 +91,7 @@ public class ProductOrderServiceImpl implements ProductOrderService {
             return productOrderRepository.findAllByOrder_Id(cartId)
                     .stream()
                     .filter(bookCart -> bookCart.getDeliveryReport().equals(DeliveryReport.RECEIVING)
-                            || bookCart.getDeliveryReport().equals(DeliveryReport.CANCELLED)
+                                        || bookCart.getDeliveryReport().equals(DeliveryReport.CANCELLED)
                     )
                     .collect(Collectors.toList());
         } else {
