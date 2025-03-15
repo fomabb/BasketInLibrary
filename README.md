@@ -1,4 +1,4 @@
-# This project is pattern store
+# BOOKSTORE
 
 # RESTful Web-application is written using the following technologies:
 
