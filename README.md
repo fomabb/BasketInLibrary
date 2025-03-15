@@ -42,6 +42,10 @@
 docker-compose up
 ```
 
+### My application requests in Postman
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/21948648/2sA3JFCk5E)
+
 # Data model
 
 ## ER diagram for the data model
@@ -610,8 +614,3 @@ ___Response answer___
   }
 }
 ```
-
-### My application requests in Postman
-
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/21948648/2sA3JFCk5E)
-  
