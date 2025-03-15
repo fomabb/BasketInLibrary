@@ -8,7 +8,6 @@ import com.iase24.springjunit.entities.enumerated.DeliveryReport;
 import com.iase24.springjunit.exception.EntityNotFoundException;
 import com.iase24.springjunit.mapper.book_cart.BookCartMapper;
 import com.iase24.springjunit.repository.ProductOrderRepository;
-import com.iase24.springjunit.repository.ProductRepository;
 import com.iase24.springjunit.service.ProductOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class ProductOrderServiceImpl implements ProductOrderService {
 
     private final ProductOrderRepository productOrderRepository;
     private final BookCartMapper bookCartMapper;
-    private final ProductRepository productRepository;
 
     @Override
     public List<ProductOrderDataDTO> findAllByOrderId(Long cartId) {
@@ -78,20 +76,20 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     }
 
     @Override
-    public List<ProductOrder> findDeliveryReportByOrderId(Long cartId) {
-        return productOrderRepository.findAllByOrder_Id(cartId)
+    public List<ProductOrder> findDeliveryReportByOrderId(Long orderId) {
+        return productOrderRepository.findAllByOrder_Id(orderId)
                 .stream()
                 .filter(bookCart -> bookCart.getStatusDeliveryId() == null || bookCart.getStatusDeliveryId() == 1)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ProductOrder> findArchiveOrdersByCartId(Long cartId) {
-        if (cartId != null) {
-            return productOrderRepository.findAllByOrder_Id(cartId)
+    public List<ProductOrder> findArchiveOrdersByCartId(Long orderId) {
+        if (orderId != null) {
+            return productOrderRepository.findAllByOrder_Id(orderId)
                     .stream()
                     .filter(bookCart -> bookCart.getDeliveryReport().equals(DeliveryReport.RECEIVING)
-                                        || bookCart.getDeliveryReport().equals(DeliveryReport.CANCELLED)
+                            || bookCart.getDeliveryReport().equals(DeliveryReport.CANCELLED)
                     )
                     .collect(Collectors.toList());
         } else {
@@ -99,8 +97,7 @@ public class ProductOrderServiceImpl implements ProductOrderService {
         }
     }
 
-
-    public ProductOrder findByCartId(Long cartId) {
+    private ProductOrder findByCartId(Long cartId) {
         return productOrderRepository.findById(cartId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Product order with id %s not found", cartId)));
     }

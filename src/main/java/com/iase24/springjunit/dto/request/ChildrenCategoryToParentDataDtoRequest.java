@@ -9,6 +9,5 @@ import lombok.Getter;
 public class ChildrenCategoryToParentDataDtoRequest {
 
     private Long childrenId;
-
     private ParentNodeDataDto parentId;
 }

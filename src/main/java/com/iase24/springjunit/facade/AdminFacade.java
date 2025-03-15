@@ -1,15 +1,22 @@
 package com.iase24.springjunit.facade;
 
-import com.iase24.springjunit.dto.*;
+import com.iase24.springjunit.dto.DescriptionDataDTO;
+import com.iase24.springjunit.dto.FaqAnswerDTO;
+import com.iase24.springjunit.dto.ProductUpdateDTO;
+import com.iase24.springjunit.dto.UpdateDeliveryDTO;
+import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
 import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
 import com.iase24.springjunit.entities.Faq;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.entities.Product;
-import com.iase24.springjunit.repository.ProductOrderRepository;
 import com.iase24.springjunit.repository.ProductRepository;
-import com.iase24.springjunit.service.*;
+import com.iase24.springjunit.service.AdminService;
+import com.iase24.springjunit.service.OrderService;
+import com.iase24.springjunit.service.ProductOrderService;
+import com.iase24.springjunit.service.ProductService;
+import com.iase24.springjunit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +35,6 @@ public class AdminFacade {
     private final ProductOrderService productOrderService;
     private final ProductService productService;
     private final ProductRepository productRepository;
-    private final ProductOrderRepository productOrderRepository;
 
     public FaqAnswerDTO answerForFaq(FaqAnswerDTO answer) {
         adminService.answerForFaq(answer);

@@ -1,6 +1,10 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.*;
+import com.iase24.springjunit.dto.DescriptionDataDTO;
+import com.iase24.springjunit.dto.FaqAnswerDTO;
+import com.iase24.springjunit.dto.ProductUpdateDTO;
+import com.iase24.springjunit.dto.UpdateDeliveryDTO;
+import com.iase24.springjunit.dto.UserDataDTO;
 import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
 import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
 import com.iase24.springjunit.dto.response.CommonExceptionResponse;
@@ -19,7 +23,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +47,7 @@ public class AdminController {
     private final AdminFacade adminFacade;
 
     /**
-     * Добавление коментария на заданный пользователем вопрос
+     * Добавление комментария на заданный пользователем вопрос
      *
      * @return JSON answer
      */
@@ -96,7 +108,7 @@ public class AdminController {
     }
 
     /**
-     * Добавление админом описания категориипо названию категории
+     * Добавление админом описания категории по названию категории
      *
      * @return JSON description
      */
@@ -132,7 +144,7 @@ public class AdminController {
     }
 
     /**
-     * Добавление колличества книги на складе
+     * Добавление количества книги на складе
      *
      * @return productUpdateDTO
      */
@@ -262,7 +274,7 @@ public class AdminController {
     /**
      * Обновление отчета о доставке (1,2,3)
      * 1. Отчет о доставке на пункт пропуска
-     * 2. Еслии пользователь забрал продукт
+     * 2. Если пользователь забрал продукт
      * 3. Отмена заказа
      *
      * @return ResponseEntity
