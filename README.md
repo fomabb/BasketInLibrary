@@ -29,6 +29,7 @@
 ## Скачивание файла `docker-compose.yml`
 
 Для удобства вы можете скачать файл `docker-compose.yml`, который содержит необходимые настройки для запуска приложения.
+
 [![Скачать docker-compose.yml](https://img.shields.io/badge/Скачать%20docker--compose.yml-blue)](https://raw.githubusercontent.com/fomabb/BasketInLibrary/main/docker-compose.yml)
 
 ## Шаги для запуска приложения
