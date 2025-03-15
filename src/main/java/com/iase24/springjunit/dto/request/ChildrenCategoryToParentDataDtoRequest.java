@@ -1,6 +1,6 @@
 package com.iase24.springjunit.dto.request;
 
-import com.iase24.springjunit.entities.Node;
+import com.iase24.springjunit.dto.ParentNodeDataDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,5 +9,6 @@ import lombok.Getter;
 public class ChildrenCategoryToParentDataDtoRequest {
 
     private Long childrenId;
-    private Node parentNode;
+
+    private ParentNodeDataDto parentId;
 }

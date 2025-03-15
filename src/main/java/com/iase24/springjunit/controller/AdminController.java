@@ -112,6 +112,20 @@ public class AdminController {
      *
      * @return JSON description
      */
+    @Operation(summary = "Добавление описания категории.",
+            description = """
+                    В теле запроса необходимо указать название категории.
+                    """,
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "ОК",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = DescriptionDataDTO.class)))
+                            }),
+                    @ApiResponse(responseCode = "500", description = "Ошибка сервера",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommonExceptionResponse.class))
+                            })
+            })
     @PostMapping("/create/descriptionByName")
     public ResponseEntity<String> createDescriptionByCategoryName(@RequestBody DescriptionDataDTO descriptionCategory) {
         return adminFacade.createDescriptionByCategoryName(descriptionCategory);
@@ -205,6 +219,20 @@ public class AdminController {
      * Добавление дочерней категории в родительскую
      *
      */
+    @Operation(summary = "Добавление дочерней категории в родительскую.",
+            description = """
+                    В теле запроса необходимо указать ID дочерней категории и родительской.
+                    """,
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "ОК",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ChildrenCategoryToParentDataDtoRequest.class)))
+                            }),
+                    @ApiResponse(responseCode = "500", description = "Ошибка сервера",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommonExceptionResponse.class))
+                            })
+            })
     @PutMapping("/add-child-node/to/parent-node")
     public void addChildNodeToParent(@RequestBody ChildrenCategoryToParentDataDtoRequest request) {
         adminFacade.addChildNodeToParent(request);
@@ -214,6 +242,20 @@ public class AdminController {
      * Добавление книг в категорию
      *
      */
+    @Operation(summary = "Добавление продукта в категорию.",
+            description = """
+                    В теле запроса необходимо указать IDs продукта и категории.
+                    """,
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "ОК",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = BookToCategoryDataDtoRequest.class)))
+                            }),
+                    @ApiResponse(responseCode = "500", description = "Ошибка сервера",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommonExceptionResponse.class))
+                            })
+            })
     @PutMapping("/add-book-to-category")
     public void addBookInCategory(@RequestBody BookToCategoryDataDtoRequest request) {
         adminFacade.addBookInCategory(request);

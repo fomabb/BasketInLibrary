@@ -130,29 +130,22 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void addChildNodeToParent(ChildrenCategoryToParentDataDtoRequest dtoRequest) {
-        Node node = findNodeById(dtoRequest.getChildrenId());
-        node.setParent(dtoRequest.getParentNode());
+        Node category = findNodeById(dtoRequest.getChildrenId());
+        Node parentNode = findNodeById(dtoRequest.getParentId().getId());
 
-        ChildrenCategoryToParentDataDtoRequest.builder()
-                .childrenId(node.getId())
-                .parentNode(dtoRequest.getParentNode().getParent())
-                .build();
+        category.setParent(parentNode);
 
-        nodeRepository.save(node);
+        nodeRepository.save(category);
     }
 
     @Override
     @Transactional
     public void addBookInCategory(BookToCategoryDataDtoRequest dataDtoRequest) {
-        Product product = getBookById(dataDtoRequest.getBookId());
-        product.setNode(dataDtoRequest.getCategoryId());
+        Product book = getBookById(dataDtoRequest.getBookId());
+        Node categoryId = findNodeById(dataDtoRequest.getCategoryId().getId());
+        book.setNode(categoryId);
 
-        BookToCategoryDataDtoRequest.builder()
-                .bookId(product.getId())
-                .categoryId(dataDtoRequest.getCategoryId().getParent())
-                .build();
-
-        productRepository.saveAndFlush(product);
+        productRepository.saveAndFlush(book);
     }
 
     @Override
