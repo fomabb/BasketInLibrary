@@ -6,7 +6,6 @@ import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
-import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +36,8 @@ public class ProductFacade {
     }
 
 
-    public Optional<Product> getBookByIdStatusActive(Long id, Status status) {
-        return productService.getBookByIdStatusActive(id, status);
+    public Product getBookByIdStatusActive(Long id) {
+        return productService.getBookByIdStatusActive(id);
     }
 
     public ResponseEntity<?> deleteBookFromCart(Long cartId, Long bookId) {

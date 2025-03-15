@@ -7,11 +7,11 @@ import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.ProductOrder;
 import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.entities.enumerated.DeliveryReport;
+import com.iase24.springjunit.repository.OrderRepository;
 import com.iase24.springjunit.repository.ProductOrderRepository;
 import com.iase24.springjunit.repository.ProductRepository;
-import com.iase24.springjunit.repository.OrderRepository;
-import com.iase24.springjunit.service.ProductService;
 import com.iase24.springjunit.service.OrderService;
+import com.iase24.springjunit.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
                 product.setCount(productUpdateDTO.getCount());
             }
             Product updateCount = productRepository.save(product);
-            new ProductUpdateDTO(updateCount.getCount(), updateCount.getStatus());
+            new ProductUpdateDTO(bookId, updateCount.getCount(), updateCount.getStatus());
         } else {
             throw new IllegalArgumentException("Product with id " + bookId + " not found");
         }

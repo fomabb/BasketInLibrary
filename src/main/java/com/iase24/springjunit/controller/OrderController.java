@@ -4,8 +4,10 @@ import com.iase24.springjunit.dto.ProductOrderDataDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.facade.OrderFacade;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,8 @@ import java.util.List;
 @RequestMapping("/api/v1/carts")
 @RequiredArgsConstructor
 @Tag(name = "Заказы", description = "API для управления заказами")
+@SecurityRequirement(name = "bearerAuth")
+@Validated
 public class OrderController {
 
     private final OrderFacade orderFacade;

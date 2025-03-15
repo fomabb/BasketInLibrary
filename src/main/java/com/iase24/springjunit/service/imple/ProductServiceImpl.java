@@ -2,25 +2,30 @@ package com.iase24.springjunit.service.imple;
 
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
+import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
+import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
 import com.iase24.springjunit.entities.Status;
+import com.iase24.springjunit.exceptionhandler.exceptions.BusinessException;
 import com.iase24.springjunit.mapper.book.BookMapper;
-import com.iase24.springjunit.repository.ProductRepository;
-import com.iase24.springjunit.repository.OrderRepository;
 import com.iase24.springjunit.repository.NodeRepository;
+import com.iase24.springjunit.repository.OrderRepository;
+import com.iase24.springjunit.repository.ProductRepository;
 import com.iase24.springjunit.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -32,12 +37,16 @@ public class ProductServiceImpl implements ProductService {
     private final BookMapper bookMapper;
 
     @Override
-    public Optional<Product> getBookByIdStatusActive(Long id, Status status) {
+    public Product getBookByIdStatusActive(Long id) {
 
-        if (status == Status.ACTIVE) {
-            return productRepository.findById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Book with ID %s not found", id)));
+
+        if (product.getStatus().equals(Status.ACTIVE)) {
+            return product;
+        } else {
+            throw new BusinessException(String.format("Book with ID %s is not active", id));
         }
-        return Optional.empty();
     }
 
 
@@ -59,29 +68,31 @@ public class ProductServiceImpl implements ProductService {
     public void createNewBook(List<Product> product) {
         if (product != null) {
             productRepository.saveAllAndFlush(product);
+        } else {
+            throw new EntityNotFoundException("Products not found");
         }
     }
 
     @Override
     public Product getBookById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Product with id " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id %s not found", id)));
     }
 
     @Override
     @Transactional
-    public void updateBookCount(Long id, ProductUpdateDTO productUpdateDTO) {
-        Product product = getBookById(id);
+    public ProductUpdateDTO updateBookCount(ProductUpdateDTO productUpdateDTO) {
+        Product product = getBookById(productUpdateDTO.getId());
         product.setCount(productUpdateDTO.getCount());
         if (product.getCount() > 0) {
             product.setStatus(Status.ACTIVE);
         } else if (product.getCount() == 0) {
             product.setStatus(Status.INACTIVE);
         } else {
-            throw new IllegalArgumentException("IllegalAccessException");
+            throw new BusinessException("Bad request");
         }
         Product updateProduct = productRepository.save(product);
-        new ProductUpdateDTO(updateProduct.getCount(), updateProduct.getStatus());
+        return new ProductUpdateDTO(productUpdateDTO.getId(), updateProduct.getCount(), updateProduct.getStatus());
     }
 
     //TODO
@@ -118,17 +129,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void addChildrenIdInParentId(Long childrenId, Node parentNode) {
-        Node node = findNodeById(childrenId);
-        node.setParent(parentNode);
+    public void addChildNodeToParent(ChildrenCategoryToParentDataDtoRequest dtoRequest) {
+        Node category = findNodeById(dtoRequest.getChildrenId());
+        Node parentNode = findNodeById(dtoRequest.getParentId().getId());
+
+        category.setParent(parentNode);
+
+        nodeRepository.save(category);
     }
 
     @Override
     @Transactional
-    public void addBookInCategory(Long bookId, Node categoryId) {
-        Product product = getBookById(bookId);
-        product.setNode(categoryId);
-        productRepository.saveAndFlush(product);
+    public void addBookInCategory(BookToCategoryDataDtoRequest dataDtoRequest) {
+        Product book = getBookById(dataDtoRequest.getBookId());
+        Node categoryId = findNodeById(dataDtoRequest.getCategoryId().getId());
+        book.setNode(categoryId);
+
+        productRepository.saveAndFlush(book);
     }
 
     @Override
@@ -145,7 +162,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Node findNodeById(Long nodeId) {
         return nodeRepository.findById(nodeId)
-                .orElseThrow(() -> new IllegalArgumentException("Node with id " + nodeId + "not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Node with id " + nodeId + "not found"));
     }
 
     @Override

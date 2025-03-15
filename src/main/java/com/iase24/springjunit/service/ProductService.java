@@ -2,14 +2,14 @@ package com.iase24.springjunit.service;
 
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.dto.ProductUpdateDTO;
+import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
+import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
 import com.iase24.springjunit.entities.DescriptionCategory;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
-import com.iase24.springjunit.entities.Status;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductService {
 
@@ -19,25 +19,24 @@ public interface ProductService {
 
     Product getBookById(Long id);
 
-    void updateBookCount(Long id, ProductUpdateDTO productUpdateDTO);
+    ProductUpdateDTO updateBookCount(ProductUpdateDTO dto);
 
     //TODO
     void updateBookCounter(Long id, int count);
 
-    Optional<Product> getBookByIdStatusActive(Long id, Status status);
-
+    Product getBookByIdStatusActive(Long id);
 
     void deleteBookFromCart(Long cartId, Long bookId);
 
     List<BookDataDTO> search(String text);
 
-    void addBookInCategory(Long bookId, Node categoryId);
+    void addBookInCategory(BookToCategoryDataDtoRequest dataDtoRequest);
 
     void addBooksInCategoryByName(String categoryName);
 
     void createNewCategory(List<Node> node);
 
-    void addChildrenIdInParentId(Long childrenId, Node parentNode);
+    void addChildNodeToParent(ChildrenCategoryToParentDataDtoRequest dataDtoRequest);
 
     Node findNodeById(Long nodeId);
 

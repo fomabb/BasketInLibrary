@@ -16,14 +16,14 @@ import java.util.List;
 @Transactional
 public interface ProductRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
 
-    @Query(value =
-            "select * from products b where make_tsvector_book_product(b.title, b.genre, b.author) @@ plainto_tsquery(?1)" +
-                    "or similarity(b.title, ?1) > 0.3 " +
-                    "or similarity(b.genre, ?1) > 0.1 " +
-                    "or similarity(b.author, ?1) > 0.6 " +
-                    "order by ts_rank(make_tsvector_book_product(b.title, b.genre, b.author), plainto_tsquery(?1)) " +
-                    "desc",
-            nativeQuery = true)
+    @Query(value = """
+            select * from products p where make_tsvector_book_product(p.title, p.genre, p.author) @@ plainto_tsquery(?1)
+            or similarity(p.title, ?1) > 0.3
+            or title % ?1
+            or similarity(p.genre, ?1) > 0.1
+            or similarity(p.author, ?1) > 0.6
+            order by ts_rank(make_tsvector_book_product(p.title, p.genre, p.author), plainto_tsquery(?1)) desc
+            """, nativeQuery = true)
     List<Product> search(String text);
 
     @Query(value =

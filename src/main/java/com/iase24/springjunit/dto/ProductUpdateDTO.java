@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ProductUpdateDTO {
+    private Long id;
     private int count;
     private Status status;
 }

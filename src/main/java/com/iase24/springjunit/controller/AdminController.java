@@ -1,25 +1,28 @@
 package com.iase24.springjunit.controller;
 
-import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.DescriptionDataDTO;
 import com.iase24.springjunit.dto.FaqAnswerDTO;
+import com.iase24.springjunit.dto.ProductUpdateDTO;
 import com.iase24.springjunit.dto.UpdateDeliveryDTO;
 import com.iase24.springjunit.dto.UserDataDTO;
+import com.iase24.springjunit.dto.request.BookToCategoryDataDtoRequest;
+import com.iase24.springjunit.dto.request.ChildrenCategoryToParentDataDtoRequest;
+import com.iase24.springjunit.dto.response.CommonExceptionResponse;
 import com.iase24.springjunit.entities.Faq;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Order;
 import com.iase24.springjunit.entities.Product;
-import com.iase24.springjunit.exceptionhandler.CommonExceptionResponse;
 import com.iase24.springjunit.facade.AdminFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,8 +39,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
-@Valid
 @Tag(name = "Админка", description = "API для управления приложением")
+@SecurityRequirement(name = "bearerAuth")
+@Validated
 public class AdminController {
 
     private final AdminFacade adminFacade;
@@ -61,12 +65,9 @@ public class AdminController {
                                     schema = @Schema(implementation = CommonExceptionResponse.class))
                             })
             })
-    @PutMapping("/answer/faqId/{faqId}")
-    public FaqAnswerDTO answerForFaq(
-            @PathVariable("faqId") Long faqId,
-            @RequestBody FaqAnswerDTO answer
-    ) {
-        return adminFacade.answerForFaq(faqId, answer);
+    @PutMapping("/answer/faqId")
+    public FaqAnswerDTO answerForFaq(@RequestBody FaqAnswerDTO answer) {
+        return adminFacade.answerForFaq(answer);
     }
 
     /**
@@ -111,12 +112,23 @@ public class AdminController {
      *
      * @return JSON description
      */
+    @Operation(summary = "Добавление описания категории.",
+            description = """
+                    В теле запроса необходимо указать название категории.
+                    """,
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "ОК",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = DescriptionDataDTO.class)))
+                            }),
+                    @ApiResponse(responseCode = "500", description = "Ошибка сервера",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommonExceptionResponse.class))
+                            })
+            })
     @PostMapping("/create/descriptionByName")
-    public ResponseEntity<String> createDescriptionByCategoryName(
-            @RequestParam("categoryName") String categoryName,
-            @RequestBody DescriptionDataDTO descriptionCategory
-    ) {
-        return adminFacade.createDescriptionByCategoryName(categoryName, descriptionCategory);
+    public ResponseEntity<String> createDescriptionByCategoryName(@RequestBody DescriptionDataDTO descriptionCategory) {
+        return adminFacade.createDescriptionByCategoryName(descriptionCategory);
     }
 
 //=======================================================Product===========================================================
@@ -136,12 +148,9 @@ public class AdminController {
      *
      * @return productUpdateDTO
      */
-    @PutMapping("/bookCount/{id}")
-    public ProductUpdateDTO updateBookCount(
-            @PathVariable("id") Long id,
-            @RequestBody ProductUpdateDTO productUpdateDTO
-    ) {
-        return adminFacade.updateBookCount(id, productUpdateDTO);
+    @PutMapping("/bookCount")
+    public ProductUpdateDTO updateBookCount(@RequestBody ProductUpdateDTO productUpdateDTO) {
+        return adminFacade.updateBookCount(productUpdateDTO);
     }
 
 //=======================================================User===========================================================
@@ -209,27 +218,47 @@ public class AdminController {
     /**
      * Добавление дочерней категории в родительскую
      *
-     * @return JSON
      */
-    @PutMapping("/addChildrenId/{childrenId}")
-    public Node addChildrenIdInParentId(
-            @PathVariable("childrenId") Long childrenId,
-            @RequestParam Node parentNode
-    ) {
-        return adminFacade.addChildrenIdInParentId(childrenId, parentNode);
+    @Operation(summary = "Добавление дочерней категории в родительскую.",
+            description = """
+                    В теле запроса необходимо указать ID дочерней категории и родительской.
+                    """,
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "ОК",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ChildrenCategoryToParentDataDtoRequest.class)))
+                            }),
+                    @ApiResponse(responseCode = "500", description = "Ошибка сервера",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommonExceptionResponse.class))
+                            })
+            })
+    @PutMapping("/add-child-node/to/parent-node")
+    public void addChildNodeToParent(@RequestBody ChildrenCategoryToParentDataDtoRequest request) {
+        adminFacade.addChildNodeToParent(request);
     }
 
     /**
      * Добавление книг в категорию
      *
-     * @return JSON
      */
-    @PutMapping("/addBookId/{bookId}/categoryId/{categoryId}")
-    public Node addBookInCategory(
-            @PathVariable("bookId") Long bookId,
-            @PathVariable("categoryId") Node categoryId
-    ) {
-        return adminFacade.addBookInCategory(bookId, categoryId);
+    @Operation(summary = "Добавление продукта в категорию.",
+            description = """
+                    В теле запроса необходимо указать IDs продукта и категории.
+                    """,
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "ОК",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = BookToCategoryDataDtoRequest.class)))
+                            }),
+                    @ApiResponse(responseCode = "500", description = "Ошибка сервера",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CommonExceptionResponse.class))
+                            })
+            })
+    @PutMapping("/add-book-to-category")
+    public void addBookInCategory(@RequestBody BookToCategoryDataDtoRequest request) {
+        adminFacade.addBookInCategory(request);
     }
 
     /**

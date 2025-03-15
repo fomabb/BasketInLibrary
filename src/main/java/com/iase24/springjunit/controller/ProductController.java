@@ -4,12 +4,12 @@ import com.iase24.springjunit.component.BookResponse;
 import com.iase24.springjunit.dto.BookDataDTO;
 import com.iase24.springjunit.entities.Node;
 import com.iase24.springjunit.entities.Product;
-import com.iase24.springjunit.entities.Status;
 import com.iase24.springjunit.facade.ProductFacade;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
-@Transactional
 @Tag(name = "Склад продуктов", description = "API для управления продуктами")
+@SecurityRequirement(name = "bearerAuth")
+@Validated
 public class ProductController {
 
     private final ProductFacade productFacade;
@@ -36,10 +36,7 @@ public class ProductController {
      * @return List<Books>
      */
     @GetMapping
-    public BookResponse getAllBooks(
-            @RequestParam int page,
-            @RequestParam int size
-    ) {
+    public BookResponse getAllBooks(@RequestParam int page, @RequestParam int size) {
         return productFacade.getAllBooks(page, size);
     }
 
@@ -54,11 +51,8 @@ public class ProductController {
     }
 
     @GetMapping("/active/{id}")
-    public Optional<Product> getBookByIdStatusActive(
-            @PathVariable("id") Long id,
-            @RequestParam("status") Status status
-    ) {
-        return productFacade.getBookByIdStatusActive(id, status);
+    public Product getBookByIdStatusActive(@PathVariable("id") Long id) {
+        return productFacade.getBookByIdStatusActive(id);
     }
 
     /**
