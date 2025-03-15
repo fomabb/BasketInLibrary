@@ -40,6 +40,7 @@
 
 ```bash
 docker-compose up
+```
 
 # Data model
 
