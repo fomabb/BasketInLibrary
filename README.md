@@ -42,6 +42,10 @@
 docker-compose up
 ```
 
+### После запуска проекта, можно открыть Swagger
+
+[![Запустить swagger](https://img.shields.io/badge/open--swagger-ui-green)]
+
 ### My application requests in Postman
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/21948648/2sA3JFCk5E)
