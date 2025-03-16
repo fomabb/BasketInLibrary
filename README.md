@@ -46,7 +46,7 @@ docker compose up
 
 [![swagger](https://img.shields.io/badge/open--swagger-ui-green)](http://localhost:8084/swagger-ui/index.html)
 
-### My application requests in Postman
+### Мои запросы к приложению в Postman
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/21948648/2sA3JFCk5E)
 
